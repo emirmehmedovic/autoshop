@@ -151,25 +151,38 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Završite narudžbu</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <div className="mb-8 backdrop-blur-md bg-gradient-to-r from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10">
+          <div className="flex items-center space-x-3">
+            <div className="w-1 h-12 bg-lime-400 rounded-full" />
+            <div>
+              <h1 className="text-4xl font-bold text-white">Završite narudžbu</h1>
+              <p className="text-gray-400 mt-1">Unesite podatke za dostavu i potvrdite narudžbu</p>
+            </div>
+          </div>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Forma */}
-        <div className="lg:col-span-2">
-          <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-lg p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Podaci za dostavu</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Forma */}
+          <div className="lg:col-span-2">
+            <form onSubmit={handleSubmit} className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-8">
+              <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                <div className="w-1 h-8 bg-lime-400 rounded-full" />
+                Podaci za dostavu
+              </h2>
 
-            {serverError && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-600 rounded">
-                {serverError}
-              </div>
-            )}
+              {serverError && (
+                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl">
+                  {serverError}
+                </div>
+              )}
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               {/* Ime i prezime */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-300 mb-2">
                   Ime i prezime *
                 </label>
                 <input
@@ -178,17 +191,17 @@ export default function CheckoutPage() {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.name ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition ${
+                    errors.name ? "border-red-500/50" : "border-white/10"
                   }`}
                   disabled={loading}
                 />
-                {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+                {errors.name && <p className="mt-2 text-sm text-red-400">{errors.name}</p>}
               </div>
 
               {/* Email */}
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2">
                   Email adresa *
                 </label>
                 <input
@@ -197,17 +210,17 @@ export default function CheckoutPage() {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.email ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition ${
+                    errors.email ? "border-red-500/50" : "border-white/10"
                   }`}
                   disabled={loading}
                 />
-                {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+                {errors.email && <p className="mt-2 text-sm text-red-400">{errors.email}</p>}
               </div>
 
               {/* Telefon */}
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="phone" className="block text-sm font-semibold text-gray-300 mb-2">
                   Telefon *
                 </label>
                 <input
@@ -217,17 +230,17 @@ export default function CheckoutPage() {
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="+387 XX XXX XXX"
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.phone ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition ${
+                    errors.phone ? "border-red-500/50" : "border-white/10"
                   }`}
                   disabled={loading}
                 />
-                {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
+                {errors.phone && <p className="mt-2 text-sm text-red-400">{errors.phone}</p>}
               </div>
 
               {/* Adresa */}
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="address" className="block text-sm font-semibold text-gray-300 mb-2">
                   Adresa *
                 </label>
                 <input
@@ -237,18 +250,18 @@ export default function CheckoutPage() {
                   value={formData.address}
                   onChange={handleInputChange}
                   placeholder="Ulica i broj"
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    errors.address ? "border-red-500" : "border-gray-300"
+                  className={`w-full px-4 py-3 bg-slate-900/50 border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition ${
+                    errors.address ? "border-red-500/50" : "border-white/10"
                   }`}
                   disabled={loading}
                 />
-                {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address}</p>}
+                {errors.address && <p className="mt-2 text-sm text-red-400">{errors.address}</p>}
               </div>
 
               {/* Grad i Poštanski broj */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="city" className="block text-sm font-semibold text-gray-300 mb-2">
                     Grad *
                   </label>
                   <input
@@ -257,16 +270,16 @@ export default function CheckoutPage() {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                      errors.city ? "border-red-500" : "border-gray-300"
+                    className={`w-full px-4 py-3 bg-slate-900/50 border rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition ${
+                      errors.city ? "border-red-500/50" : "border-white/10"
                     }`}
                     disabled={loading}
                   />
-                  {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city}</p>}
+                  {errors.city && <p className="mt-2 text-sm text-red-400">{errors.city}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="zip" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="zip" className="block text-sm font-semibold text-gray-300 mb-2">
                     Poštanski broj
                   </label>
                   <input
@@ -275,7 +288,7 @@ export default function CheckoutPage() {
                     name="zip"
                     value={formData.zip}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
                     disabled={loading}
                   />
                 </div>
@@ -283,7 +296,7 @@ export default function CheckoutPage() {
 
               {/* Napomena */}
               <div>
-                <label htmlFor="note" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="note" className="block text-sm font-semibold text-gray-300 mb-2">
                   Napomena (opciono)
                 </label>
                 <textarea
@@ -293,7 +306,7 @@ export default function CheckoutPage() {
                   onChange={handleInputChange}
                   rows={3}
                   placeholder="Dodatne napomene za dostavu..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition resize-none"
                   disabled={loading}
                 />
               </div>
@@ -303,7 +316,7 @@ export default function CheckoutPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-6 py-4 px-6 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full mt-8 py-4 px-6 bg-lime-400 text-slate-900 rounded-xl font-bold text-lg hover:bg-lime-300 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg shadow-lime-400/20"
             >
               {loading ? (
                 <>
@@ -319,23 +332,26 @@ export default function CheckoutPage() {
 
         {/* Sažetak */}
         <div className="lg:col-span-1">
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 sticky top-24">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Vaša narudžba</h2>
+          <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6 sticky top-24">
+            <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+              <div className="w-1 h-8 bg-lime-400 rounded-full" />
+              Vaša narudžba
+            </h2>
 
             {/* Lista proizvoda */}
-            <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
+            <div className="space-y-3 mb-6 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-lime-400/20 scrollbar-track-transparent">
               {items.map((item) => (
-                <div key={item.productId} className="flex gap-3">
-                  <div className="relative w-16 h-16 bg-white rounded flex-shrink-0">
-                    <Image src={item.image} alt={item.name} fill className="object-cover rounded" sizes="64px" />
+                <div key={item.productId} className="flex gap-3 p-3 bg-slate-900/30 rounded-xl border border-white/5">
+                  <div className="relative w-16 h-16 bg-slate-800 rounded-lg flex-shrink-0 overflow-hidden">
+                    <Image src={item.image} alt={item.name} fill className="object-cover" sizes="64px" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 line-clamp-2">{item.name}</p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm font-semibold text-white line-clamp-2 mb-1">{item.name}</p>
+                    <p className="text-xs text-gray-400">
                       {item.quantity} x {item.price.toFixed(2)} KM
                     </p>
                   </div>
-                  <p className="text-sm font-bold text-gray-900 flex-shrink-0">
+                  <p className="text-sm font-bold text-lime-400 flex-shrink-0">
                     {(item.quantity * item.price).toFixed(2)} KM
                   </p>
                 </div>
@@ -343,30 +359,36 @@ export default function CheckoutPage() {
             </div>
 
             {/* Totali */}
-            <div className="space-y-2 pt-4 border-t">
-              <div className="flex justify-between text-gray-600">
+            <div className="space-y-3 pt-6 border-t border-white/10">
+              <div className="flex justify-between text-gray-400">
                 <span>Proizvodi:</span>
-                <span>{total.toFixed(2)} KM</span>
+                <span className="text-white font-semibold">{total.toFixed(2)} KM</span>
               </div>
-              <div className="flex justify-between text-gray-600">
+              <div className="flex justify-between text-gray-400">
                 <span>Dostava:</span>
-                <span className="text-green-600 font-medium">Besplatna</span>
+                <span className="text-lime-400 font-semibold">Besplatna</span>
               </div>
-              <div className="flex justify-between text-lg font-bold text-gray-900 pt-2 border-t">
+              <div className="flex justify-between text-xl font-bold text-white pt-3 border-t border-white/10">
                 <span>Ukupno:</span>
-                <span>{total.toFixed(2)} KM</span>
+                <span className="text-lime-400">{total.toFixed(2)} KM</span>
               </div>
             </div>
 
             {/* Način plaćanja */}
-            <div className="mt-6 pt-6 border-t">
-              <p className="font-semibold text-gray-900 mb-2">Plaćanje pouzećem (COD)</p>
-              <p className="text-sm text-gray-600">
-                Platite gotovinom prilikom preuzimanja paketa. Siguran i praktičan način plaćanja.
-              </p>
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <div className="bg-slate-900/50 rounded-xl p-4 border border-lime-400/20">
+                <p className="font-bold text-white mb-2 flex items-center gap-2">
+                  <ShoppingBag className="text-lime-400" size={18} />
+                  Plaćanje pouzećem (COD)
+                </p>
+                <p className="text-sm text-gray-400">
+                  Platite gotovinom prilikom preuzimanja paketa. Siguran i praktičan način plaćanja.
+                </p>
+              </div>
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   )
