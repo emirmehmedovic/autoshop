@@ -70,6 +70,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
@@ -87,12 +94,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session
     },
-  },
-  pages: {
-    signIn: "/login",
-    error: "/login",
-  },
-  session: {
-    strategy: "jwt",
+    authorized: async ({ auth, request }) => {
+      const { pathname } = request.nextUrl
+      const isLoggedIn = !!auth?.user
+      const isAdmin = auth?.user?.role === "ADMIN"
+
+      // Zaštita admin ruta
+      if (pathname.startsWith("/admin")) {
+        return isLoggedIn && isAdmin
+      }
+
+      // Zaštita account ruta
+      if (pathname.startsWith("/account")) {
+        return isLoggedIn
+      }
+
+      return true
+    },
   },
 })
