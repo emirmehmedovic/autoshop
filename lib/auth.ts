@@ -1,8 +1,9 @@
 import NextAuth, { DefaultSession } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { prisma } from "./prisma"
-import bcrypt from "bcryptjs"
 import { z } from "zod"
+
+// Lazy imports for Edge Runtime compatibility
+// These are only used in API routes, not in middleware
 
 // Extend NextAuth types
 declare module "next-auth" {
@@ -33,6 +34,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         try {
+          // Lazy import for Node.js modules (not used in Edge middleware)
+          const { prisma } = await import("./prisma")
+          const bcrypt = await import("bcryptjs")
+
           const { email, password } = loginSchema.parse(credentials)
 
           const user = await prisma.user.findUnique({
@@ -93,23 +98,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.customerType = token.customerType as "B2C" | "B2B"
       }
       return session
-    },
-    authorized: async ({ auth, request }) => {
-      const { pathname } = request.nextUrl
-      const isLoggedIn = !!auth?.user
-      const isAdmin = auth?.user?.role === "ADMIN"
-
-      // Zaštita admin ruta
-      if (pathname.startsWith("/admin")) {
-        return isLoggedIn && isAdmin
-      }
-
-      // Zaštita account ruta
-      if (pathname.startsWith("/account")) {
-        return isLoggedIn
-      }
-
-      return true
     },
   },
 })

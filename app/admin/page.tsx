@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { DollarSign, ShoppingCart, Package, Users, TrendingUp, AlertTriangle } from "lucide-react"
 import Link from "next/link"
+import { AdminGuard } from "@/components/admin/AdminGuard"
 
 async function getDashboardStats() {
   const now = new Date()
@@ -135,7 +136,9 @@ export default async function AdminDashboard() {
   const stats = await getDashboardStats()
 
   return (
-    <div>
+    <>
+      <AdminGuard />
+      <div>
       <div className="mb-8 backdrop-blur-md bg-gradient-to-r from-slate-800/50 to-slate-900/50 rounded-2xl p-6 border border-white/10">
         <div className="flex items-center space-x-3">
           <div className="w-1 h-12 bg-lime-400 rounded-full" />
@@ -323,5 +326,6 @@ export default async function AdminDashboard() {
         </div>
       </div>
     </div>
+    </>
   )
 }
