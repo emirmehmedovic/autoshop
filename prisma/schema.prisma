@@ -1,0 +1,273 @@
+// Prisma Schema za AutoShop - Auto Kozmetika & Repromatrijali E-commerce
+// Next.js 15 + TypeScript + PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// KORISNICI I AUTENTIFIKACIJA
+// ============================================
+
+model User {
+  id            String       @id @default(cuid())
+  email         String       @unique
+  name          String?
+  phone         String?
+  passwordHash  String?
+  role          UserRole     @default(CUSTOMER)
+  customerType  CustomerType @default(B2C)
+  isApproved    Boolean      @default(true) // false za B2B dok admin ne odobri
+  createdAt     DateTime     @default(now())
+
+  addresses     Address[]
+  orders        Order[]
+  b2bProfile    B2BProfile?
+  sessions      Session[]
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+}
+
+enum CustomerType {
+  B2C
+  B2B
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionToken String   @unique
+  expires      DateTime
+  createdAt    DateTime @default(now())
+}
+
+model Address {
+  id          String  @id @default(cuid())
+  userId      String
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  phone       String
+  address     String
+  city        String
+  zip         String?
+  isDefault   Boolean @default(false)
+}
+
+model B2BProfile {
+  id            String      @id @default(cuid())
+  userId        String      @unique
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName   String
+  pib           String? // PDV/PIB broj
+  address       String
+  contactPerson String
+  priceGroupId  String?
+  priceGroup    PriceGroup? @relation(fields: [priceGroupId], references: [id])
+}
+
+model PriceGroup {
+  id            String              @id @default(cuid())
+  name          String              @unique // npr. "Veleprodaja A", "Veleprodaja B"
+  discount      Float // postotak popusta (0-100)
+  b2bProfiles   B2BProfile[]
+  productPrices ProductPriceGroup[]
+}
+
+// ============================================
+// PROIZVODI I KATEGORIJE
+// ============================================
+
+model Category {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  description String?
+  imageUrl    String?
+  parentId    String?
+  parent      Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryTree")
+  products    Product[]
+  sortOrder   Int        @default(0)
+  isVisible   Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Product {
+  id             String              @id @default(cuid())
+  name           String
+  slug           String              @unique
+  description    String              @db.Text
+  shortDesc      String?
+  sku            String              @unique
+  price          Float // B2C cijena
+  comparePrice   Float? // Prekrižena cijena
+  stock          Int                 @default(0)
+  lowStockAlert  Int                 @default(5) // Upozorenje kad padne ispod
+  isActive       Boolean             @default(true)
+  isFeatured     Boolean             @default(false)
+  categoryId     String
+  category       Category            @relation(fields: [categoryId], references: [id])
+  images         ProductImage[]
+  tags           ProductTag[]
+  orderItems     OrderItem[]
+  priceGroups    ProductPriceGroup[] // B2B cijene po grupama
+  metaTitle      String?
+  metaDesc       String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+}
+
+model ProductTag {
+  id        String  @id @default(cuid())
+  name      String  @unique
+  slug      String  @unique
+  products  Product[]
+}
+
+model ProductPriceGroup {
+  id           String     @id @default(cuid())
+  productId    String
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  priceGroupId String
+  priceGroup   PriceGroup @relation(fields: [priceGroupId], references: [id], onDelete: Cascade)
+  price        Float // Specifična B2B cijena za ovaj proizvod
+
+  @@unique([productId, priceGroupId])
+}
+
+// ============================================
+// NARUDŽBE
+// ============================================
+
+model Order {
+  id              String               @id @default(cuid())
+  orderNumber     String               @unique @default(cuid()) // Prikazan kupcu: #AK-2024-001
+  userId          String?
+  user            User?                @relation(fields: [userId], references: [id])
+  // Guest checkout podaci
+  guestName       String?
+  guestEmail      String?
+  guestPhone      String?
+  status          OrderStatus          @default(PENDING)
+  paymentMethod   String               @default("COD")
+  // Adresa dostave (snapshot u trenutku narudžbe)
+  shippingName    String
+  shippingPhone   String
+  shippingAddress String
+  shippingCity    String
+  shippingZip     String?
+  shippingNote    String?
+  // Finansije
+  subtotal        Float
+  shippingCost    Float                @default(0)
+  discount        Float                @default(0)
+  total           Float
+  // B2B
+  isB2B           Boolean              @default(false)
+  invoiceRequested Boolean             @default(false)
+  invoiceNumber   String?
+  items           OrderItem[]
+  statusHistory   OrderStatusHistory[]
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+}
+
+enum OrderStatus {
+  PENDING // Nova narudžba
+  CONFIRMED // Potvrđena
+  PROCESSING // U pripremi
+  SHIPPED // Poslana
+  DELIVERED // Dostavljena
+  CANCELLED // Otkazana
+  RETURNED // Vraćena
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  unitPrice Float // Snapshot cijene u trenutku narudžbe
+  total     Float
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(cuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  note      String?
+  createdAt DateTime    @default(now())
+}
+
+// ============================================
+// BLOG I LANDING PAGES
+// ============================================
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  content     String    @db.Text // HTML / MDX
+  excerpt     String?
+  imageUrl    String?
+  isPublished Boolean   @default(false)
+  metaTitle   String?
+  metaDesc    String?
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model LandingPage {
+  id             String   @id @default(cuid())
+  title          String
+  slug           String   @unique
+  content        Json // Blokovi: hero, features, testimonials, CTA...
+  isActive       Boolean  @default(true)
+  metaTitle      String?
+  metaDesc       String?
+  // Tracking
+  pixelEventName String? // npr. "Purchase", "Lead"
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// ============================================
+// ANALITIKA ADS SPENDA
+// ============================================
+
+model AdSpendRecord {
+  id           String   @id @default(cuid())
+  platform     String // "meta", "google"
+  date         DateTime
+  spend        Float
+  impressions  Int?
+  clicks       Int?
+  conversions  Int?
+  revenue      Float?
+  campaignId   String?
+  campaignName String?
+  createdAt    DateTime @default(now())
+}
