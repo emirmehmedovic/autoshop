@@ -1,6 +1,12 @@
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Lazy initialization - only create client when needed and API key is available
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    return null
+  }
+  return new Resend(process.env.RESEND_API_KEY)
+}
 
 interface Order {
   id: string
@@ -157,6 +163,12 @@ export async function sendOrderConfirmationToCustomer(order: Order) {
 </html>
   `
 
+  const resend = getResendClient()
+  if (!resend) {
+    console.warn("RESEND_API_KEY nije postavljen, preskačem slanje emaila")
+    return
+  }
+
   try {
     await resend.emails.send({
       from: "AutoShop <narudzbe@autoshop.ba>",
@@ -238,6 +250,12 @@ export async function sendNewOrderToAdmin(order: Order) {
 </body>
 </html>
   `
+
+  const resend = getResendClient()
+  if (!resend) {
+    console.warn("RESEND_API_KEY nije postavljen, preskačem slanje emaila")
+    return
+  }
 
   try {
     await resend.emails.send({

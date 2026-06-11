@@ -1,11 +1,11 @@
 "use client"
 
 import Script from "next/script"
-import { useEffect } from "react"
+import { useEffect, Suspense } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 import { META_PIXEL_ID, trackPageView } from "@/lib/analytics/meta-pixel"
 
-export function MetaPixel() {
+function MetaPixelContent() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -47,5 +47,17 @@ fbq('track', 'PageView');
         />
       </noscript>
     </>
+  )
+}
+
+export function MetaPixel() {
+  if (!META_PIXEL_ID) {
+    return null
+  }
+
+  return (
+    <Suspense fallback={null}>
+      <MetaPixelContent />
+    </Suspense>
   )
 }
