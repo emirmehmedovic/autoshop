@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { Plus, Edit, Trash2, Eye, EyeOff, FileText } from "lucide-react"
+import { Plus, Edit, Eye, EyeOff, FileText } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
+import { DeleteBlogButton } from "@/components/admin/DeleteBlogButton"
 
 export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({
@@ -101,9 +102,10 @@ export default async function BlogPage() {
                       >
                         <Edit size={18} />
                       </Link>
-                      <button className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition border border-transparent hover:border-red-400/20">
-                        <Trash2 size={18} />
-                      </button>
+                      <DeleteBlogButton
+                        postId={post.id}
+                        postTitle={post.title}
+                      />
                     </div>
                   </td>
                 </tr>

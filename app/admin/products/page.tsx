@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import Image from "next/image"
-import { Plus, Search, Edit, Trash2, AlertCircle } from "lucide-react"
+import { Plus, Search, Edit, AlertCircle } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
+import { DeleteProductButton } from "@/components/admin/DeleteProductButton"
 
 interface SearchParams {
   search?: string
@@ -219,9 +220,10 @@ export default async function ProductsPage({
                       >
                         <Edit size={18} />
                       </Link>
-                      <button className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition border border-transparent hover:border-red-400/20">
-                        <Trash2 size={18} />
-                      </button>
+                      <DeleteProductButton
+                        productId={product.id}
+                        productName={product.name}
+                      />
                     </div>
                   </td>
                 </tr>
