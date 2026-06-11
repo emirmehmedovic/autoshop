@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { Plus, Edit, Trash2, FolderTree } from "lucide-react"
+import { Plus, Edit, FolderTree } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
+import { DeleteCategoryButton } from "@/components/admin/DeleteCategoryButton"
 
 export default async function CategoriesPage() {
   const categories = await prisma.category.findMany({
@@ -77,9 +78,11 @@ export default async function CategoriesPage() {
                 >
                   <Edit size={18} />
                 </Link>
-                <button className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition border border-transparent hover:border-red-400/20">
-                  <Trash2 size={18} />
-                </button>
+                <DeleteCategoryButton
+                  categoryId={category.id}
+                  categoryName={category.name}
+                  productCount={category._count.products}
+                />
               </div>
             </div>
           </div>
