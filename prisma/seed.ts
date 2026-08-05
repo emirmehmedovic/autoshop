@@ -7,13 +7,13 @@ async function main() {
   console.log('🌱 Seeding database...')
 
   // Kreiranje admin korisnika
-  const adminPassword = await bcrypt.hash('admin123', 10)
+  const adminPassword = await bcrypt.hash('123456789EmIna', 10)
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@autokozmetika.ba' },
+    where: { email: 'emir@autokozmetika.ba' },
     update: {},
     create: {
-      email: 'admin@autokozmetika.ba',
-      name: 'Admin AutoShop',
+      email: 'emir@autokozmetika.ba',
+      name: 'Emir',
       passwordHash: adminPassword,
       role: 'ADMIN',
       customerType: 'B2C',
