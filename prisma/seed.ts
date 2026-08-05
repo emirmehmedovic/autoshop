@@ -9,10 +9,10 @@ async function main() {
   // Kreiranje admin korisnika
   const adminPassword = await bcrypt.hash('admin123', 10)
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@autoshop.ba' },
+    where: { email: 'admin@autokozmetika.ba' },
     update: {},
     create: {
-      email: 'admin@autoshop.ba',
+      email: 'admin@autokozmetika.ba',
       name: 'Admin AutoShop',
       passwordHash: adminPassword,
       role: 'ADMIN',

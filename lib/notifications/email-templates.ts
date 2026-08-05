@@ -70,7 +70,7 @@ export function b2bApprovalEmailTemplate(data: {
 
     <p style="font-size: 14px; color: #6b7280; margin-top: 30px;">
       Ako imate bilo kakvih pitanja, slobodno nas kontaktirajte na
-      <a href="mailto:info@autoshop.ba" style="color: #10b981;">info@autoshop.ba</a>
+      <a href="mailto:info@autokozmetika.ba" style="color: #10b981;">info@autokozmetika.ba</a>
     </p>
 
     <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">

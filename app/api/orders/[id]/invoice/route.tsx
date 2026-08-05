@@ -78,7 +78,7 @@ export async function GET(
         address: "Ulica Primjer bb, Sarajevo",
         pib: "123456789",
         phone: "+387 XX XXX XXX",
-        email: "info@autoshop.ba",
+        email: "info@autokozmetika.ba",
       },
       customer: {
         name: order.shippingName,

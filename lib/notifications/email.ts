@@ -171,7 +171,7 @@ export async function sendOrderConfirmationToCustomer(order: Order) {
 
   try {
     await resend.emails.send({
-      from: "AutoShop <narudzbe@autoshop.ba>",
+      from: "AutoShop <narudzbe@autokozmetika.ba>",
       to: customerEmail,
       subject: `Potvrda narudžbe #${order.orderNumber}`,
       html,
@@ -259,7 +259,7 @@ export async function sendNewOrderToAdmin(order: Order) {
 
   try {
     await resend.emails.send({
-      from: "AutoShop Sistem <sistem@autoshop.ba>",
+      from: "AutoShop Sistem <sistem@autokozmetika.ba>",
       to: process.env.ADMIN_EMAIL,
       subject: `🛒 Nova narudžba #${order.orderNumber} — ${order.total.toFixed(2)} KM`,
       html,

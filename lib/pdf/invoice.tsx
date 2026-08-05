@@ -217,7 +217,7 @@ export function InvoiceDocument({ data }: { data: InvoiceData }) {
 
         {/* Footer */}
         <Text style={styles.footer}>
-          AutoShop • www.autoshop.ba • Hvala na kupovini!
+          AutoShop • www.autokozmetika.ba • Hvala na kupovini!
         </Text>
       </Page>
     </Document>
