@@ -183,6 +183,8 @@ model Order {
   total           Float
   // B2B
   isB2B           Boolean              @default(false)
+  isPaid          Boolean              @default(false)
+  paidAt          DateTime?
   invoiceRequested Boolean             @default(false)
   invoiceNumber   String?
   items           OrderItem[]

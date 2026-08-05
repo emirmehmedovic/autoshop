@@ -1,20 +1,30 @@
 import { Metadata } from "next"
 
 export const siteConfig = {
-  name: "AutoShop",
-  description: "Online prodaja auto kozmetike i repromatrijala u Bosni i Hercegovini",
-  url: "https://autoshop.ba",
+  name: "GlossDrive",
+  description: "Premium auto kozmetika, detailing proizvodi i oprema za autopraonice u Bosni i Hercegovini. Dostava širom BiH.",
+  url: "https://glossdrive.ba",
   ogImage: "/og-image.jpg",
   keywords: [
     "auto kozmetika",
+    "detailing",
+    "car care",
     "repromatrijali",
     "BiH",
-    "Sarajevo",
-    "auto njega",
+    "Tuzla",
+    "autopraonice",
     "poliranje",
     "pranje auta",
     "auto detailing",
   ],
+  contact: {
+    phone: "+38761577576",
+    email: "info@glossdrive.ba",
+    address: {
+      city: "Tuzla",
+      country: "BA",
+    },
+  },
 }
 
 export function generateSEOMetadata({
@@ -134,6 +144,92 @@ export function generateProductJsonLd(product: {
       priceCurrency: "BAM",
       price: product.price,
       availability: "https://schema.org/InStock",
+    },
+  }
+}
+
+// LocalBusiness JSON-LD
+export function generateLocalBusinessJsonLd(options?: {
+  name?: string
+  description?: string
+  url?: string
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: options?.name || siteConfig.name,
+    description: options?.description || siteConfig.description,
+    url: options?.url || siteConfig.url,
+    telephone: siteConfig.contact.phone,
+    email: siteConfig.contact.email,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: siteConfig.contact.address.city,
+      addressCountry: siteConfig.contact.address.country,
+    },
+    openingHours: "Mo-Fr 09:00-17:00",
+    priceRange: "$$",
+    areaServed: {
+      "@type": "Country",
+      name: "Bosnia and Herzegovina",
+    },
+  }
+}
+
+// FAQ JSON-LD
+export function generateFAQJsonLd(
+  faqItems: { question: string; answer: string }[]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  }
+}
+
+// BreadcrumbList JSON-LD
+export function generateBreadcrumbJsonLd(
+  items: { name: string; url: string }[]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: `${siteConfig.url}${item.url}`,
+    })),
+  }
+}
+
+// Organization JSON-LD
+export function generateOrganizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteConfig.name,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    logo: `${siteConfig.url}/logo.png`,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: siteConfig.contact.phone,
+      contactType: "customer service",
+      areaServed: "BA",
+      availableLanguage: ["bs", "hr", "sr"],
+    },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: siteConfig.contact.address.city,
+      addressCountry: siteConfig.contact.address.country,
     },
   }
 }

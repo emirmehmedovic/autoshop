@@ -16,20 +16,20 @@ export default async function BlogPage() {
     <div>
       <Breadcrumbs items={[{ label: "Blog" }]} />
 
-      <div className="backdrop-blur-md bg-gradient-to-r from-slate-800/50 to-slate-900/50 rounded-2xl p-6 mb-6 border border-white/10">
+      <div className="relative overflow-hidden rounded-2xl p-6 mb-6 backdrop-blur-xl bg-gradient-to-br from-purple-500/5 via-white/80 to-pink-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
-            <div className="w-1 h-12 bg-lime-400 rounded-full" />
+            <div className="w-1 h-12 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-lg shadow-orange-500/30" />
             <div>
-              <h1 className="text-4xl font-bold text-white">Blog</h1>
-              <p className="text-gray-400 mt-1">
+              <h1 className="text-4xl font-bold text-gray-900">Blog</h1>
+              <p className="text-gray-600 mt-1">
                 {posts.length} postova • {publishedCount} objavljeno • {draftCount} draft
               </p>
             </div>
           </div>
           <Link
             href="/admin/blog/new"
-            className="flex items-center gap-2 px-6 py-3 bg-lime-400 text-slate-900 rounded-xl hover:bg-lime-300 transition font-bold shadow-lg shadow-lime-400/20"
+            className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-bold shadow-md"
           >
             <Plus size={20} />
             Novi post
@@ -37,45 +37,45 @@ export default async function BlogPage() {
         </div>
       </div>
 
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl overflow-hidden">
+      <div className="relative overflow-hidden rounded-2xl backdrop-blur-xl bg-gradient-to-br from-orange-500/5 via-white/80 to-amber-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-slate-900/50 border-b border-white/10">
+            <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Naslov
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Datum
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider">
                   Akcije
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="divide-y divide-gray-200">
               {posts.map((post) => (
-                <tr key={post.id} className="hover:bg-white/5 transition">
+                <tr key={post.id} className="hover:bg-gray-50 transition">
                   <td className="px-6 py-4">
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="font-bold text-white hover:text-lime-400 transition"
+                      className="font-bold text-gray-900 hover:text-orange-500 transition"
                     >
                       {post.title}
                     </Link>
                     {post.excerpt && (
-                      <p className="text-sm text-gray-400 mt-1 line-clamp-1">{post.excerpt}</p>
+                      <p className="text-sm text-gray-500 mt-1 line-clamp-1">{post.excerpt}</p>
                     )}
                   </td>
                   <td className="px-6 py-4">
                     <span
                       className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold border ${
                         post.isPublished
-                          ? "bg-lime-500/10 text-lime-400 border-lime-500/20"
-                          : "bg-gray-500/10 text-gray-400 border-gray-500/20"
+                          ? "bg-green-50 text-green-600 border-green-200"
+                          : "bg-gray-50 text-gray-500 border-gray-200"
                       }`}
                     >
                       {post.isPublished ? (
@@ -89,7 +89,7 @@ export default async function BlogPage() {
                       )}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-400">
+                  <td className="px-6 py-4 text-sm text-gray-500">
                     {post.publishedAt
                       ? new Date(post.publishedAt).toLocaleDateString("bs-BA")
                       : new Date(post.createdAt).toLocaleDateString("bs-BA")}
@@ -98,7 +98,7 @@ export default async function BlogPage() {
                     <div className="flex items-center justify-end gap-2">
                       <Link
                         href={`/admin/blog/${post.id}/edit`}
-                        className="p-2 text-lime-400 hover:bg-lime-400/10 rounded-lg transition border border-transparent hover:border-lime-400/20"
+                        className="p-2 text-orange-500 hover:bg-orange-50 rounded-lg transition border border-transparent hover:border-orange-200"
                       >
                         <Edit size={18} />
                       </Link>
@@ -116,14 +116,14 @@ export default async function BlogPage() {
 
         {posts.length === 0 && (
           <div className="text-center py-16">
-            <div className="w-32 h-32 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FileText className="h-16 w-16 text-lime-400" />
+            <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <FileText className="h-16 w-16 text-orange-500" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">Nema blog postova</h2>
-            <p className="text-gray-400 mb-8">Kreirajte prvi blog post</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Nema blog postova</h2>
+            <p className="text-gray-500 mb-8">Kreirajte prvi blog post</p>
             <Link
               href="/admin/blog/new"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-lime-400 text-slate-900 rounded-xl hover:bg-lime-300 transition font-bold shadow-lg shadow-lime-400/20"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-bold shadow-md"
             >
               <Plus size={20} />
               Novi post

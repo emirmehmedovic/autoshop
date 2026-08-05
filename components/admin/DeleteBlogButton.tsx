@@ -41,24 +41,24 @@ export function DeleteBlogButton({ postId, postTitle }: DeleteBlogButtonProps) {
     <>
       <button
         onClick={() => setShowModal(true)}
-        className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition border border-transparent hover:border-red-400/20"
+        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition border border-transparent hover:border-red-200"
       >
         <Trash2 size={18} />
       </button>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/95 to-slate-900/95 border border-white/10 rounded-2xl p-6 max-w-md w-full shadow-2xl">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white border border-gray-200 rounded-2xl p-6 max-w-md w-full shadow-2xl">
             <div className="flex items-start gap-4 mb-6">
-              <div className="p-3 bg-red-500/10 rounded-xl border border-red-500/20">
-                <AlertTriangle className="text-red-400" size={24} />
+              <div className="p-3 bg-red-50 rounded-xl border border-red-200">
+                <AlertTriangle className="text-red-500" size={24} />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white mb-2">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
                   Obriši blog post?
                 </h3>
-                <p className="text-gray-400">
-                  Da li ste sigurni da želite da obrišete <span className="font-bold text-white">{postTitle}</span>?
+                <p className="text-gray-600">
+                  Da li ste sigurni da želite da obrišete <span className="font-bold text-gray-900">{postTitle}</span>?
                 </p>
                 <p className="text-gray-500 text-sm mt-2">
                   Ova akcija je nepovratna.
@@ -88,7 +88,7 @@ export function DeleteBlogButton({ postId, postTitle }: DeleteBlogButtonProps) {
               <button
                 onClick={() => setShowModal(false)}
                 disabled={deleting}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-slate-700/50 text-white rounded-xl hover:bg-slate-700 transition font-bold border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-bold border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <X size={18} />
                 Odustani

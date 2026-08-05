@@ -76,12 +76,12 @@ export default async function AnalyticsPage() {
     <div>
       <Breadcrumbs items={[{ label: "Analitika" }]} />
 
-      <div className="backdrop-blur-md bg-gradient-to-r from-slate-800/50 to-slate-900/50 rounded-2xl p-6 mb-6 border border-white/10">
+      <div className="bg-white rounded-2xl p-6 mb-6 border border-gray-200 shadow-sm">
         <div className="flex items-center space-x-3">
-          <div className="w-1 h-12 bg-lime-400 rounded-full" />
+          <div className="w-1 h-12 bg-orange-500 rounded-full" />
           <div>
-            <h1 className="text-4xl font-bold text-white">Prodajna Analitika</h1>
-            <p className="text-gray-400 mt-1">Pregled performansi za zadnjih 30 dana</p>
+            <h1 className="text-4xl font-bold text-gray-900">Prodajna Analitika</h1>
+            <p className="text-gray-600 mt-1">Pregled performansi za zadnjih 30 dana</p>
           </div>
         </div>
       </div>
@@ -89,61 +89,61 @@ export default async function AnalyticsPage() {
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         {/* Ukupan prihod */}
-        <div className="group backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6 hover:border-lime-400/30 transition-all">
+        <div className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-orange-300 hover:shadow-lg transition-all">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Ukupan prihod</p>
-            <div className="p-2 bg-lime-400/10 rounded-lg border border-lime-400/20 group-hover:bg-lime-400/20 transition">
-              <DollarSign className="text-lime-400" size={20} />
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Ukupan prihod</p>
+            <div className="p-2 bg-orange-50 rounded-lg border border-orange-200 group-hover:bg-orange-100 transition">
+              <DollarSign className="text-orange-500" size={20} />
             </div>
           </div>
-          <p className="text-2xl font-bold text-white">{data.totalRevenue.toFixed(2)} <span className="text-lime-400">KM</span></p>
+          <p className="text-2xl font-bold text-gray-900">{data.totalRevenue.toFixed(2)} <span className="text-orange-500">KM</span></p>
         </div>
 
         {/* Ad Spend */}
-        <div className="group backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6 hover:border-blue-400/30 transition-all">
+        <div className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-blue-300 hover:shadow-lg transition-all">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Ad Spend</p>
-            <div className="p-2 bg-blue-400/10 rounded-lg border border-blue-400/20 group-hover:bg-blue-400/20 transition">
-              <TrendingUp className="text-blue-400" size={20} />
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Ad Spend</p>
+            <div className="p-2 bg-blue-50 rounded-lg border border-blue-200 group-hover:bg-blue-100 transition">
+              <TrendingUp className="text-blue-500" size={20} />
             </div>
           </div>
-          <p className="text-2xl font-bold text-white">{data.totalSpend.toFixed(2)} <span className="text-blue-400">KM</span></p>
+          <p className="text-2xl font-bold text-gray-900">{data.totalSpend.toFixed(2)} <span className="text-blue-500">KM</span></p>
         </div>
 
         {/* ROAS */}
-        <div className="group backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6 hover:border-purple-400/30 transition-all">
+        <div className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-purple-300 hover:shadow-lg transition-all">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">ROAS</p>
-            <div className="p-2 bg-purple-400/10 rounded-lg border border-purple-400/20 group-hover:bg-purple-400/20 transition">
-              <Target className="text-purple-400" size={20} />
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">ROAS</p>
+            <div className="p-2 bg-purple-50 rounded-lg border border-purple-200 group-hover:bg-purple-100 transition">
+              <Target className="text-purple-500" size={20} />
             </div>
           </div>
-          <p className="text-2xl font-bold text-white">{data.roas.toFixed(2)}<span className="text-purple-400">x</span></p>
-          <p className="text-xs text-gray-400 mt-1">Return on Ad Spend</p>
+          <p className="text-2xl font-bold text-gray-900">{data.roas.toFixed(2)}<span className="text-purple-500">x</span></p>
+          <p className="text-xs text-gray-500 mt-1">Return on Ad Spend</p>
         </div>
 
         {/* CPA */}
-        <div className="group backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6 hover:border-orange-400/30 transition-all">
+        <div className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-orange-300 hover:shadow-lg transition-all">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">CPA</p>
-            <div className="p-2 bg-orange-400/10 rounded-lg border border-orange-400/20 group-hover:bg-orange-400/20 transition">
-              <ShoppingCart className="text-orange-400" size={20} />
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">CPA</p>
+            <div className="p-2 bg-orange-50 rounded-lg border border-orange-200 group-hover:bg-orange-100 transition">
+              <ShoppingCart className="text-orange-500" size={20} />
             </div>
           </div>
-          <p className="text-2xl font-bold text-white">{data.cpa.toFixed(2)} <span className="text-orange-400">KM</span></p>
-          <p className="text-xs text-gray-400 mt-1">Cost per Acquisition</p>
+          <p className="text-2xl font-bold text-gray-900">{data.cpa.toFixed(2)} <span className="text-orange-500">KM</span></p>
+          <p className="text-xs text-gray-500 mt-1">Cost per Acquisition</p>
         </div>
 
         {/* AOV */}
-        <div className="group backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6 hover:border-indigo-400/30 transition-all">
+        <div className="group bg-white border border-gray-200 rounded-2xl p-6 hover:border-indigo-300 hover:shadow-lg transition-all">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider">AOV</p>
-            <div className="p-2 bg-indigo-400/10 rounded-lg border border-indigo-400/20 group-hover:bg-indigo-400/20 transition">
-              <Percent className="text-indigo-400" size={20} />
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">AOV</p>
+            <div className="p-2 bg-indigo-50 rounded-lg border border-indigo-200 group-hover:bg-indigo-100 transition">
+              <Percent className="text-indigo-500" size={20} />
             </div>
           </div>
-          <p className="text-2xl font-bold text-white">{data.aov.toFixed(2)} <span className="text-indigo-400">KM</span></p>
-          <p className="text-xs text-gray-400 mt-1">Average Order Value</p>
+          <p className="text-2xl font-bold text-gray-900">{data.aov.toFixed(2)} <span className="text-indigo-500">KM</span></p>
+          <p className="text-xs text-gray-500 mt-1">Average Order Value</p>
         </div>
       </div>
 

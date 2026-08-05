@@ -60,81 +60,89 @@ export function FilterSidebar({
 
   return (
     <div className="space-y-6">
-      {/* Kategorije - Glassmorphism */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
-        <div className="flex items-center space-x-2 mb-5">
-          <Filter className="text-lime-400" size={20} />
-          <h3 className="font-bold text-white text-lg">Kategorije</h3>
-        </div>
-        <ul className="space-y-2">
-          <li>
-            <Link
-              href="/shop"
-              className={`block py-3 px-4 rounded-xl transition-all duration-300 ${
-                !selectedCategory
-                  ? "bg-lime-400 text-slate-900 font-bold shadow-lg shadow-lime-400/20"
-                  : "text-gray-300 hover:bg-white/5 hover:text-white"
-              }`}
-            >
-              Sve kategorije
-            </Link>
-          </li>
-          {categories.map((category) => (
-            <li key={category.id}>
+      {/* Kategorije */}
+      <div className="relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-orange-500/5 via-white/70 to-amber-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
+        <div className="relative">
+          <div className="flex items-center space-x-2 mb-5">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
+              <Filter className="text-white" size={18} />
+            </div>
+            <h3 className="font-bold text-gray-900 text-lg">Kategorije</h3>
+          </div>
+          <ul className="space-y-2">
+            <li>
               <Link
-                href={`/shop?category=${category.slug}`}
+                href="/shop"
                 className={`block py-3 px-4 rounded-xl transition-all duration-300 ${
-                  selectedCategory === category.slug
-                    ? "bg-lime-400 text-slate-900 font-bold shadow-lg shadow-lime-400/20"
-                    : "text-gray-300 hover:bg-white/5 hover:text-white"
+                  !selectedCategory
+                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold shadow-lg shadow-orange-500/30"
+                    : "text-gray-700 hover:bg-white/60 backdrop-blur-sm"
                 }`}
               >
-                <span className="flex justify-between items-center">
-                  <span>{category.name}</span>
-                  <span className={`text-xs px-2 py-0.5 rounded-full ${
-                    selectedCategory === category.slug
-                      ? "bg-slate-900/20"
-                      : "bg-white/10"
-                  }`}>
-                    {category._count.products}
-                  </span>
-                </span>
+                Sve kategorije
               </Link>
             </li>
-          ))}
-        </ul>
+            {categories.map((category) => (
+              <li key={category.id}>
+                <Link
+                  href={`/shop?category=${category.slug}`}
+                  className={`block py-3 px-4 rounded-xl transition-all duration-300 ${
+                    selectedCategory === category.slug
+                      ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold shadow-lg shadow-orange-500/30"
+                      : "text-gray-700 hover:bg-white/60 backdrop-blur-sm"
+                  }`}
+                >
+                  <span className="flex justify-between items-center">
+                    <span>{category.name}</span>
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
+                      selectedCategory === category.slug
+                        ? "bg-white/25"
+                        : "bg-gray-200/80"
+                    }`}>
+                      {category._count.products}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
-      {/* Cijena - Glassmorphism */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
-        <h3 className="font-bold text-white text-lg mb-5">Cijena (KM)</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-400 mb-2 font-medium">Od</label>
-            <input
-              type="number"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              placeholder="0"
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
-            />
+      {/* Cijena */}
+      <div className="relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/5 via-white/70 to-indigo-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
+        <div className="relative">
+          <h3 className="font-bold text-gray-900 text-lg mb-5">Cijena (KM)</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm text-gray-600 mb-2 font-medium">Od</label>
+              <input
+                type="number"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                placeholder="0"
+                className="w-full px-4 py-3 bg-white/80 border border-white/60 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition backdrop-blur-sm shadow-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm text-gray-600 mb-2 font-medium">Do</label>
+              <input
+                type="number"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                placeholder="1000"
+                className="w-full px-4 py-3 bg-white/80 border border-white/60 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition backdrop-blur-sm shadow-sm"
+              />
+            </div>
+            <button
+              onClick={handlePriceFilter}
+              className="w-full py-3 px-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition font-bold shadow-lg shadow-orange-500/30"
+            >
+              Primijeni filter
+            </button>
           </div>
-          <div>
-            <label className="block text-sm text-gray-400 mb-2 font-medium">Do</label>
-            <input
-              type="number"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              placeholder="1000"
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
-            />
-          </div>
-          <button
-            onClick={handlePriceFilter}
-            className="w-full py-3 px-4 bg-lime-400 text-slate-900 rounded-xl hover:bg-lime-300 transition font-bold shadow-lg shadow-lime-400/20"
-          >
-            Primijeni filter
-          </button>
         </div>
       </div>
 
@@ -142,7 +150,7 @@ export function FilterSidebar({
       {hasFilters && (
         <button
           onClick={clearFilters}
-          className="w-full py-3 px-4 backdrop-blur-md bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 hover:bg-red-500/20 transition font-semibold flex items-center justify-center space-x-2"
+          className="w-full py-3 px-4 backdrop-blur-xl bg-red-50/80 border border-red-200/50 rounded-xl text-red-600 hover:bg-red-100/80 transition font-semibold flex items-center justify-center space-x-2 shadow-sm"
         >
           <X size={18} />
           <span>Očisti sve filtere</span>

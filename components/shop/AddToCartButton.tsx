@@ -60,7 +60,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
     return (
       <button
         disabled
-        className="w-full py-4 px-6 bg-gray-300 text-gray-500 rounded-lg font-semibold cursor-not-allowed"
+        className="w-full py-4 px-6 bg-gray-200/80 text-gray-500 rounded-full font-semibold cursor-not-allowed backdrop-blur-sm"
       >
         Rasprodato
       </button>
@@ -72,10 +72,10 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
       {/* Količina */}
       <div className="flex items-center gap-4">
         <label className="font-medium text-gray-700">Količina:</label>
-        <div className="flex items-center border border-gray-300 rounded-lg">
+        <div className="flex items-center border border-white/60 bg-white/80 backdrop-blur-sm rounded-full overflow-hidden shadow-sm">
           <button
             onClick={decreaseQuantity}
-            className="p-3 hover:bg-gray-100 transition"
+            className="p-3 hover:bg-gray-100/80 transition"
             aria-label="Smanji količinu"
           >
             <Minus size={18} />
@@ -89,11 +89,11 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
               const val = parseInt(e.target.value) || 1
               setQuantity(Math.min(Math.max(1, val), product.stock))
             }}
-            className="w-16 text-center border-x border-gray-300 py-3 focus:outline-none"
+            className="w-16 text-center py-3 focus:outline-none bg-transparent"
           />
           <button
             onClick={increaseQuantity}
-            className="p-3 hover:bg-gray-100 transition"
+            className="p-3 hover:bg-gray-100/80 transition"
             aria-label="Povećaj količinu"
           >
             <Plus size={18} />
@@ -104,10 +104,10 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
       {/* Dodaj u korpu dugme */}
       <button
         onClick={handleAddToCart}
-        className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition flex items-center justify-center gap-3 ${
+        className={`w-full py-4 px-6 rounded-full font-bold text-white transition-all duration-300 flex items-center justify-center gap-3 ${
           justAdded
-            ? "bg-green-600 hover:bg-green-700"
-            : "bg-blue-600 hover:bg-blue-700"
+            ? "bg-gradient-to-r from-emerald-500 to-green-500 shadow-lg shadow-emerald-500/30"
+            : "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/30"
         }`}
       >
         {justAdded ? (

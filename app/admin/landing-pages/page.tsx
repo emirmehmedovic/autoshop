@@ -15,20 +15,20 @@ export default async function LandingPagesPage() {
     <div>
       <Breadcrumbs items={[{ label: "Landing Pages" }]} />
 
-      <div className="backdrop-blur-md bg-gradient-to-r from-slate-800/50 to-slate-900/50 rounded-2xl p-6 mb-6 border border-white/10">
+      <div className="bg-white rounded-2xl p-6 mb-6 border border-gray-200 shadow-sm">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
-            <div className="w-1 h-12 bg-lime-400 rounded-full" />
+            <div className="w-1 h-12 bg-orange-500 rounded-full" />
             <div>
-              <h1 className="text-4xl font-bold text-white">Landing Pages</h1>
-              <p className="text-gray-400 mt-1">
+              <h1 className="text-4xl font-bold text-gray-900">Landing Pages</h1>
+              <p className="text-gray-600 mt-1">
                 {pages.length} stranica • {activeCount} aktivnih • {inactiveCount} neaktivnih
               </p>
             </div>
           </div>
           <Link
             href="/admin/landing-pages/new"
-            className="flex items-center gap-2 px-6 py-3 bg-lime-400 text-slate-900 rounded-xl hover:bg-lime-300 transition font-bold shadow-lg shadow-lime-400/20"
+            className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-bold shadow-sm"
           >
             <Plus size={20} />
             Nova stranica
@@ -36,34 +36,34 @@ export default async function LandingPagesPage() {
         </div>
       </div>
 
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-slate-900/50 border-b border-white/10">
+            <thead className="bg-gray-50 border-b border-gray-200">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-orange-500 uppercase tracking-wider">
                   Naslov
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-orange-500 uppercase tracking-wider">
                   Slug
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-orange-500 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-orange-500 uppercase tracking-wider">
                   Pixel Event
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-lime-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-orange-500 uppercase tracking-wider">
                   Akcije
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/10">
+            <tbody className="divide-y divide-gray-200">
               {pages.map((page) => (
-                <tr key={page.id} className="hover:bg-white/5 transition">
-                  <td className="px-6 py-4 font-bold text-white">{page.title}</td>
+                <tr key={page.id} className="hover:bg-gray-50 transition">
+                  <td className="px-6 py-4 font-bold text-gray-900">{page.title}</td>
                   <td className="px-6 py-4 text-sm">
-                    <code className="bg-slate-700/30 px-3 py-1.5 rounded-lg text-gray-300 font-mono border border-white/10">
+                    <code className="bg-gray-100 px-3 py-1.5 rounded-lg text-gray-700 font-mono border border-gray-200">
                       /landing/{page.slug}
                     </code>
                   </td>
@@ -71,8 +71,8 @@ export default async function LandingPagesPage() {
                     <span
                       className={`inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold border ${
                         page.isActive
-                          ? "bg-lime-500/10 text-lime-400 border-lime-500/20"
-                          : "bg-gray-500/10 text-gray-400 border-gray-500/20"
+                          ? "bg-green-50 text-green-600 border-green-200"
+                          : "bg-gray-100 text-gray-500 border-gray-200"
                       }`}
                     >
                       {page.isActive ? (
@@ -88,12 +88,12 @@ export default async function LandingPagesPage() {
                   </td>
                   <td className="px-6 py-4">
                     {page.pixelEventName ? (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-bold bg-purple-50 text-purple-600 border border-purple-200">
                         <Zap size={14} />
                         {page.pixelEventName}
                       </span>
                     ) : (
-                      <span className="text-gray-500">-</span>
+                      <span className="text-gray-400">-</span>
                     )}
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -101,17 +101,17 @@ export default async function LandingPagesPage() {
                       <Link
                         href={`/landing/${page.slug}`}
                         target="_blank"
-                        className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition border border-transparent hover:border-white/10"
+                        className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition border border-transparent hover:border-gray-200"
                       >
                         <Eye size={18} />
                       </Link>
                       <Link
                         href={`/admin/landing-pages/${page.id}/edit`}
-                        className="p-2 text-lime-400 hover:bg-lime-400/10 rounded-lg transition border border-transparent hover:border-lime-400/20"
+                        className="p-2 text-orange-500 hover:bg-orange-50 rounded-lg transition border border-transparent hover:border-orange-200"
                       >
                         <Edit size={18} />
                       </Link>
-                      <button className="p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition border border-transparent hover:border-red-400/20">
+                      <button className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition border border-transparent hover:border-red-200">
                         <Trash2 size={18} />
                       </button>
                     </div>
@@ -124,14 +124,14 @@ export default async function LandingPagesPage() {
 
         {pages.length === 0 && (
           <div className="text-center py-16">
-            <div className="w-32 h-32 bg-slate-700/50 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Zap className="h-16 w-16 text-lime-400" />
+            <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Zap className="h-16 w-16 text-orange-500" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">Nema landing pages</h2>
-            <p className="text-gray-400 mb-8">Kreirajte prvu landing stranicu</p>
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">Nema landing pages</h2>
+            <p className="text-gray-600 mb-8">Kreirajte prvu landing stranicu</p>
             <Link
               href="/admin/landing-pages/new"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-lime-400 text-slate-900 rounded-xl hover:bg-lime-300 transition font-bold shadow-lg shadow-lime-400/20"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-bold shadow-sm"
             >
               <Plus size={20} />
               Nova stranica

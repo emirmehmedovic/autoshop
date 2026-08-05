@@ -30,29 +30,28 @@ export function ProductCard({ product }: ProductCardProps) {
   const imageUrl = product.images[0]?.url || "/placeholder-product.svg"
 
   return (
-    <div className="group relative backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl overflow-hidden hover:border-lime-400/30 transition-all duration-300">
-      {/* Glassmorphism hover effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-lime-400/0 to-lime-600/0 group-hover:from-lime-400/5 group-hover:to-lime-600/5 transition-all duration-300 pointer-events-none" />
+    <div className="group relative overflow-hidden rounded-[22px] backdrop-blur-xl bg-gradient-to-br from-orange-500/5 via-white/80 to-amber-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)] hover:shadow-[0_16px_48px_rgba(0,0,0,0.12)] hover:-translate-y-1.5 transition-all duration-300">
+      <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
 
       <Link href={`/product/${product.slug}`} className="block relative aspect-square overflow-hidden">
         {hasDiscount && (
-          <div className="absolute top-3 left-3 backdrop-blur-md bg-red-500/90 text-white px-3 py-1.5 rounded-lg text-xs font-bold z-10 border border-white/20">
+          <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-rose-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold z-10 shadow-lg shadow-red-500/30">
             -{discountPercentage}%
           </div>
         )}
         {product.stock === 0 && (
-          <div className="absolute top-3 right-3 backdrop-blur-md bg-slate-900/90 text-white px-3 py-1.5 rounded-lg text-xs font-bold z-10 border border-white/20">
+          <div className="absolute top-3 right-3 bg-gray-900/90 backdrop-blur-sm text-white px-3 py-1.5 rounded-lg text-xs font-bold z-10">
             Rasprodato
           </div>
         )}
         {product.stock > 0 && product.stock <= 5 && (
-          <div className="absolute top-3 right-3 backdrop-blur-md bg-orange-500/90 text-white px-3 py-1.5 rounded-lg text-xs font-bold z-10 border border-white/20 flex items-center space-x-1">
+          <div className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold z-10 flex items-center space-x-1 shadow-lg shadow-orange-500/30">
             <Sparkles size={12} />
             <span>Uskoro nestaje</span>
           </div>
         )}
 
-        <div className="relative w-full h-full bg-slate-700/30">
+        <div className="relative w-full h-full bg-gradient-to-br from-gray-100 to-gray-50">
           <Image
             src={imageUrl}
             alt={product.images[0]?.alt || product.name}
@@ -60,35 +59,33 @@ export function ProductCard({ product }: ProductCardProps) {
             className="object-cover group-hover:scale-110 transition-transform duration-500"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/0 to-slate-900/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
       </Link>
 
       <div className="relative p-5">
         {/* Category badge */}
-        <div className="inline-flex items-center px-2.5 py-1 bg-lime-400/10 border border-lime-400/20 rounded-full mb-3">
-          <span className="text-xs text-lime-400 font-semibold uppercase tracking-wider">{product.category.name}</span>
+        <div className="inline-flex items-center px-2.5 py-1 bg-orange-100/80 backdrop-blur-sm border border-orange-200/50 rounded-full mb-3">
+          <span className="text-xs text-orange-600 font-semibold uppercase tracking-wider">{product.category.name}</span>
         </div>
 
         <Link href={`/product/${product.slug}`}>
-          <h3 className="font-bold text-white group-hover:text-lime-400 transition line-clamp-2 mb-2 text-lg">
+          <h3 className="font-bold text-gray-900 group-hover:text-orange-500 transition line-clamp-2 mb-2 text-lg">
             {product.name}
           </h3>
         </Link>
 
         {product.shortDesc && (
-          <p className="text-sm text-gray-400 line-clamp-2 mb-4">{product.shortDesc}</p>
+          <p className="text-sm text-gray-500 line-clamp-2 mb-4">{product.shortDesc}</p>
         )}
 
-        <div className="flex items-end justify-between pt-4 border-t border-white/10">
+        <div className="flex items-end justify-between pt-4 border-t border-gray-200/50">
           <div>
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-white">{product.price.toFixed(2)}</span>
-              <span className="text-sm text-gray-400">KM</span>
+              <span className="text-2xl font-bold text-gray-900">{product.price.toFixed(2)}</span>
+              <span className="text-sm text-gray-500">KM</span>
             </div>
             {hasDiscount && (
-              <span className="text-sm text-gray-500 line-through">
+              <span className="text-sm text-gray-400 line-through">
                 {product.comparePrice!.toFixed(2)} KM
               </span>
             )}
@@ -98,8 +95,8 @@ export function ProductCard({ product }: ProductCardProps) {
             href={`/product/${product.slug}`}
             className={`group/btn relative p-3 rounded-xl transition-all duration-300 ${
               product.stock > 0
-                ? "bg-lime-400 text-slate-900 hover:bg-lime-300 hover:scale-110"
-                : "bg-slate-700/50 text-gray-500 cursor-not-allowed border border-white/10"
+                ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 hover:scale-110 shadow-lg shadow-orange-500/30"
+                : "bg-gray-200/80 text-gray-400 cursor-not-allowed"
             }`}
             aria-label="Dodaj u korpu"
           >

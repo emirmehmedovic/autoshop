@@ -125,7 +125,7 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
       <div
         onDrop={handleDropZone}
         onDragOver={(e) => e.preventDefault()}
-        className="border-2 border-dashed border-white/20 rounded-xl p-8 text-center hover:border-lime-400/50 transition cursor-pointer bg-slate-900/30"
+        className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-orange-500 transition cursor-pointer bg-gray-50"
         onClick={() => fileInputRef.current?.click()}
       >
         <input
@@ -137,13 +137,13 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
           className="hidden"
         />
         <Upload className="mx-auto mb-4 text-gray-400" size={48} />
-        <p className="text-white font-bold mb-2">
+        <p className="text-gray-900 font-bold mb-2">
           Klikni ili prevuci slike ovdje
         </p>
-        <p className="text-gray-400 text-sm">
+        <p className="text-gray-500 text-sm">
           JPG, PNG ili WEBP (max 10MB po slici)
         </p>
-        <p className="text-gray-500 text-xs mt-2">
+        <p className="text-gray-400 text-xs mt-2">
           Maksimalno {maxImages} slika
         </p>
       </div>
@@ -151,8 +151,8 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
       {/* Loading State */}
       {uploading && (
         <div className="text-center py-4">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-lime-400"></div>
-          <p className="text-gray-400 mt-2">Upload u toku...</p>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+          <p className="text-gray-500 mt-2">Upload u toku...</p>
         </div>
       )}
 
@@ -166,7 +166,7 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
               onDragStart={() => handleDragStart(index)}
               onDragOver={(e) => handleDragOver(e, index)}
               onDragEnd={handleDragEnd}
-              className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-xl p-4 cursor-move hover:border-lime-400/30 transition"
+              className="bg-white border border-gray-200 rounded-xl p-4 cursor-move hover:border-orange-300 hover:shadow-md transition"
             >
               <div className="flex gap-4">
                 {/* Drag Handle */}
@@ -175,7 +175,7 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
                 </div>
 
                 {/* Image Preview */}
-                <div className="relative w-24 h-24 flex-shrink-0 bg-slate-700/30 rounded-lg overflow-hidden border border-white/10">
+                <div className="relative w-24 h-24 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
                   <Image
                     src={image.url}
                     alt={image.alt || "Product image"}
@@ -187,7 +187,7 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
 
                 {/* Alt Text Input */}
                 <div className="flex-1 min-w-0">
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5 uppercase tracking-wider">
+                  <label className="block text-xs font-semibold text-gray-500 mb-1.5 uppercase tracking-wider">
                     Alt tekst
                   </label>
                   <input
@@ -195,9 +195,9 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
                     value={image.alt}
                     onChange={(e) => handleAltChange(index, e.target.value)}
                     placeholder="Opis slike..."
-                    className="w-full px-3 py-2 bg-slate-900/50 border border-white/10 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+                    className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-gray-400 mt-1">
                     Slika #{index + 1}
                   </p>
                 </div>
@@ -206,7 +206,7 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
                 <button
                   type="button"
                   onClick={() => handleRemove(index)}
-                  className="flex-shrink-0 p-2 text-red-400 hover:bg-red-400/10 rounded-lg transition border border-transparent hover:border-red-400/20 h-fit"
+                  className="flex-shrink-0 p-2 text-red-500 hover:bg-red-50 rounded-lg transition border border-transparent hover:border-red-200 h-fit"
                 >
                   <X size={18} />
                 </button>
@@ -217,9 +217,9 @@ export function ImageUpload({ images, onChange, maxImages = 10 }: ImageUploadPro
       )}
 
       {images.length === 0 && !uploading && (
-        <div className="text-center py-8 border border-white/10 rounded-xl bg-slate-900/20">
-          <ImageIcon className="mx-auto mb-3 text-gray-500" size={40} />
-          <p className="text-gray-400">Još nema dodatih slika</p>
+        <div className="text-center py-8 border border-gray-200 rounded-xl bg-gray-50">
+          <ImageIcon className="mx-auto mb-3 text-gray-400" size={40} />
+          <p className="text-gray-500">Još nema dodatih slika</p>
         </div>
       )}
     </div>

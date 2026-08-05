@@ -8,13 +8,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Decorative background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-lime-400/3 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-lime-400/3 rounded-full blur-3xl" />
-      </div>
-
+    <div className="flex h-screen relative">
+      {/* Background pattern */}
+      <div
+        className="fixed inset-0 -z-10"
+        style={{
+          backgroundColor: "white",
+          backgroundImage: "radial-gradient(#e5e7eb 1px, transparent 1px)",
+          backgroundSize: "16px 16px",
+        }}
+      />
+      <div
+        className="fixed inset-0 -z-9 pointer-events-none"
+        style={{
+          background: `radial-gradient(circle 600px at 100% 150px, rgba(254, 215, 170, 0.3), transparent),
+                       radial-gradient(circle 400px at 0% 50%, rgba(191, 219, 254, 0.3), transparent),
+                       radial-gradient(circle 500px at 50% 100%, rgba(233, 213, 255, 0.2), transparent)`,
+        }}
+      />
       {/* Sidebar - Desktop */}
       <AdminSidebar />
 
@@ -22,7 +33,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       {mobileMenuOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
             onClick={() => setMobileMenuOpen(false)}
           />
           <div className="fixed inset-y-0 left-0 z-50 lg:hidden">
@@ -32,7 +43,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       )}
 
       {/* Main content */}
-      <div className="relative flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden">
         <AdminHeader onMenuClick={() => setMobileMenuOpen(true)} />
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

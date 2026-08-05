@@ -183,16 +183,16 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Info Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Osnovne informacije</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Osnovne informacije</h2>
         </div>
 
         <div className="space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Naziv proizvoda *
             </label>
             <input
@@ -200,17 +200,17 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="npr. Turtle Wax Premium Vosak"
             />
             {errors.name && (
-              <p className="text-red-400 text-sm mt-2">{errors.name}</p>
+              <p className="text-red-500 text-sm mt-2">{errors.name}</p>
             )}
           </div>
 
           {/* SKU */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               SKU *
             </label>
             <input
@@ -218,17 +218,17 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               name="sku"
               value={formData.sku}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 font-mono focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 font-mono focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="TW-PREM-001"
             />
             {errors.sku && (
-              <p className="text-red-400 text-sm mt-2">{errors.sku}</p>
+              <p className="text-red-500 text-sm mt-2">{errors.sku}</p>
             )}
           </div>
 
           {/* Short Description */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Kratki opis
             </label>
             <input
@@ -237,7 +237,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               value={formData.shortDesc}
               onChange={handleChange}
               maxLength={150}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="Kratak opis koji se prikazuje na kartici proizvoda"
             />
             <p className="text-gray-500 text-xs mt-1">
@@ -247,7 +247,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Detaljan opis *
             </label>
             <textarea
@@ -255,27 +255,27 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               value={formData.description}
               onChange={handleChange}
               rows={6}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition resize-none"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition resize-none"
               placeholder="Detaljan opis proizvoda, karakteristike, način upotrebe..."
             />
             {errors.description && (
-              <p className="text-red-400 text-sm mt-2">{errors.description}</p>
+              <p className="text-red-500 text-sm mt-2">{errors.description}</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Pricing Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Cijene</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Cijene</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Price */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Prodajna cijena (KM) *
             </label>
             <input
@@ -285,17 +285,17 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               onChange={handleChange}
               step="0.01"
               min="0"
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="0.00"
             />
             {errors.price && (
-              <p className="text-red-400 text-sm mt-2">{errors.price}</p>
+              <p className="text-red-500 text-sm mt-2">{errors.price}</p>
             )}
           </div>
 
           {/* Compare Price */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Prekrižena cijena (KM)
             </label>
             <input
@@ -305,7 +305,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               onChange={handleChange}
               step="0.01"
               min="0"
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="0.00"
             />
             <p className="text-gray-500 text-xs mt-1">
@@ -316,16 +316,16 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
       </div>
 
       {/* Inventory Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Zalihe</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Zalihe</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Stock */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Dostupna količina *
             </label>
             <input
@@ -334,17 +334,17 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               value={formData.stock}
               onChange={handleChange}
               min="0"
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="0"
             />
             {errors.stock && (
-              <p className="text-red-400 text-sm mt-2">{errors.stock}</p>
+              <p className="text-red-500 text-sm mt-2">{errors.stock}</p>
             )}
           </div>
 
           {/* Low Stock Alert */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Upozorenje za niske zalihe
             </label>
             <input
@@ -353,7 +353,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               value={formData.lowStockAlert}
               onChange={handleChange}
               min="0"
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="5"
             />
             <p className="text-gray-500 text-xs mt-1">
@@ -364,21 +364,21 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
       </div>
 
       {/* Category Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Kategorija</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Kategorija</h2>
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+          <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
             Kategorija *
           </label>
           <select
             name="categoryId"
             value={formData.categoryId}
             onChange={handleChange}
-            className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+            className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
           >
             <option value="">Izaberi kategoriju...</option>
             {categories.map((category) => (
@@ -388,16 +388,16 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
             ))}
           </select>
           {errors.categoryId && (
-            <p className="text-red-400 text-sm mt-2">{errors.categoryId}</p>
+            <p className="text-red-500 text-sm mt-2">{errors.categoryId}</p>
           )}
         </div>
       </div>
 
       {/* Status Toggles */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Status</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Status</h2>
         </div>
 
         <div className="space-y-4">
@@ -408,11 +408,11 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               name="isActive"
               checked={formData.isActive}
               onChange={handleChange}
-              className="w-5 h-5 rounded border-white/10 bg-slate-900/50 text-lime-400 focus:ring-2 focus:ring-lime-400"
+              className="w-5 h-5 rounded border-gray-300 bg-white text-orange-500 focus:ring-2 focus:ring-orange-500"
             />
             <div>
-              <span className="text-white font-bold">Aktivan proizvod</span>
-              <p className="text-gray-400 text-sm">Proizvod je vidljiv na webshopu</p>
+              <span className="text-gray-900 font-bold">Aktivan proizvod</span>
+              <p className="text-gray-500 text-sm">Proizvod je vidljiv na webshopu</p>
             </div>
           </label>
 
@@ -423,21 +423,21 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               name="isFeatured"
               checked={formData.isFeatured}
               onChange={handleChange}
-              className="w-5 h-5 rounded border-white/10 bg-slate-900/50 text-lime-400 focus:ring-2 focus:ring-lime-400"
+              className="w-5 h-5 rounded border-gray-300 bg-white text-orange-500 focus:ring-2 focus:ring-orange-500"
             />
             <div>
-              <span className="text-white font-bold">Istaknut proizvod</span>
-              <p className="text-gray-400 text-sm">Prikazuje se na početnoj stranici</p>
+              <span className="text-gray-900 font-bold">Istaknut proizvod</span>
+              <p className="text-gray-500 text-sm">Prikazuje se na početnoj stranici</p>
             </div>
           </label>
         </div>
       </div>
 
       {/* Images Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Slike</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Slike</h2>
         </div>
 
         <ImageUpload
@@ -447,16 +447,16 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
       </div>
 
       {/* SEO Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">SEO</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">SEO</h2>
         </div>
 
         <div className="space-y-4">
           {/* Meta Title */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Meta naslov
             </label>
             <input
@@ -465,7 +465,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               value={formData.metaTitle}
               onChange={handleChange}
               maxLength={60}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="Naslov za pretraživače (ako je prazan, koristi naziv proizvoda)"
             />
             <p className="text-gray-500 text-xs mt-1">
@@ -475,7 +475,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
 
           {/* Meta Description */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Meta opis
             </label>
             <textarea
@@ -484,7 +484,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
               onChange={handleChange}
               maxLength={160}
               rows={3}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition resize-none"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition resize-none"
               placeholder="Opis za pretraživače (ako je prazan, koristi kratki opis)"
             />
             <p className="text-gray-500 text-xs mt-1">
@@ -499,11 +499,11 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2 px-8 py-4 bg-lime-400 text-slate-900 rounded-xl hover:bg-lime-300 transition font-bold shadow-lg shadow-lime-400/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-8 py-4 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-900"></div>
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               Čuvanje...
             </>
           ) : (
@@ -518,7 +518,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
           type="button"
           onClick={() => router.push("/admin/products")}
           disabled={loading}
-          className="flex items-center gap-2 px-8 py-4 bg-slate-700/50 text-white rounded-xl hover:bg-slate-700 transition font-bold border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-8 py-4 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition font-bold border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <X size={20} />
           Odustani

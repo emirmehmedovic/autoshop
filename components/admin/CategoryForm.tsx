@@ -179,16 +179,16 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Info Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Osnovne informacije</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Osnovne informacije</h2>
         </div>
 
         <div className="space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Naziv kategorije *
             </label>
             <input
@@ -196,11 +196,11 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="npr. Auto kozmetika"
             />
             {errors.name && (
-              <p className="text-red-400 text-sm mt-2">{errors.name}</p>
+              <p className="text-red-500 text-sm mt-2">{errors.name}</p>
             )}
             {formData.name && (
               <p className="text-gray-500 text-xs mt-1">
@@ -211,7 +211,7 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Opis
             </label>
             <textarea
@@ -219,21 +219,21 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
               value={formData.description}
               onChange={handleChange}
               rows={3}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition resize-none"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition resize-none"
               placeholder="Kratak opis kategorije"
             />
           </div>
 
           {/* Parent Category */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Roditeljska kategorija
             </label>
             <select
               name="parentId"
               value={formData.parentId}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
             >
               <option value="">Nema (glavna kategorija)</option>
               {availableParents.map((category) => (
@@ -249,7 +249,7 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
 
           {/* Sort Order */}
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2 uppercase tracking-wider">
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
               Redosljed prikaza
             </label>
             <input
@@ -258,7 +258,7 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
               value={formData.sortOrder}
               onChange={handleChange}
               min="0"
-              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-lime-400 focus:border-transparent transition"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
               placeholder="0"
             />
             <p className="text-gray-500 text-xs mt-1">
@@ -269,15 +269,15 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
       </div>
 
       {/* Image Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Slika kategorije</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Slika kategorije</h2>
         </div>
 
         <div className="space-y-4">
           {formData.imageUrl ? (
-            <div className="relative w-full h-48 bg-slate-700/30 rounded-xl overflow-hidden border border-white/10">
+            <div className="relative w-full h-48 bg-gray-100 rounded-xl overflow-hidden border border-gray-200">
               <Image
                 src={formData.imageUrl}
                 alt={formData.name || "Category image"}
@@ -288,7 +288,7 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
               <button
                 type="button"
                 onClick={() => setFormData((prev) => ({ ...prev, imageUrl: "" }))}
-                className="absolute top-4 right-4 p-2 bg-red-500/90 text-white rounded-lg hover:bg-red-600 transition"
+                className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
               >
                 <X size={18} />
               </button>
@@ -296,7 +296,7 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
           ) : (
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-white/20 rounded-xl p-12 text-center hover:border-lime-400/50 transition cursor-pointer bg-slate-900/30"
+              className="border-2 border-dashed border-gray-300 rounded-xl p-12 text-center hover:border-orange-500 transition cursor-pointer bg-gray-50"
             >
               <input
                 ref={fileInputRef}
@@ -306,10 +306,10 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
                 className="hidden"
               />
               <Upload className="mx-auto mb-4 text-gray-400" size={48} />
-              <p className="text-white font-bold mb-2">
+              <p className="text-gray-900 font-bold mb-2">
                 Klikni za upload slike
               </p>
-              <p className="text-gray-400 text-sm">
+              <p className="text-gray-500 text-sm">
                 JPG, PNG ili WEBP (max 10MB)
               </p>
             </div>
@@ -317,18 +317,18 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
 
           {uploading && (
             <div className="text-center py-4">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-lime-400"></div>
-              <p className="text-gray-400 mt-2">Upload u toku...</p>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+              <p className="text-gray-500 mt-2">Upload u toku...</p>
             </div>
           )}
         </div>
       </div>
 
       {/* Visibility Section */}
-      <div className="backdrop-blur-md bg-gradient-to-br from-slate-800/40 to-slate-900/40 border border-white/10 rounded-2xl p-6">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-1 h-8 bg-lime-400 rounded-full" />
-          <h2 className="text-2xl font-bold text-white">Vidljivost</h2>
+          <div className="w-1 h-8 bg-orange-500 rounded-full" />
+          <h2 className="text-2xl font-bold text-gray-900">Vidljivost</h2>
         </div>
 
         <label className="flex items-center gap-3 cursor-pointer">
@@ -337,11 +337,11 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
             name="isVisible"
             checked={formData.isVisible}
             onChange={handleChange}
-            className="w-5 h-5 rounded border-white/10 bg-slate-900/50 text-lime-400 focus:ring-2 focus:ring-lime-400"
+            className="w-5 h-5 rounded border-gray-300 bg-white text-orange-500 focus:ring-2 focus:ring-orange-500"
           />
           <div>
-            <span className="text-white font-bold">Vidljiva kategorija</span>
-            <p className="text-gray-400 text-sm">Kategorija je prikazana na webshopu</p>
+            <span className="text-gray-900 font-bold">Vidljiva kategorija</span>
+            <p className="text-gray-500 text-sm">Kategorija je prikazana na webshopu</p>
           </div>
         </label>
       </div>
@@ -351,11 +351,11 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
         <button
           type="submit"
           disabled={loading}
-          className="flex items-center gap-2 px-8 py-4 bg-lime-400 text-slate-900 rounded-xl hover:bg-lime-300 transition font-bold shadow-lg shadow-lime-400/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-8 py-4 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-slate-900"></div>
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
               Čuvanje...
             </>
           ) : (
@@ -370,7 +370,7 @@ export function CategoryForm({ categories, initialData, categoryId }: CategoryFo
           type="button"
           onClick={() => router.push("/admin/categories")}
           disabled={loading}
-          className="flex items-center gap-2 px-8 py-4 bg-slate-700/50 text-white rounded-xl hover:bg-slate-700 transition font-bold border border-white/10 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-2 px-8 py-4 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition font-bold border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <X size={20} />
           Odustani

@@ -11,9 +11,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AutoShop - Auto Kozmetika i Repromatrijali | BiH",
+  title: "GlossDrive - Detailing & Car Care | BiH",
   description: "Online prodaja auto kozmetike i repromatrijala u Bosni i Hercegovini. Brza dostava, plaćanje pouzećem.",
-  keywords: ["auto kozmetika", "repromatrijali", "BiH", "Sarajevo", "online kupovina"],
+  keywords: ["auto kozmetika", "repromatrijali", "detailing", "car care", "BiH", "Sarajevo", "online kupovina"],
 };
 
 export default function RootLayout({
