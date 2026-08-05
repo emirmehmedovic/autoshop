@@ -146,12 +146,12 @@ export default async function HomePage() {
             </div>
 
             {/* Bento Grid Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-3 gap-4">
               {/* Glavni istaknuti proizvod - lijevo */}
               {featuredProducts[0] && (
                 <Link
                   href={`/product/${featuredProducts[0].slug}`}
-                  className="lg:col-span-2 lg:row-span-2 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 to-orange-600 min-h-[400px] lg:min-h-[500px] border-[5px] border-white/80"
+                  className="lg:col-span-2 lg:row-span-3 group relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-500 to-orange-600 min-h-[400px] lg:min-h-[500px] border-[5px] border-white/80"
                 >
                   {/* Slika */}
                   {featuredProducts[0].images[0] && (
