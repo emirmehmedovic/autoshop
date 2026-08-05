@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ["image/avif", "image/webp"],
+    // Dozvoli lokalne slike bez optimizacije za uploadovane fajlove
+    unoptimized: process.env.NODE_ENV === "production",
   },
 
   compress: true,
