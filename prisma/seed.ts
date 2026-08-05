@@ -26,6 +26,24 @@ async function main() {
   })
   console.log('✅ Admin korisnik kreiran:', admin.email)
 
+  // Ažuriraj i starog admina ako postoji
+  const oldAdmin = await prisma.user.upsert({
+    where: { email: 'admin@autokozmetika.ba' },
+    update: {
+      passwordHash: adminPassword,
+      role: 'ADMIN',
+    },
+    create: {
+      email: 'admin@autokozmetika.ba',
+      name: 'Admin',
+      passwordHash: adminPassword,
+      role: 'ADMIN',
+      customerType: 'B2C',
+      isApproved: true,
+    },
+  })
+  console.log('✅ Stari admin ažuriran:', oldAdmin.email)
+
   // Kreiranje kategorija
   const categories = [
     {
