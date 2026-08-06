@@ -3,6 +3,8 @@ import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { CategoryForm } from "@/components/admin/CategoryForm"
 import { FolderTree } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function NewCategoryPage() {
   const categories = await prisma.category.findMany({
     where: { isVisible: true },

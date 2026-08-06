@@ -4,6 +4,9 @@ import { OrderStatusButtons } from "@/components/admin/OrderStatusButtons"
 import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
+
+export const dynamic = "force-dynamic"
+
 import {
   Package,
   User,

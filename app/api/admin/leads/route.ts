@@ -14,6 +14,7 @@ const leadSchema = z.object({
   address: z.string().optional().nullable(),
   city: z.string().optional().nullable(),
   region: z.string().optional().nullable(),
+  categoryId: z.string().optional().nullable(),
   businessType: z.string().optional().nullable(),
   source: z.enum(["MANUAL", "GOOGLE_PLACES", "FACEBOOK", "REFERRAL", "WEBSITE", "OTHER"]).default("MANUAL"),
   status: z.enum(["NEW", "CONTACTED", "INTERESTED", "NEGOTIATING", "WON", "LOST", "ON_HOLD"]).default("NEW"),
@@ -38,6 +39,7 @@ export async function GET(req: NextRequest) {
     const priority = searchParams.get("priority")
     const search = searchParams.get("search")
     const city = searchParams.get("city")
+    const categoryId = searchParams.get("categoryId")
 
     const where: Record<string, unknown> = {}
 
@@ -53,6 +55,10 @@ export async function GET(req: NextRequest) {
       where.city = city
     }
 
+    if (categoryId && categoryId !== "all") {
+      where.categoryId = categoryId
+    }
+
     if (search) {
       where.OR = [
         { companyName: { contains: search, mode: "insensitive" } },
@@ -66,6 +72,7 @@ export async function GET(req: NextRequest) {
     const leads = await prisma.lead.findMany({
       where,
       include: {
+        category: true,
         notes: {
           orderBy: { createdAt: "desc" },
           take: 1,
@@ -87,9 +94,20 @@ export async function GET(req: NextRequest) {
       distinct: ["city"],
     })
 
+    // Get categories with lead count
+    const categories = await prisma.leadCategory.findMany({
+      orderBy: { sortOrder: "asc" },
+      include: {
+        _count: {
+          select: { leads: true },
+        },
+      },
+    })
+
     return NextResponse.json({
       leads,
       cities: cities.map((c) => c.city).filter(Boolean),
+      categories,
     })
   } catch (error) {
     console.error("Error fetching leads:", error)
@@ -128,6 +146,7 @@ export async function POST(req: NextRequest) {
         website: validatedData.website || null,
         facebookUrl: validatedData.facebookUrl || null,
         googleMapsUrl: validatedData.googleMapsUrl || null,
+        categoryId: validatedData.categoryId || null,
         nextFollowUpAt: validatedData.nextFollowUpAt ? new Date(validatedData.nextFollowUpAt) : null,
       },
     })

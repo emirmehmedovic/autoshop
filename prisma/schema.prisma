@@ -306,8 +306,20 @@ model AdSpendRecord {
 // B2B LEADOVI
 // ============================================
 
+model LeadCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  color       String   @default("#6366f1") // Hex boja za badge
+  icon        String?  // Lucide icon name
+  description String?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  leads       Lead[]
+  createdAt   DateTime @default(now())
+}
+
 model Lead {
-  id              String       @id @default(cuid())
+  id              String        @id @default(cuid())
   // Osnovni podaci
   companyName     String
   contactPerson   String?
@@ -319,12 +331,14 @@ model Lead {
   // Lokacija
   address         String?
   city            String?
-  region          String?      // npr. "Tuzlanski kanton"
+  region          String?       // npr. "Tuzlanski kanton"
   // Kategorizacija
-  businessType    String?      // "Autopraonica", "Detailing studio", "Autoservis"
-  source          LeadSource   @default(MANUAL)
-  status          LeadStatus   @default(NEW)
-  priority        LeadPriority @default(MEDIUM)
+  categoryId      String?
+  category        LeadCategory? @relation(fields: [categoryId], references: [id])
+  businessType    String?       // Legacy polje, koristiti category
+  source          LeadSource    @default(MANUAL)
+  status          LeadStatus    @default(NEW)
+  priority        LeadPriority  @default(MEDIUM)
   // Bilješke i praćenje
   notes           LeadNote[]
   // Google/Facebook podaci

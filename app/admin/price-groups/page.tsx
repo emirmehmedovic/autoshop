@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Plus, Edit, Trash2, DollarSign, Users, Package } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 
+export const dynamic = "force-dynamic"
+
 export default async function PriceGroupsPage() {
   const priceGroups = await prisma.priceGroup.findMany({
     include: {

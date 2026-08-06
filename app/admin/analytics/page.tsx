@@ -3,6 +3,8 @@ import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { AnalyticsCharts } from "@/components/admin/AnalyticsCharts"
 import { TrendingUp, DollarSign, ShoppingCart, Target, Percent } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 async function getAnalyticsData() {
   const now = new Date()
   const last30Days = new Date(now)

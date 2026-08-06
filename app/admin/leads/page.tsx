@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import {
   Users,
@@ -13,20 +13,29 @@ import {
   Star,
   MessageSquare,
   ExternalLink,
-  Filter,
   Building2,
-  Calendar,
   Loader2,
   X,
-  ChevronDown,
   Send,
-  Clock,
   Target,
   TrendingUp,
   AlertCircle,
   CheckCircle,
-  RefreshCw,
+  Tags,
+  Trash2,
+  Edit3,
 } from "lucide-react"
+
+interface LeadCategory {
+  id: string
+  name: string
+  color: string
+  icon: string | null
+  description: string | null
+  sortOrder: number
+  isActive: boolean
+  _count?: { leads: number }
+}
 
 interface Lead {
   id: string
@@ -40,6 +49,8 @@ interface Lead {
   address: string | null
   city: string | null
   region: string | null
+  categoryId: string | null
+  category: LeadCategory | null
   businessType: string | null
   source: string
   status: string
@@ -88,16 +99,25 @@ const priorityConfig: Record<string, { label: string; color: string }> = {
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>([])
   const [cities, setCities] = useState<string[]>([])
+  const [categories, setCategories] = useState<LeadCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [statusFilter, setStatusFilter] = useState("all")
   const [priorityFilter, setPriorityFilter] = useState("all")
   const [cityFilter, setCityFilter] = useState("all")
+  const [categoryFilter, setCategoryFilter] = useState("all")
 
   // Modals
   const [showAddModal, setShowAddModal] = useState(false)
   const [showSearchModal, setShowSearchModal] = useState(false)
   const [showDetailModal, setShowDetailModal] = useState<Lead | null>(null)
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
+
+  // Category management
+  const [editingCategory, setEditingCategory] = useState<LeadCategory | null>(null)
+  const [newCategory, setNewCategory] = useState({ name: "", color: "#6366f1", description: "" })
+  const [savingCategory, setSavingCategory] = useState(false)
+  const [deletingCategory, setDeletingCategory] = useState<string | null>(null)
 
   // Search state
   const [searchQuery, setSearchQuery] = useState("autopraonica OR detailing OR car wash")
@@ -113,6 +133,7 @@ export default function LeadsPage() {
     phone: "",
     website: "",
     city: "",
+    categoryId: "",
     businessType: "",
     priority: "MEDIUM",
   })
@@ -122,28 +143,91 @@ export default function LeadsPage() {
   const [newNote, setNewNote] = useState("")
   const [savingNote, setSavingNote] = useState(false)
 
-  const fetchLeads = async () => {
+  const fetchLeads = useCallback(async () => {
     try {
       const params = new URLSearchParams()
       if (searchTerm) params.set("search", searchTerm)
       if (statusFilter !== "all") params.set("status", statusFilter)
       if (priorityFilter !== "all") params.set("priority", priorityFilter)
       if (cityFilter !== "all") params.set("city", cityFilter)
+      if (categoryFilter !== "all") params.set("categoryId", categoryFilter)
 
       const res = await fetch(`/api/admin/leads?${params}`)
       const data = await res.json()
       setLeads(data.leads || [])
       setCities(data.cities || [])
+      setCategories(data.categories || [])
     } catch (error) {
       console.error("Error fetching leads:", error)
     } finally {
       setLoading(false)
     }
+  }, [searchTerm, statusFilter, priorityFilter, cityFilter, categoryFilter])
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/leads/categories")
+      const data = await res.json()
+      setCategories(data || [])
+    } catch (error) {
+      console.error("Error fetching categories:", error)
+    }
+  }, [])
+
+  const handleSaveCategory = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSavingCategory(true)
+    try {
+      const url = editingCategory
+        ? `/api/admin/leads/categories/${editingCategory.id}`
+        : "/api/admin/leads/categories"
+
+      const res = await fetch(url, {
+        method: editingCategory ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(editingCategory || newCategory),
+      })
+
+      if (res.ok) {
+        fetchCategories()
+        setEditingCategory(null)
+        setNewCategory({ name: "", color: "#6366f1", description: "" })
+      } else {
+        const data = await res.json()
+        alert(data.error || "Greška pri spremanju kategorije")
+      }
+    } catch (error) {
+      console.error("Save category error:", error)
+    } finally {
+      setSavingCategory(false)
+    }
+  }
+
+  const handleDeleteCategory = async (categoryId: string) => {
+    if (!confirm("Da li ste sigurni da želite obrisati ovu kategoriju?")) return
+    setDeletingCategory(categoryId)
+    try {
+      const res = await fetch(`/api/admin/leads/categories/${categoryId}`, {
+        method: "DELETE",
+      })
+
+      if (res.ok) {
+        fetchCategories()
+      } else {
+        const data = await res.json()
+        alert(data.error || "Greška pri brisanju kategorije")
+      }
+    } catch (error) {
+      console.error("Delete category error:", error)
+    } finally {
+      setDeletingCategory(null)
+    }
   }
 
   useEffect(() => {
-    fetchLeads()
-  }, [searchTerm, statusFilter, priorityFilter, cityFilter])
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Data fetching requires setState
+    void fetchLeads()
+  }, [fetchLeads])
 
   const handleSearch = async () => {
     setSearching(true)
@@ -226,6 +310,7 @@ export default function LeadsPage() {
           phone: "",
           website: "",
           city: "",
+          categoryId: "",
           businessType: "",
           priority: "MEDIUM",
         })
@@ -254,6 +339,29 @@ export default function LeadsPage() {
       }
     } catch (error) {
       console.error("Status update error:", error)
+    }
+  }
+
+  const handleCategoryChange = async (leadId: string, categoryId: string) => {
+    try {
+      const res = await fetch(`/api/admin/leads/${leadId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ categoryId: categoryId || null }),
+      })
+      if (res.ok) {
+        const updatedLead = await res.json()
+        fetchLeads()
+        if (showDetailModal?.id === leadId) {
+          setShowDetailModal((prev) => (prev ? {
+            ...prev,
+            categoryId: updatedLead.categoryId,
+            category: updatedLead.category
+          } : null))
+        }
+      }
+    } catch (error) {
+      console.error("Category update error:", error)
     }
   }
 
@@ -310,6 +418,13 @@ export default function LeadsPage() {
           </div>
 
           <div className="flex gap-3">
+            <button
+              onClick={() => setShowCategoryModal(true)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition shadow-sm"
+            >
+              <Tags size={18} />
+              Kategorije
+            </button>
             <button
               onClick={() => setShowSearchModal(true)}
               className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition shadow-sm"
@@ -423,6 +538,19 @@ export default function LeadsPage() {
             ))}
           </select>
         )}
+
+        {categories.length > 0 && (
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            <option value="all">Sve kategorije</option>
+            {categories.filter(c => c.isActive).map((cat) => (
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
+            ))}
+          </select>
+        )}
       </div>
 
       {/* Leads List */}
@@ -471,13 +599,22 @@ export default function LeadsPage() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
+                    {lead.category && (
+                      <span
+                        className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold text-white"
+                        style={{ backgroundColor: lead.category.color }}
+                      >
+                        <Tags size={12} />
+                        {lead.category.name}
+                      </span>
+                    )}
                     {lead.city && (
                       <span className="flex items-center gap-1">
                         <MapPin size={14} />
                         {lead.city}
                       </span>
                     )}
-                    {lead.businessType && (
+                    {lead.businessType && !lead.category && (
                       <span className="flex items-center gap-1">
                         <Building2 size={14} />
                         {lead.businessType}
@@ -620,21 +757,35 @@ export default function LeadsPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Tip biznisa</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Kategorija</label>
                   <select
-                    value={newLead.businessType}
-                    onChange={(e) => setNewLead({ ...newLead, businessType: e.target.value })}
+                    value={newLead.categoryId}
+                    onChange={(e) => setNewLead({ ...newLead, categoryId: e.target.value })}
                     className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
-                    <option value="">Odaberi...</option>
-                    <option value="Autopraonica">Autopraonica</option>
-                    <option value="Detailing studio">Detailing studio</option>
-                    <option value="Autoservis">Autoservis</option>
-                    <option value="Benzinska pumpa">Benzinska pumpa</option>
-                    <option value="Auto salon">Auto salon</option>
-                    <option value="Ostalo">Ostalo</option>
+                    <option value="">Bez kategorije</option>
+                    {categories.filter(c => c.isActive).map((cat) => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
                   </select>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Tip biznisa (legacy)</label>
+                <select
+                  value={newLead.businessType}
+                  onChange={(e) => setNewLead({ ...newLead, businessType: e.target.value })}
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="">Odaberi...</option>
+                  <option value="Autopraonica">Autopraonica</option>
+                  <option value="Detailing studio">Detailing studio</option>
+                  <option value="Autoservis">Autoservis</option>
+                  <option value="Benzinska pumpa">Benzinska pumpa</option>
+                  <option value="Auto salon">Auto salon</option>
+                  <option value="Ostalo">Ostalo</option>
+                </select>
               </div>
 
               <div>
@@ -781,6 +932,166 @@ export default function LeadsPage() {
         </div>
       )}
 
+      {/* Category Management Modal */}
+      {showCategoryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                  <Tags size={24} />
+                  Upravljanje kategorijama leadova
+                </h2>
+                <button onClick={() => { setShowCategoryModal(false); setEditingCategory(null) }} className="p-2 hover:bg-gray-100 rounded-lg">
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6">
+              {/* Add/Edit Category Form */}
+              <form onSubmit={handleSaveCategory} className="mb-6 p-4 bg-gray-50 rounded-xl">
+                <h3 className="font-semibold text-gray-900 mb-4">
+                  {editingCategory ? "Uredi kategoriju" : "Dodaj novu kategoriju"}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Naziv *</label>
+                    <input
+                      type="text"
+                      value={editingCategory?.name || newCategory.name}
+                      onChange={(e) =>
+                        editingCategory
+                          ? setEditingCategory({ ...editingCategory, name: e.target.value })
+                          : setNewCategory({ ...newCategory, name: e.target.value })
+                      }
+                      required
+                      className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      placeholder="npr. Autopraonica"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Boja</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="color"
+                        value={editingCategory?.color || newCategory.color}
+                        onChange={(e) =>
+                          editingCategory
+                            ? setEditingCategory({ ...editingCategory, color: e.target.value })
+                            : setNewCategory({ ...newCategory, color: e.target.value })
+                        }
+                        className="w-12 h-10 rounded-lg border border-gray-200 cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={editingCategory?.color || newCategory.color}
+                        onChange={(e) =>
+                          editingCategory
+                            ? setEditingCategory({ ...editingCategory, color: e.target.value })
+                            : setNewCategory({ ...newCategory, color: e.target.value })
+                        }
+                        className="flex-1 px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm"
+                        placeholder="#6366f1"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Opis</label>
+                  <input
+                    type="text"
+                    value={editingCategory?.description || newCategory.description}
+                    onChange={(e) =>
+                      editingCategory
+                        ? setEditingCategory({ ...editingCategory, description: e.target.value })
+                        : setNewCategory({ ...newCategory, description: e.target.value })
+                    }
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Kratki opis kategorije"
+                  />
+                </div>
+                <div className="flex gap-2">
+                  {editingCategory && (
+                    <button
+                      type="button"
+                      onClick={() => setEditingCategory(null)}
+                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-300 transition"
+                    >
+                      Odustani
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={savingCategory}
+                    className="flex items-center gap-2 px-4 py-2 bg-indigo-500 text-white rounded-xl font-medium hover:bg-indigo-600 transition disabled:opacity-50"
+                  >
+                    {savingCategory ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus size={16} />}
+                    {editingCategory ? "Spremi izmjene" : "Dodaj kategoriju"}
+                  </button>
+                </div>
+              </form>
+
+              {/* Categories List */}
+              <div className="space-y-3">
+                <h3 className="font-semibold text-gray-900">Postojeće kategorije</h3>
+                {categories.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">Nema kategorija. Dodajte prvu kategoriju iznad.</p>
+                ) : (
+                  categories.map((cat) => (
+                    <div
+                      key={cat.id}
+                      className={`p-4 rounded-xl border ${cat.isActive ? 'border-gray-200 bg-white' : 'border-gray-100 bg-gray-50'}`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="w-8 h-8 rounded-lg flex items-center justify-center"
+                            style={{ backgroundColor: cat.color }}
+                          >
+                            <Tags size={16} className="text-white" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{cat.name}</h4>
+                            {cat.description && (
+                              <p className="text-sm text-gray-500">{cat.description}</p>
+                            )}
+                            <p className="text-xs text-gray-400 mt-1">
+                              {cat._count?.leads || 0} leadova
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setEditingCategory(cat)}
+                            className="p-2 text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 rounded-lg transition"
+                            title="Uredi"
+                          >
+                            <Edit3 size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteCategory(cat.id)}
+                            disabled={deletingCategory === cat.id || (cat._count?.leads || 0) > 0}
+                            className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            title={(cat._count?.leads || 0) > 0 ? "Ne možete obrisati kategoriju sa leadovima" : "Obriši"}
+                          >
+                            {deletingCategory === cat.id ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <Trash2 size={18} />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Lead Detail Modal */}
       {showDetailModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
@@ -789,7 +1100,10 @@ export default function LeadsPage() {
               <div className="flex items-start justify-between">
                 <div>
                   <h2 className="text-xl font-bold text-gray-900">{showDetailModal.companyName}</h2>
-                  <p className="text-gray-500">{showDetailModal.businessType} • {showDetailModal.city}</p>
+                  <p className="text-gray-500">
+                    {showDetailModal.category?.name || showDetailModal.businessType || "Bez kategorije"}
+                    {showDetailModal.city && ` • ${showDetailModal.city}`}
+                  </p>
                 </div>
                 <button onClick={() => setShowDetailModal(null)} className="p-2 hover:bg-gray-100 rounded-lg">
                   <X size={20} />
@@ -798,9 +1112,22 @@ export default function LeadsPage() {
             </div>
 
             <div className="flex-1 overflow-y-auto p-6 space-y-6">
-              {/* Status & Priority */}
-              <div className="flex gap-4">
-                <div className="flex-1">
+              {/* Category Badge */}
+              {showDetailModal.category && (
+                <div className="flex items-center gap-2">
+                  <span
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold text-white"
+                    style={{ backgroundColor: showDetailModal.category.color }}
+                  >
+                    <Tags size={14} />
+                    {showDetailModal.category.name}
+                  </span>
+                </div>
+              )}
+
+              {/* Status & Category */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">Status</label>
                   <select
                     value={showDetailModal.status}
@@ -809,6 +1136,19 @@ export default function LeadsPage() {
                   >
                     {Object.entries(statusConfig).map(([key, { label }]) => (
                       <option key={key} value={key}>{label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Kategorija</label>
+                  <select
+                    value={showDetailModal.categoryId || ""}
+                    onChange={(e) => handleCategoryChange(showDetailModal.id, e.target.value)}
+                    className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  >
+                    <option value="">Bez kategorije</option>
+                    {categories.filter(c => c.isActive).map((cat) => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
                     ))}
                   </select>
                 </div>

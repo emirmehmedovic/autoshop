@@ -4,6 +4,8 @@ import { CategoryForm } from "@/components/admin/CategoryForm"
 import { FolderTree } from "lucide-react"
 import { notFound } from "next/navigation"
 
+export const dynamic = "force-dynamic"
+
 export default async function EditCategoryPage({
   params,
 }: {

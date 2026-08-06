@@ -3,6 +3,8 @@ import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { ProductForm } from "@/components/admin/ProductForm"
 import { Package } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function NewProductPage() {
   const categories = await prisma.category.findMany({
     where: { isVisible: true },

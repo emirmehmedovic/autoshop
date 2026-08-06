@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { CheckCircle, XCircle, Users } from "lucide-react"
 
+export const dynamic = "force-dynamic"
+
 export default async function CustomersPage() {
   const customers = await prisma.user.findMany({
     where: { role: "CUSTOMER" },

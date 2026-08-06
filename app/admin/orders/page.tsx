@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Eye } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 
+export const dynamic = "force-dynamic"
+
 export default async function OrdersPage() {
   const orders = await prisma.order.findMany({
     include: {

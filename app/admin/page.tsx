@@ -3,6 +3,8 @@ import { DollarSign, ShoppingCart, Package, Users, TrendingUp, AlertTriangle } f
 import Link from "next/link"
 import { AdminGuard } from "@/components/admin/AdminGuard"
 
+export const dynamic = "force-dynamic"
+
 async function getDashboardStats() {
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())

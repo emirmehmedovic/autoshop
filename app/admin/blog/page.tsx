@@ -4,6 +4,8 @@ import { Plus, Edit, Eye, EyeOff, FileText } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { DeleteBlogButton } from "@/components/admin/DeleteBlogButton"
 
+export const dynamic = "force-dynamic"
+
 export default async function BlogPage() {
   const posts = await prisma.blogPost.findMany({
     orderBy: { createdAt: "desc" },

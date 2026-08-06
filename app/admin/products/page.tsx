@@ -5,6 +5,8 @@ import { Plus, Search, Edit, AlertCircle } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { DeleteProductButton } from "@/components/admin/DeleteProductButton"
 
+export const dynamic = "force-dynamic"
+
 interface SearchParams {
   search?: string
   category?: string

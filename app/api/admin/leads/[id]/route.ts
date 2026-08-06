@@ -14,6 +14,7 @@ const leadUpdateSchema = z.object({
   address: z.string().optional().nullable(),
   city: z.string().optional().nullable(),
   region: z.string().optional().nullable(),
+  categoryId: z.string().optional().nullable(),
   businessType: z.string().optional().nullable(),
   status: z.enum(["NEW", "CONTACTED", "INTERESTED", "NEGOTIATING", "WON", "LOST", "ON_HOLD"]).optional(),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
@@ -39,6 +40,7 @@ export async function GET(
     const lead = await prisma.lead.findUnique({
       where: { id },
       include: {
+        category: true,
         notes: {
           orderBy: { createdAt: "desc" },
         },
@@ -79,8 +81,12 @@ export async function PUT(
         website: validatedData.website || null,
         facebookUrl: validatedData.facebookUrl || null,
         googleMapsUrl: validatedData.googleMapsUrl || null,
+        categoryId: validatedData.categoryId === "" ? null : validatedData.categoryId,
         lastContactedAt: validatedData.lastContactedAt ? new Date(validatedData.lastContactedAt) : undefined,
         nextFollowUpAt: validatedData.nextFollowUpAt ? new Date(validatedData.nextFollowUpAt) : null,
+      },
+      include: {
+        category: true,
       },
     })
 

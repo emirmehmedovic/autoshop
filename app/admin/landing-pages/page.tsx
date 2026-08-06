@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Plus, Edit, Trash2, Eye, EyeOff, Zap } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 
+export const dynamic = "force-dynamic"
+
 export default async function LandingPagesPage() {
   const pages = await prisma.landingPage.findMany({
     orderBy: { createdAt: "desc" },

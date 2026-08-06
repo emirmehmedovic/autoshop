@@ -4,6 +4,8 @@ import { BlogForm } from "@/components/admin/BlogForm"
 import { FileText } from "lucide-react"
 import { notFound } from "next/navigation"
 
+export const dynamic = "force-dynamic"
+
 export default async function EditBlogPostPage({
   params,
 }: {

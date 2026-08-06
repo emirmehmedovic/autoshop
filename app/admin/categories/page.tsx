@@ -4,6 +4,8 @@ import { Plus, Edit, FolderTree } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { DeleteCategoryButton } from "@/components/admin/DeleteCategoryButton"
 
+export const dynamic = "force-dynamic"
+
 export default async function CategoriesPage() {
   const categories = await prisma.category.findMany({
     include: {
