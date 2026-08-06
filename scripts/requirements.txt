@@ -1,0 +1,2 @@
+# Python dependencies za Google Maps scraper
+playwright>=1.40.0
