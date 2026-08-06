@@ -28,21 +28,35 @@ async def search_google_maps(query: str, limit: int = 20) -> list[dict]:
     async with async_playwright() as p:
         browser = await p.chromium.launch(
             headless=True,
-            args=['--no-sandbox', '--disable-setuid-sandbox']
+            args=[
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--disable-gpu'
+            ]
         )
 
         context = await browser.new_context(
             viewport={'width': 1920, 'height': 1080},
             locale='bs-BA',
-            timezone_id='Europe/Sarajevo'
+            timezone_id='Europe/Sarajevo',
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         )
 
         page = await context.new_page()
 
+        # Block nepotrebni resursi za brže učitavanje
+        await page.route("**/*.{png,jpg,jpeg,gif,svg,ico,woff,woff2}", lambda route: route.abort())
+        await page.route("**/ads/**", lambda route: route.abort())
+
         try:
             # Idi na Google Maps pretragu
             search_url = f"https://www.google.com/maps/search/{query.replace(' ', '+')}"
-            await page.goto(search_url, wait_until='networkidle', timeout=30000)
+            await page.goto(search_url, wait_until='domcontentloaded', timeout=60000)
+
+            # Čekaj da se stranica učita
+            await page.wait_for_timeout(5000)
 
             # Prihvati cookies ako se pojavi
             try:
@@ -95,17 +109,23 @@ async def search_google_maps(query: str, limit: int = 20) -> list[dict]:
                     # Ekstraktuj podatke
                     data = await extract_place_data(page)
 
-                    if data and data.get('name'):
+                    if data and data.get('name') and data['name'] != "Rezultati":
                         # Dodaj Google Maps URL
                         data['google_maps_url'] = page.url
 
-                        # Ekstraktuj place_id iz URL-a
-                        place_id_match = re.search(r'!1s([^!]+)', page.url)
+                        # Ekstraktuj place_id iz URL-a (format: 0x...:0x...)
+                        place_id_match = re.search(r'!1s(0x[a-f0-9]+:0x[a-f0-9]+)', page.url)
                         if place_id_match:
                             data['google_place_id'] = place_id_match.group(1)
                         else:
-                            # Generiraj pseudo ID
-                            data['google_place_id'] = f"scraped_{hash(data['name'] + (data.get('address') or ''))}"
+                            # Alternativni format
+                            alt_match = re.search(r'/place/[^/]+/@[^/]+/data=!.*?!1s([^!]+)', page.url)
+                            if alt_match:
+                                data['google_place_id'] = alt_match.group(1)
+                            else:
+                                # Generiraj pseudo ID baziran na imenu i adresi
+                                unique_str = f"{data['name']}_{data.get('address', '')}_{data.get('phone', '')}"
+                                data['google_place_id'] = f"scraped_{abs(hash(unique_str))}"
 
                         results.append(data)
                         processed += 1
@@ -145,10 +165,37 @@ async def extract_place_data(page) -> Optional[dict]:
     }
 
     try:
-        # Naziv
-        name_el = page.locator('h1').first
-        if await name_el.count() > 0:
-            data['name'] = await name_el.text_content()
+        # Čekaj da se panel učita
+        await page.wait_for_timeout(1500)
+
+        # Naziv - probaj više selektora
+        name = None
+        name_selectors = [
+            'h1.DUwDvf',
+            'h1[data-attrid="title"]',
+            'div[role="main"] h1',
+            'h1'
+        ]
+        for selector in name_selectors:
+            try:
+                el = page.locator(selector).first
+                if await el.count() > 0:
+                    name = await el.text_content()
+                    if name and name != "Rezultati" and len(name) > 1:
+                        data['name'] = name.strip()
+                        break
+            except:
+                continue
+
+        # Ako nema validnog imena, probaj iz URL-a
+        if not data['name'] or data['name'] == "Rezultati":
+            try:
+                url = page.url
+                if '/place/' in url:
+                    place_name = url.split('/place/')[1].split('/')[0]
+                    data['name'] = place_name.replace('+', ' ').replace('%20', ' ')
+            except:
+                pass
 
         # Pronađi info elemente
         info_buttons = await page.locator('button[data-item-id]').all()
