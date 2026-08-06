@@ -301,3 +301,77 @@ model AdSpendRecord {
   campaignName String?
   createdAt    DateTime @default(now())
 }
+
+// ============================================
+// B2B LEADOVI
+// ============================================
+
+model Lead {
+  id              String       @id @default(cuid())
+  // Osnovni podaci
+  companyName     String
+  contactPerson   String?
+  email           String?
+  phone           String?
+  website         String?
+  facebookUrl     String?
+  googleMapsUrl   String?
+  // Lokacija
+  address         String?
+  city            String?
+  region          String?      // npr. "Tuzlanski kanton"
+  // Kategorizacija
+  businessType    String?      // "Autopraonica", "Detailing studio", "Autoservis"
+  source          LeadSource   @default(MANUAL)
+  status          LeadStatus   @default(NEW)
+  priority        LeadPriority @default(MEDIUM)
+  // Bilješke i praćenje
+  notes           LeadNote[]
+  // Google/Facebook podaci
+  googlePlaceId   String?      @unique
+  googleRating    Float?
+  googleReviews   Int?
+  // Prodaja
+  estimatedValue  Float?       // Procjena godišnje vrijednosti
+  lastContactedAt DateTime?
+  nextFollowUpAt  DateTime?
+  assignedTo      String?      // ID admina koji je zadužen
+  // Timestamps
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+model LeadNote {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  content   String   @db.Text
+  authorId  String?  // ID admina koji je napisao
+  createdAt DateTime @default(now())
+}
+
+enum LeadSource {
+  MANUAL        // Ručno uneseno
+  GOOGLE_PLACES // Google Maps pretraga
+  FACEBOOK      // Facebook Pages
+  REFERRAL      // Preporuka
+  WEBSITE       // Sa web stranice
+  OTHER
+}
+
+enum LeadStatus {
+  NEW           // Novi lead
+  CONTACTED     // Kontaktiran
+  INTERESTED    // Zainteresovan
+  NEGOTIATING   // U pregovorima
+  WON           // Zatvoren - uspješno
+  LOST          // Zatvoren - neuspješno
+  ON_HOLD       // Na čekanju
+}
+
+enum LeadPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}

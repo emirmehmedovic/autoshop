@@ -15,6 +15,7 @@ import {
   Sparkles,
   Shield,
   Globe,
+  Target,
   X,
 } from "lucide-react"
 
@@ -24,6 +25,7 @@ const navigation = [
   { name: "Proizvodi", href: "/admin/products", icon: Package },
   { name: "Kategorije", href: "/admin/categories", icon: FolderTree },
   { name: "Kupci", href: "/admin/customers", icon: Users },
+  { name: "B2B Leadovi", href: "/admin/leads", icon: Target },
   { name: "Blog", href: "/admin/blog", icon: FileText },
   { name: "SEO & Landing", href: "/admin/seo-landing", icon: Globe },
   { name: "Analitika", href: "/admin/analytics", icon: BarChart3 },
