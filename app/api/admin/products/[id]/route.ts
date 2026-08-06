@@ -5,6 +5,23 @@ import { z } from "zod"
 import { unlink } from "fs/promises"
 import { join } from "path"
 
+const optionValueSchema = z.object({
+  id: z.string().optional(),
+  value: z.string().min(1, "Vrijednost je obavezna"),
+  priceModifier: z.number().default(0),
+  isDefault: z.boolean().default(false),
+  isAvailable: z.boolean().default(true),
+  sortOrder: z.number().int().default(0),
+})
+
+const optionSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, "Naziv opcije je obavezan"),
+  isRequired: z.boolean().default(true),
+  sortOrder: z.number().int().default(0),
+  values: z.array(optionValueSchema).default([]),
+})
+
 const productUpdateSchema = z.object({
   name: z.string().min(2, "Naziv mora imati najmanje 2 karaktera"),
   description: z.string().min(10, "Opis mora imati najmanje 10 karaktera"),
@@ -24,6 +41,7 @@ const productUpdateSchema = z.object({
     alt: z.string().optional().nullable(),
     sortOrder: z.number().int(),
   })).optional().default([]),
+  options: z.array(optionSchema).optional().default([]),
 })
 
 function generateSlug(name: string): string {
@@ -150,7 +168,7 @@ export async function PUT(
     // Delete old image files from filesystem
     await Promise.all(imagesToDelete.map((url) => deleteImageFile(url)))
 
-    // Update product
+    // Update product with options
     const product = await prisma.product.update({
       where: { id },
       data: {
@@ -176,10 +194,32 @@ export async function PUT(
             sortOrder: img.sortOrder,
           })),
         },
+        options: {
+          deleteMany: {},
+          create: validatedData.options.map((option) => ({
+            name: option.name,
+            isRequired: option.isRequired,
+            sortOrder: option.sortOrder,
+            values: {
+              create: option.values.map((value) => ({
+                value: value.value,
+                priceModifier: value.priceModifier,
+                isDefault: value.isDefault,
+                isAvailable: value.isAvailable,
+                sortOrder: value.sortOrder,
+              })),
+            },
+          })),
+        },
       },
       include: {
         category: true,
         images: true,
+        options: {
+          include: {
+            values: true,
+          },
+        },
       },
     })
 

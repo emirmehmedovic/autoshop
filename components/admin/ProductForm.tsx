@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { ImageUpload } from "./ImageUpload"
-import { Save, X } from "lucide-react"
+import { ProductOptions, ProductOption } from "./ProductOptions"
+import { Save, X, Settings2 } from "lucide-react"
 
 interface Category {
   id: string
@@ -31,6 +32,7 @@ interface ProductFormData {
   metaTitle: string
   metaDesc: string
   images: ProductImage[]
+  options: ProductOption[]
 }
 
 interface ProductFormProps {
@@ -75,6 +77,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
     metaTitle: initialData?.metaTitle || "",
     metaDesc: initialData?.metaDesc || "",
     images: initialData?.images || [],
+    options: initialData?.options || [],
   })
 
   // Auto-generate SKU from name
@@ -431,6 +434,27 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
             </div>
           </label>
         </div>
+      </div>
+
+      {/* Product Options Section */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-1 h-8 bg-purple-500 rounded-full" />
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <Settings2 size={24} />
+              Opcije proizvoda
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Dodajte opcije ako kupac treba odabrati varijantu (npr. miris, boja, veličina)
+            </p>
+          </div>
+        </div>
+
+        <ProductOptions
+          options={formData.options}
+          onChange={(options) => setFormData((prev) => ({ ...prev, options }))}
+        />
       </div>
 
       {/* Images Section */}

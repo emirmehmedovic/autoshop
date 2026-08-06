@@ -17,6 +17,14 @@ export default async function EditProductPage({
       images: {
         orderBy: { sortOrder: "asc" },
       },
+      options: {
+        orderBy: { sortOrder: "asc" },
+        include: {
+          values: {
+            orderBy: { sortOrder: "asc" },
+          },
+        },
+      },
     },
   })
 
@@ -52,6 +60,20 @@ export default async function EditProductPage({
       url: img.url,
       alt: img.alt || "",
       sortOrder: img.sortOrder,
+    })),
+    options: product.options.map((option) => ({
+      id: option.id,
+      name: option.name,
+      isRequired: option.isRequired,
+      sortOrder: option.sortOrder,
+      values: option.values.map((value) => ({
+        id: value.id,
+        value: value.value,
+        priceModifier: value.priceModifier,
+        isDefault: value.isDefault,
+        isAvailable: value.isAvailable,
+        sortOrder: value.sortOrder,
+      })),
     })),
   }
 

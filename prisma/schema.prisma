@@ -121,6 +121,7 @@ model Product {
   tags           ProductTag[]
   orderItems     OrderItem[]
   priceGroups    ProductPriceGroup[] // B2B cijene po grupama
+  options        ProductOption[]     // Opcije proizvoda (miris, boja, itd.)
   metaTitle      String?
   metaDesc       String?
   createdAt      DateTime            @default(now())
@@ -152,6 +153,32 @@ model ProductPriceGroup {
   price        Float // Specifična B2B cijena za ovaj proizvod
 
   @@unique([productId, priceGroupId])
+}
+
+// ============================================
+// OPCIJE PROIZVODA (Varijante)
+// ============================================
+
+model ProductOption {
+  id         String               @id @default(cuid())
+  productId  String
+  product    Product              @relation(fields: [productId], references: [id], onDelete: Cascade)
+  name       String               // npr. "Miris", "Boja", "Veličina"
+  isRequired Boolean              @default(true)
+  sortOrder  Int                  @default(0)
+  values     ProductOptionValue[]
+}
+
+model ProductOptionValue {
+  id            String        @id @default(cuid())
+  optionId      String
+  option        ProductOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  value         String        // npr. "Vanila", "Limun", "Ocean"
+  priceModifier Float         @default(0) // Dodatna cijena (+5 KM, -2 KM)
+  imageUrl      String?       // Slika za ovu opciju
+  isDefault     Boolean       @default(false)
+  isAvailable   Boolean       @default(true)
+  sortOrder     Int           @default(0)
 }
 
 // ============================================
@@ -204,14 +231,15 @@ enum OrderStatus {
 }
 
 model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int
-  unitPrice Float // Snapshot cijene u trenutku narudžbe
-  total     Float
+  id              String  @id @default(cuid())
+  orderId         String
+  order           Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId       String
+  product         Product @relation(fields: [productId], references: [id])
+  quantity        Int
+  unitPrice       Float   // Snapshot cijene u trenutku narudžbe
+  total           Float
+  selectedOptions Json?   // Odabrane opcije: [{ name: "Miris", value: "Vanila", price: 0 }]
 }
 
 model OrderStatusHistory {

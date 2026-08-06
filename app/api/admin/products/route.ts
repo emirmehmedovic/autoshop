@@ -3,6 +3,23 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
+const optionValueSchema = z.object({
+  id: z.string().optional(),
+  value: z.string().min(1, "Vrijednost je obavezna"),
+  priceModifier: z.number().default(0),
+  isDefault: z.boolean().default(false),
+  isAvailable: z.boolean().default(true),
+  sortOrder: z.number().int().default(0),
+})
+
+const optionSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, "Naziv opcije je obavezan"),
+  isRequired: z.boolean().default(true),
+  sortOrder: z.number().int().default(0),
+  values: z.array(optionValueSchema).default([]),
+})
+
 const productSchema = z.object({
   name: z.string().min(2, "Naziv mora imati najmanje 2 karaktera"),
   description: z.string().min(10, "Opis mora imati najmanje 10 karaktera"),
@@ -22,6 +39,7 @@ const productSchema = z.object({
     alt: z.string().optional().nullable(),
     sortOrder: z.number().int(),
   })).optional().default([]),
+  options: z.array(optionSchema).optional().default([]),
 })
 
 function generateSlug(name: string): string {
@@ -94,7 +112,7 @@ export async function POST(req: NextRequest) {
       counter++
     }
 
-    // Create product with images
+    // Create product with images and options
     const product = await prisma.product.create({
       data: {
         name: validatedData.name,
@@ -118,10 +136,31 @@ export async function POST(req: NextRequest) {
             sortOrder: img.sortOrder,
           })),
         },
+        options: {
+          create: validatedData.options.map((option) => ({
+            name: option.name,
+            isRequired: option.isRequired,
+            sortOrder: option.sortOrder,
+            values: {
+              create: option.values.map((value) => ({
+                value: value.value,
+                priceModifier: value.priceModifier,
+                isDefault: value.isDefault,
+                isAvailable: value.isAvailable,
+                sortOrder: value.sortOrder,
+              })),
+            },
+          })),
+        },
       },
       include: {
         category: true,
         images: true,
+        options: {
+          include: {
+            values: true,
+          },
+        },
       },
     })
 
