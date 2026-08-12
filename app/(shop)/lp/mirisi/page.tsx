@@ -422,7 +422,7 @@ export default async function CarScentsLandingPage() {
                 <img
                   src="/products/luxury.png"
                   alt="Luxury Collection"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
                 {/* Hover overlay */}
@@ -441,7 +441,7 @@ export default async function CarScentsLandingPage() {
                 <img
                   src="/products/signature.png"
                   alt="Signature Collection"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
                 <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/30 transition-colors flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
@@ -459,7 +459,7 @@ export default async function CarScentsLandingPage() {
                 <img
                   src="/products/performance.png"
                   alt="Performance Collection"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
                 <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/30 transition-colors flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
