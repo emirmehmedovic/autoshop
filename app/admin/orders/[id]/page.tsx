@@ -185,6 +185,24 @@ export default async function OrderDetailPage({
                         {item.product.name}
                       </Link>
                       <p className="text-sm text-gray-500">SKU: {item.product.sku}</p>
+                      {/* Selected Options */}
+                      {item.selectedOptions && Array.isArray(item.selectedOptions) && (item.selectedOptions as Array<{name: string; value: string; price: number}>).length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {(item.selectedOptions as Array<{name: string; value: string; price: number}>).map((option, idx) => (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200"
+                            >
+                              {option.name}: {option.value}
+                              {option.price !== 0 && (
+                                <span className="ml-1 text-orange-500">
+                                  ({option.price > 0 ? "+" : ""}{option.price.toFixed(2)} KM)
+                                </span>
+                              )}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       <div className="flex items-center gap-4 mt-1 text-sm">
                         <span className="text-gray-600">
                           {item.quantity} x {item.unitPrice.toFixed(2)} KM
