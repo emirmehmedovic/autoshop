@@ -10,6 +10,11 @@ const orderItemSchema = z.object({
   productId: z.string(),
   quantity: z.number().int().positive(),
   unitPrice: z.number().positive(),
+  selectedOptions: z.array(z.object({
+    name: z.string(),
+    value: z.string(),
+    price: z.number(),
+  })).optional(),
 })
 
 const shippingInfoSchema = z.object({
@@ -80,6 +85,7 @@ export async function POST(request: NextRequest) {
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         total,
+        selectedOptions: item.selectedOptions?.length ? item.selectedOptions : undefined,
       }
     })
 

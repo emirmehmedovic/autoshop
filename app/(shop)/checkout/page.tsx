@@ -118,6 +118,7 @@ export default function CheckoutPage() {
             productId: item.productId,
             quantity: item.quantity,
             unitPrice: item.price,
+            selectedOptions: item.selectedOptions,
           })),
           shippingInfo: formData,
         }),
