@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useState } from "react"
-import { Filter, X } from "lucide-react"
+import { ChevronDown, Filter, X } from "lucide-react"
 
 interface Category {
   id: string
@@ -31,6 +31,7 @@ export function FilterSidebar({
   const searchParams = useSearchParams()
   const [minPrice, setMinPrice] = useState(initialMinPrice || "")
   const [maxPrice, setMaxPrice] = useState(initialMaxPrice || "")
+  const [showMobileCategories, setShowMobileCategories] = useState(false)
 
   const handlePriceFilter = () => {
     const params = new URLSearchParams(searchParams.toString())
@@ -64,13 +65,33 @@ export function FilterSidebar({
       <div className="relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-orange-500/5 via-white/70 to-amber-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
         <div className="relative">
-          <div className="flex items-center space-x-2 mb-5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
-              <Filter className="text-white" size={18} />
+          <div className="flex items-center justify-between gap-3 mb-5">
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
+                <Filter className="text-white" size={18} />
+              </div>
+              <h3 className="font-bold text-gray-900 text-lg">Kategorije</h3>
             </div>
-            <h3 className="font-bold text-gray-900 text-lg">Kategorije</h3>
+            <button
+              type="button"
+              onClick={() => setShowMobileCategories((isOpen) => !isOpen)}
+              aria-expanded={showMobileCategories}
+              aria-controls="mobile-category-list"
+              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-700 shadow-sm transition hover:bg-white"
+            >
+              <ChevronDown
+                size={20}
+                className={`transition-transform duration-300 ${showMobileCategories ? "rotate-180" : ""}`}
+              />
+              <span className="sr-only">
+                {showMobileCategories ? "Sakrij kategorije" : "Prikaži kategorije"}
+              </span>
+            </button>
           </div>
-          <ul className="space-y-2">
+          <ul
+            id="mobile-category-list"
+            className={`${showMobileCategories ? "block" : "hidden"} space-y-2 lg:block`}
+          >
             <li>
               <Link
                 href="/shop"
@@ -111,7 +132,7 @@ export function FilterSidebar({
       </div>
 
       {/* Cijena */}
-      <div className="relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/5 via-white/70 to-indigo-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+      <div className="hidden lg:block relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/5 via-white/70 to-indigo-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
         <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
         <div className="relative">
           <h3 className="font-bold text-gray-900 text-lg mb-5">Cijena (KM)</h3>

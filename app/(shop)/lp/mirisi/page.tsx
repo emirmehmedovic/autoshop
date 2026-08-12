@@ -78,7 +78,7 @@ export default async function CarScentsLandingPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12">
                 <Link
-                  href="/shop?category=miris-za-auto"
+                  href="/shop?category=mirisi-za-auto"
                   className="group inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-amber-200 to-amber-100 text-amber-950 text-sm uppercase tracking-wider hover:from-amber-100 hover:to-white transition-all rounded-full"
                 >
                   Naruči odmah
