@@ -189,6 +189,79 @@ export default async function CarScentsLandingPage() {
         </div>
       </section>
 
+      {/* Scents Collection */}
+      <section id="kolekcija" className="py-8 lg:py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-amber-950 via-[#1a1410] to-amber-950 py-20 lg:py-28 px-6 sm:px-10 lg:px-16">
+            {/* Ambient effects */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(180,140,100,0.15),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(160,120,80,0.1),transparent_50%)]" />
+
+            <div className="relative">
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-amber-500/60 mb-4">Kolekcija</p>
+                  <h2 className="text-3xl md:text-4xl font-light text-amber-100">
+                    Pronađi svoju notu
+                  </h2>
+                </div>
+                <Link
+                  href="/shop?category=miris-za-auto"
+                  className="group inline-flex items-center text-sm text-amber-300/60 hover:text-amber-200 transition-colors"
+                >
+                  Pogledaj sve mirise
+                  <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
+                </Link>
+              </div>
+
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Collection 1 - Luxury Collection */}
+                <Link href="/product/luxury-collection-miris-za-auto" className="group">
+                  <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+                    <img
+                      src="/products/luxury.png"
+                      alt="Luxury Collection"
+                      className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
+                    />
+                  </div>
+                  <h3 className="font-medium text-amber-100 mb-1">Luxury Collection</h3>
+                  <p className="text-sm text-amber-200/40 mb-2">Ekskluzivne premium note za istinske poznavaoce</p>
+                  <p className="text-sm font-medium text-amber-300">25 KM</p>
+                </Link>
+
+                {/* Collection 2 - Signature Collection */}
+                <Link href="/product/signature-collection-miris-za-auto" className="group">
+                  <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+                    <img
+                      src="/products/signature.png"
+                      alt="Signature Collection"
+                      className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
+                    />
+                  </div>
+                  <h3 className="font-medium text-amber-100 mb-1">Signature Collection</h3>
+                  <p className="text-sm text-amber-200/40 mb-2">Jedinstveni potpisi koji definiraju vaš stil</p>
+                  <p className="text-sm font-medium text-amber-300">25 KM</p>
+                </Link>
+
+                {/* Collection 3 - Performance Collection */}
+                <Link href="/product/performance-collection-miris-za-auto" className="group">
+                  <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+                    <img
+                      src="/products/performance.png"
+                      alt="Performance Collection"
+                      className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
+                    />
+                  </div>
+                  <h3 className="font-medium text-amber-100 mb-1">Performance Collection</h3>
+                  <p className="text-sm text-amber-200/40 mb-2">Energične note za dinamičnu vožnju</p>
+                  <p className="text-sm font-medium text-amber-300">25 KM</p>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Order Form Section */}
       {product && (
         <section id="naruci" className="py-20 lg:py-28">
@@ -385,79 +458,6 @@ export default async function CarScentsLandingPage() {
                   Uključi klimu i pusti da miris ispuni cijeli enterijer.
                 </p>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Scents Collection */}
-      <section id="kolekcija" className="py-8 lg:py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-b from-amber-950 via-[#1a1410] to-amber-950 py-20 lg:py-28 px-6 sm:px-10 lg:px-16">
-            {/* Ambient effects */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(180,140,100,0.15),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(160,120,80,0.1),transparent_50%)]" />
-
-            <div className="relative">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-6">
-            <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-amber-500/60 mb-4">Kolekcija</p>
-              <h2 className="text-3xl md:text-4xl font-light text-amber-100">
-                Pronađi svoju notu
-              </h2>
-            </div>
-            <Link
-              href="/shop?category=miris-za-auto"
-              className="group inline-flex items-center text-sm text-amber-300/60 hover:text-amber-200 transition-colors"
-            >
-              Pogledaj sve mirise
-              <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={16} />
-            </Link>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Collection 1 - Luxury Collection */}
-            <Link href="/product/luxury-collection-miris-za-auto" className="group">
-              <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
-                <img
-                  src="/products/luxury.png"
-                  alt="Luxury Collection"
-                  className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
-                />
-              </div>
-              <h3 className="font-medium text-amber-100 mb-1">Luxury Collection</h3>
-              <p className="text-sm text-amber-200/40 mb-2">Ekskluzivne premium note za istinske poznavaoce</p>
-              <p className="text-sm font-medium text-amber-300">25 KM</p>
-            </Link>
-
-            {/* Collection 2 - Signature Collection */}
-            <Link href="/product/signature-collection-miris-za-auto" className="group">
-              <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
-                <img
-                  src="/products/signature.png"
-                  alt="Signature Collection"
-                  className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
-                />
-              </div>
-              <h3 className="font-medium text-amber-100 mb-1">Signature Collection</h3>
-              <p className="text-sm text-amber-200/40 mb-2">Jedinstveni potpisi koji definiraju vaš stil</p>
-              <p className="text-sm font-medium text-amber-300">25 KM</p>
-            </Link>
-
-            {/* Collection 3 - Performance Collection */}
-            <Link href="/product/performance-collection-miris-za-auto" className="group">
-              <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
-                <img
-                  src="/products/performance.png"
-                  alt="Performance Collection"
-                  className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
-                />
-              </div>
-              <h3 className="font-medium text-amber-100 mb-1">Performance Collection</h3>
-              <p className="text-sm text-amber-200/40 mb-2">Energične note za dinamičnu vožnju</p>
-              <p className="text-sm font-medium text-amber-300">25 KM</p>
-            </Link>
-          </div>
             </div>
           </div>
         </div>
