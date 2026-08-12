@@ -46,7 +46,7 @@ export default async function CarScentsLandingPage() {
   return (
     <div className="flex flex-col bg-[#faf8f5] min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-8 lg:py-12">
+      <section className="relative -mt-28 pt-28 pb-8 lg:pb-12 bg-gradient-to-b from-amber-950 via-amber-950 to-[#faf8f5]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-950 via-[#1a1410] to-neutral-900 min-h-[85vh] flex items-center">
         {/* Ambient light effects */}
@@ -418,17 +418,12 @@ export default async function CarScentsLandingPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Collection 1 - Luxury Collection */}
             <Link href="/product/luxury-collection-miris-za-auto" className="group">
-              <div className="relative aspect-[3/4] rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+              <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
                 <img
                   src="/products/luxury.png"
                   alt="Luxury Collection"
-                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 rounded-2xl"
+                  className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/30 transition-colors flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
-                  <span className="px-4 py-2 bg-amber-100 text-amber-950 text-xs uppercase tracking-wider rounded-full">Pogledaj kolekciju</span>
-                </div>
               </div>
               <h3 className="font-medium text-amber-100 mb-1">Luxury Collection</h3>
               <p className="text-sm text-amber-200/40 mb-2">Ekskluzivne premium note za istinske poznavaoce</p>
@@ -437,16 +432,12 @@ export default async function CarScentsLandingPage() {
 
             {/* Collection 2 - Signature Collection */}
             <Link href="/product/signature-collection-miris-za-auto" className="group">
-              <div className="relative aspect-[3/4] rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+              <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
                 <img
                   src="/products/signature.png"
                   alt="Signature Collection"
-                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 rounded-2xl"
+                  className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
-                <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/30 transition-colors flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
-                  <span className="px-4 py-2 bg-amber-100 text-amber-950 text-xs uppercase tracking-wider rounded-full">Pogledaj kolekciju</span>
-                </div>
               </div>
               <h3 className="font-medium text-amber-100 mb-1">Signature Collection</h3>
               <p className="text-sm text-amber-200/40 mb-2">Jedinstveni potpisi koji definiraju vaš stil</p>
@@ -455,16 +446,12 @@ export default async function CarScentsLandingPage() {
 
             {/* Collection 3 - Performance Collection */}
             <Link href="/product/performance-collection-miris-za-auto" className="group">
-              <div className="relative aspect-[3/4] rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+              <div className="mb-5 overflow-hidden rounded-2xl border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
                 <img
                   src="/products/performance.png"
                   alt="Performance Collection"
-                  className="absolute inset-0 w-full h-full object-contain transition-transform duration-500 group-hover:scale-105 rounded-2xl"
+                  className="w-full h-auto transition-transform duration-500 group-hover:scale-105 rounded-2xl"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
-                <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/30 transition-colors flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
-                  <span className="px-4 py-2 bg-amber-100 text-amber-950 text-xs uppercase tracking-wider rounded-full">Pogledaj kolekciju</span>
-                </div>
               </div>
               <h3 className="font-medium text-amber-100 mb-1">Performance Collection</h3>
               <p className="text-sm text-amber-200/40 mb-2">Energične note za dinamičnu vožnju</p>

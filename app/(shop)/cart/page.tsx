@@ -57,9 +57,16 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Lista proizvoda */}
           <div className="lg:col-span-2 space-y-4">
-            {items.map((item) => (
+            {items.map((item, index) => {
+              // Create unique key including selected options
+              const optionsKey = item.selectedOptions
+                ? item.selectedOptions.map(o => `${o.name}:${o.value}`).join("-")
+                : ""
+              const uniqueKey = `${item.productId}-${optionsKey}-${index}`
+
+              return (
               <div
-                key={item.productId}
+                key={uniqueKey}
                 className="relative overflow-hidden rounded-2xl p-4 backdrop-blur-xl bg-gradient-to-br from-white/90 via-white/80 to-gray-50/90 border border-white/50 shadow-[0_4px_24px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)] transition"
               >
                 <div className="flex gap-4">
@@ -166,7 +173,7 @@ export default function CartPage() {
                   </button>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
 
           {/* Sažetak narudžbe */}

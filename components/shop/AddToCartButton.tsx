@@ -5,6 +5,21 @@ import { ShoppingCart, Plus, Minus, Check } from "lucide-react"
 import { useCartStore } from "@/lib/store/cartStore"
 import { trackAddToCart } from "@/lib/analytics/meta-pixel"
 
+interface ProductOptionValue {
+  id: string
+  value: string
+  priceModifier: number
+  isDefault: boolean
+  isAvailable: boolean
+}
+
+interface ProductOption {
+  id: string
+  name: string
+  isRequired: boolean
+  values: ProductOptionValue[]
+}
+
 interface AddToCartButtonProps {
   product: {
     id: string
@@ -13,6 +28,7 @@ interface AddToCartButtonProps {
     price: number
     stock: number
     images: { url: string; alt: string | null }[]
+    options?: ProductOption[]
   }
 }
 
@@ -21,17 +37,65 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
   const [justAdded, setJustAdded] = useState(false)
   const addItem = useCartStore((state) => state.addItem)
 
+  // Initialize selected options with defaults
+  const getDefaultOptions = () => {
+    const defaults: Record<string, string> = {}
+    product.options?.forEach((option) => {
+      const defaultValue = option.values.find((v) => v.isDefault && v.isAvailable)
+      const firstAvailable = option.values.find((v) => v.isAvailable)
+      if (defaultValue) {
+        defaults[option.id] = defaultValue.id
+      } else if (firstAvailable) {
+        defaults[option.id] = firstAvailable.id
+      }
+    })
+    return defaults
+  }
+
+  const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(getDefaultOptions())
+
+  // Calculate total price including option modifiers
+  const calculateTotalPrice = () => {
+    let total = product.price
+    product.options?.forEach((option) => {
+      const selectedValueId = selectedOptions[option.id]
+      const selectedValue = option.values.find((v) => v.id === selectedValueId)
+      if (selectedValue) {
+        total += selectedValue.priceModifier
+      }
+    })
+    return total
+  }
+
+  const totalPrice = calculateTotalPrice()
+
   const handleAddToCart = () => {
     if (product.stock === 0) return
+
+    // Build selected options array for the cart
+    const selectedOptionsArray = product.options?.map((option) => {
+      const selectedValueId = selectedOptions[option.id]
+      const selectedValue = option.values.find((v) => v.id === selectedValueId)
+      return {
+        name: option.name,
+        value: selectedValue?.value || "",
+        price: selectedValue?.priceModifier || 0,
+      }
+    }) || []
+
+    // Build product name with options
+    const optionsSuffix = selectedOptionsArray.map((o) => o.value).filter(Boolean).join(", ")
+    const fullProductName = optionsSuffix ? `${product.name} - ${optionsSuffix}` : product.name
 
     addItem(
       {
         productId: product.id,
-        name: product.name,
+        name: fullProductName,
         slug: product.slug,
-        price: product.price,
+        price: totalPrice,
         stock: product.stock,
         image: product.images[0]?.url || "/placeholder-product.svg",
+        selectedOptions: selectedOptionsArray.length > 0 ? selectedOptionsArray : undefined,
       },
       quantity
     )
@@ -39,8 +103,8 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
     // Meta Pixel tracking
     trackAddToCart({
       id: product.id,
-      name: product.name,
-      price: product.price,
+      name: fullProductName,
+      price: totalPrice,
       quantity,
     })
 
@@ -69,6 +133,44 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
 
   return (
     <div className="space-y-4">
+      {/* Opcije proizvoda */}
+      {product.options && product.options.length > 0 && (
+        <div className="space-y-4">
+          {product.options.map((option) => (
+            <div key={option.id}>
+              <label className="block font-medium text-gray-700 mb-2">
+                {option.name} {option.isRequired && <span className="text-red-500">*</span>}
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {option.values
+                  .filter((v) => v.isAvailable)
+                  .map((value) => (
+                    <button
+                      key={value.id}
+                      type="button"
+                      onClick={() =>
+                        setSelectedOptions((prev) => ({ ...prev, [option.id]: value.id }))
+                      }
+                      className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-all ${
+                        selectedOptions[option.id] === value.id
+                          ? "border-orange-500 bg-orange-50 text-orange-700"
+                          : "border-gray-200 bg-white/80 text-gray-700 hover:border-orange-300"
+                      }`}
+                    >
+                      {value.value}
+                      {value.priceModifier !== 0 && (
+                        <span className="ml-1 text-xs text-gray-500">
+                          ({value.priceModifier > 0 ? "+" : ""}{value.priceModifier.toFixed(2)} KM)
+                        </span>
+                      )}
+                    </button>
+                  ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* Količina */}
       <div className="flex items-center gap-4">
         <label className="font-medium text-gray-700">Količina:</label>

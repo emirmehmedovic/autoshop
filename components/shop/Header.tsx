@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import { ShoppingCart, User, LogOut, Menu, X, ChevronDown, Sparkles, Droplets, SprayCan, Car, Phone } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useCartStore } from "@/lib/store/cartStore"
 
 const categories = [
@@ -37,7 +37,12 @@ export function Header() {
   const { data: session } = useSession()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const totalItems = useCartStore((state) => state.getTotalItems())
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   return (
     <header className="sticky top-4 z-50 mx-4 lg:mx-8">
@@ -124,7 +129,7 @@ export function Header() {
               className="relative flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition"
             >
               <ShoppingCart className="h-5 w-5" />
-              {totalItems > 0 && (
+              {mounted && totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
                   {totalItems}
                 </span>

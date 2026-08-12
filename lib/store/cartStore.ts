@@ -1,6 +1,12 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
+export interface SelectedOption {
+  name: string
+  value: string
+  price: number
+}
+
 export interface CartItem {
   productId: string
   name: string
@@ -9,6 +15,7 @@ export interface CartItem {
   quantity: number
   image: string
   stock: number
+  selectedOptions?: SelectedOption[]
 }
 
 interface CartState {
@@ -28,12 +35,21 @@ export const useCartStore = create<CartState>()(
 
       addItem: (item, quantity = 1) => {
         set((state) => {
-          const existingItem = state.items.find((i) => i.productId === item.productId)
+          // Create a unique key based on productId and selected options
+          const getItemKey = (cartItem: { productId: string; selectedOptions?: SelectedOption[] }) => {
+            const optionsKey = cartItem.selectedOptions
+              ? JSON.stringify(cartItem.selectedOptions.map(o => `${o.name}:${o.value}`).sort())
+              : ""
+            return `${cartItem.productId}-${optionsKey}`
+          }
+
+          const newItemKey = getItemKey(item)
+          const existingItem = state.items.find((i) => getItemKey(i) === newItemKey)
 
           if (existingItem) {
             return {
               items: state.items.map((i) =>
-                i.productId === item.productId
+                getItemKey(i) === newItemKey
                   ? { ...i, quantity: Math.min(i.quantity + quantity, item.stock) }
                   : i
               ),
