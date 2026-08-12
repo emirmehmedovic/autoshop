@@ -418,15 +418,13 @@ export default async function CarScentsLandingPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Collection 1 - Luxury Collection */}
             <Link href="/product/luxury-collection-miris-za-auto" className="group">
-              <div className="relative aspect-[3/4] bg-gradient-to-br from-amber-800/40 to-amber-950/60 rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(180,140,100,0.3),transparent_60%)]" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center transform group-hover:scale-105 transition-transform duration-500">
-                    <div className="w-32 h-16 mx-auto bg-gradient-to-b from-amber-900/60 to-amber-950/80 backdrop-blur-sm rounded flex items-center justify-center border border-amber-500/20">
-                      <span className="text-amber-200/90 text-xs tracking-[0.3em]">LUXURY</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="relative aspect-[3/4] rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+                <img
+                  src="/products/luxury.png"
+                  alt="Luxury Collection"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
                 {/* Hover overlay */}
                 <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/30 transition-colors flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
                   <span className="px-4 py-2 bg-amber-100 text-amber-950 text-xs uppercase tracking-wider rounded-full">Pogledaj kolekciju</span>
@@ -439,15 +437,13 @@ export default async function CarScentsLandingPage() {
 
             {/* Collection 2 - Signature Collection */}
             <Link href="/product/signature-collection-miris-za-auto" className="group">
-              <div className="relative aspect-[3/4] bg-gradient-to-br from-amber-800/30 to-amber-950/50 rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(150,160,140,0.2),transparent_60%)]" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center transform group-hover:scale-105 transition-transform duration-500">
-                    <div className="w-32 h-16 mx-auto bg-gradient-to-b from-amber-900/60 to-amber-950/80 backdrop-blur-sm rounded flex items-center justify-center border border-amber-500/20">
-                      <span className="text-amber-200/90 text-xs tracking-[0.3em]">SIGNATURE</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="relative aspect-[3/4] rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+                <img
+                  src="/products/signature.png"
+                  alt="Signature Collection"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
                 <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/30 transition-colors flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
                   <span className="px-4 py-2 bg-amber-100 text-amber-950 text-xs uppercase tracking-wider rounded-full">Pogledaj kolekciju</span>
                 </div>
@@ -459,15 +455,13 @@ export default async function CarScentsLandingPage() {
 
             {/* Collection 3 - Performance Collection */}
             <Link href="/product/performance-collection-miris-za-auto" className="group">
-              <div className="relative aspect-[3/4] bg-gradient-to-br from-amber-900/40 to-amber-950/70 rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(120,100,80,0.25),transparent_60%)]" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center transform group-hover:scale-105 transition-transform duration-500">
-                    <div className="w-32 h-16 mx-auto bg-gradient-to-b from-amber-900/60 to-amber-950/80 backdrop-blur-sm rounded flex items-center justify-center border border-amber-500/20">
-                      <span className="text-amber-200/90 text-xs tracking-[0.3em]">PERFORMANCE</span>
-                    </div>
-                  </div>
-                </div>
+              <div className="relative aspect-[3/4] rounded-2xl mb-5 overflow-hidden border border-amber-700/20 group-hover:border-amber-600/40 transition-all">
+                <img
+                  src="/products/performance.png"
+                  alt="Performance Collection"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-amber-950/80 via-amber-950/20 to-transparent" />
                 <div className="absolute inset-0 bg-amber-900/0 group-hover:bg-amber-900/30 transition-colors flex items-end justify-center pb-6 opacity-0 group-hover:opacity-100">
                   <span className="px-4 py-2 bg-amber-100 text-amber-950 text-xs uppercase tracking-wider rounded-full">Pogledaj kolekciju</span>
                 </div>
