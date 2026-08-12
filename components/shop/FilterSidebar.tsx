@@ -62,13 +62,13 @@ export function FilterSidebar({
   return (
     <div className="space-y-6">
       {/* Kategorije */}
-      <div className="relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-orange-500/5 via-white/70 to-amber-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
+      <div className="relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-amber-950/10 via-white/75 to-amber-700/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(120,53,15,0.12)]">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/55 via-amber-50/25 to-amber-900/5 pointer-events-none" />
         <div className="relative">
           <div className="flex items-center justify-between gap-3 mb-5">
             <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/20">
-                <Filter className="text-white" size={18} />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-b from-amber-900 to-neutral-950 flex items-center justify-center shadow-lg shadow-amber-950/25 border border-amber-700/30">
+                <Filter className="text-amber-200" size={18} />
               </div>
               <h3 className="font-bold text-gray-900 text-lg">Kategorije</h3>
             </div>
@@ -77,7 +77,7 @@ export function FilterSidebar({
               onClick={() => setShowMobileCategories((isOpen) => !isOpen)}
               aria-expanded={showMobileCategories}
               aria-controls="mobile-category-list"
-              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-gray-700 shadow-sm transition hover:bg-white"
+              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl bg-white/80 text-amber-950 shadow-sm transition hover:bg-amber-50"
             >
               <ChevronDown
                 size={20}
@@ -97,8 +97,8 @@ export function FilterSidebar({
                 href="/shop"
                 className={`block py-3 px-4 rounded-xl transition-all duration-300 ${
                   !selectedCategory
-                    ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold shadow-lg shadow-orange-500/30"
-                    : "text-gray-700 hover:bg-white/60 backdrop-blur-sm"
+                    ? "bg-gradient-to-r from-amber-900 to-neutral-950 text-amber-100 font-bold shadow-lg shadow-amber-950/30"
+                    : "text-amber-950/75 hover:bg-amber-50/70 backdrop-blur-sm"
                 }`}
               >
                 Sve kategorije
@@ -110,8 +110,8 @@ export function FilterSidebar({
                   href={`/shop?category=${category.slug}`}
                   className={`block py-3 px-4 rounded-xl transition-all duration-300 ${
                     selectedCategory === category.slug
-                      ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold shadow-lg shadow-orange-500/30"
-                      : "text-gray-700 hover:bg-white/60 backdrop-blur-sm"
+                      ? "bg-gradient-to-r from-amber-900 to-neutral-950 text-amber-100 font-bold shadow-lg shadow-amber-950/30"
+                      : "text-amber-950/75 hover:bg-amber-50/70 backdrop-blur-sm"
                   }`}
                 >
                   <span className="flex justify-between items-center">
@@ -119,7 +119,7 @@ export function FilterSidebar({
                     <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
                       selectedCategory === category.slug
                         ? "bg-white/25"
-                        : "bg-gray-200/80"
+                        : "bg-amber-100/80 text-amber-950/70"
                     }`}>
                       {category._count.products}
                     </span>
@@ -132,8 +132,8 @@ export function FilterSidebar({
       </div>
 
       {/* Cijena */}
-      <div className="hidden lg:block relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/5 via-white/70 to-indigo-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
+      <div className="hidden lg:block relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-stone-950/10 via-white/75 to-amber-700/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(92,51,23,0.12)]">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/55 via-amber-50/25 to-amber-900/5 pointer-events-none" />
         <div className="relative">
           <h3 className="font-bold text-gray-900 text-lg mb-5">Cijena (KM)</h3>
           <div className="space-y-4">
@@ -144,7 +144,7 @@ export function FilterSidebar({
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
                 placeholder="0"
-                className="w-full px-4 py-3 bg-white/80 border border-white/60 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition backdrop-blur-sm shadow-sm"
+                className="w-full px-4 py-3 bg-white/80 border border-amber-100/80 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent transition backdrop-blur-sm shadow-sm"
               />
             </div>
             <div>
@@ -154,12 +154,12 @@ export function FilterSidebar({
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
                 placeholder="1000"
-                className="w-full px-4 py-3 bg-white/80 border border-white/60 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition backdrop-blur-sm shadow-sm"
+                className="w-full px-4 py-3 bg-white/80 border border-amber-100/80 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-800 focus:border-transparent transition backdrop-blur-sm shadow-sm"
               />
             </div>
             <button
               onClick={handlePriceFilter}
-              className="w-full py-3 px-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white rounded-xl hover:from-orange-600 hover:to-amber-600 transition font-bold shadow-lg shadow-orange-500/30"
+              className="w-full py-3 px-4 bg-gradient-to-r from-amber-900 to-neutral-950 text-amber-100 rounded-xl hover:from-amber-800 hover:to-amber-950 transition font-bold shadow-lg shadow-amber-950/30"
             >
               Primijeni filter
             </button>

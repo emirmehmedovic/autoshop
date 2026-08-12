@@ -20,7 +20,7 @@ export function ProductImageGallery({ images }: ProductImageGalleryProps) {
   return (
     <div className="space-y-4">
       {/* Glavna slika */}
-      <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
+      <div className="relative aspect-square bg-gradient-to-br from-amber-50 to-stone-100 rounded-lg overflow-hidden shadow-inner shadow-amber-950/10">
         <Image
           src={selectedImage.url}
           alt={selectedImage.alt || "Slika proizvoda"}
@@ -41,7 +41,7 @@ export function ProductImageGallery({ images }: ProductImageGalleryProps) {
               className={`relative aspect-square rounded-lg overflow-hidden border-2 transition ${
                 index === selectedIndex
                   ? "border-orange-500"
-                  : "border-gray-200 hover:border-gray-300"
+                  : "border-amber-100 hover:border-amber-400"
               }`}
             >
               <Image

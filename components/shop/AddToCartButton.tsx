@@ -138,7 +138,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         <div className="space-y-4">
           {product.options.map((option) => (
             <div key={option.id}>
-              <label className="block font-medium text-gray-700 mb-2">
+              <label className="block font-medium text-amber-950/75 mb-2">
                 {option.name} {option.isRequired && <span className="text-red-500">*</span>}
               </label>
               <div className="flex flex-wrap gap-2">
@@ -153,8 +153,8 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
                       }
                       className={`px-4 py-2 rounded-full border-2 text-sm font-medium transition-all ${
                         selectedOptions[option.id] === value.id
-                          ? "border-orange-500 bg-orange-50 text-orange-700"
-                          : "border-gray-200 bg-white/80 text-gray-700 hover:border-orange-300"
+                          ? "border-amber-800 bg-amber-50 text-amber-900 shadow-sm shadow-amber-950/10"
+                          : "border-amber-100 bg-white/80 text-amber-950/70 hover:border-amber-400"
                       }`}
                     >
                       {value.value}
@@ -173,11 +173,11 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
 
       {/* Količina */}
       <div className="flex items-center gap-4">
-        <label className="font-medium text-gray-700">Količina:</label>
-        <div className="flex items-center border border-white/60 bg-white/80 backdrop-blur-sm rounded-full overflow-hidden shadow-sm">
+        <label className="font-medium text-amber-950/75">Količina:</label>
+        <div className="flex items-center border border-amber-100/80 bg-white/80 backdrop-blur-sm rounded-full overflow-hidden shadow-sm">
           <button
             onClick={decreaseQuantity}
-            className="p-3 hover:bg-gray-100/80 transition"
+            className="p-3 text-amber-950 hover:bg-amber-50/80 transition"
             aria-label="Smanji količinu"
           >
             <Minus size={18} />
@@ -195,7 +195,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           />
           <button
             onClick={increaseQuantity}
-            className="p-3 hover:bg-gray-100/80 transition"
+            className="p-3 text-amber-950 hover:bg-amber-50/80 transition"
             aria-label="Povećaj količinu"
           >
             <Plus size={18} />
@@ -209,7 +209,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         className={`w-full py-4 px-6 rounded-full font-bold text-white transition-all duration-300 flex items-center justify-center gap-3 ${
           justAdded
             ? "bg-gradient-to-r from-emerald-500 to-green-500 shadow-lg shadow-emerald-500/30"
-            : "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 shadow-lg shadow-orange-500/30"
+            : "bg-gradient-to-r from-amber-900 to-neutral-950 text-amber-100 hover:from-amber-800 hover:to-amber-950 shadow-lg shadow-amber-950/30"
         }`}
       >
         {justAdded ? (

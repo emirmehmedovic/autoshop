@@ -61,7 +61,7 @@ export default async function HomePage() {
                 <div>
                   <Link
                     href="/shop"
-                    className="inline-flex items-center px-6 py-3 bg-orange-500 text-white rounded-full font-bold hover:bg-orange-600 transition"
+                    className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-amber-900 to-neutral-950 text-amber-100 rounded-full font-bold hover:from-amber-800 hover:to-amber-950 transition shadow-lg shadow-amber-950/30"
                   >
                     Pregledaj Proizvode
                     <ArrowRight className="ml-2" size={18} />
@@ -73,15 +73,15 @@ export default async function HomePage() {
             {/* Desna strana - Kartice Glassmorphism */}
             <div className="flex flex-col gap-4">
               {/* Kartica 1 - Brza dostava */}
-              <div className="group flex-1 relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-sky-500/10 via-blue-400/5 to-cyan-500/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(14,165,233,0.1)] hover:shadow-[0_8px_32px_rgba(14,165,233,0.2)] hover:scale-[1.02] transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
+              <div className="group flex-1 relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-amber-950/10 via-amber-200/10 to-amber-700/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(120,53,15,0.12)] hover:shadow-[0_8px_32px_rgba(120,53,15,0.22)] hover:scale-[1.02] transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-amber-50/20 to-amber-900/5 pointer-events-none" />
                 <div className="relative flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/80 shadow-lg shadow-sky-500/20 backdrop-blur-sm border border-white/50">
-                    <Truck className="h-6 w-6 text-sky-500" />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-950 shadow-lg shadow-amber-900/25 backdrop-blur-sm border border-amber-700/30">
+                    <Truck className="h-6 w-6 text-amber-200" />
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">BRZA DOSTAVA</h3>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-amber-950/70">
                       Isporuka u roku od 1-3 radna dana na teritoriji cijele BiH.
                     </p>
                   </div>
@@ -89,15 +89,15 @@ export default async function HomePage() {
               </div>
 
               {/* Kartica 2 - Plaćanje pouzećem */}
-              <div className="group flex-1 relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/10 via-indigo-400/5 to-blue-500/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(59,130,246,0.1)] hover:shadow-[0_8px_32px_rgba(59,130,246,0.2)] hover:scale-[1.02] transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
+              <div className="group flex-1 relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-amber-900/10 via-amber-100/20 to-yellow-700/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(146,64,14,0.12)] hover:shadow-[0_8px_32px_rgba(146,64,14,0.22)] hover:scale-[1.02] transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-amber-50/20 to-amber-800/5 pointer-events-none" />
                 <div className="relative flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/80 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-white/50">
-                    <Shield className="h-6 w-6 text-blue-500" />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-b from-amber-900 to-amber-950 shadow-lg shadow-amber-900/25 backdrop-blur-sm border border-amber-700/30">
+                    <Shield className="h-6 w-6 text-amber-200" />
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">PLAĆANJE POUZEĆEM</h3>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-amber-950/70">
                       Platite prilikom preuzimanja paketa. Sigurno i praktično.
                     </p>
                   </div>
@@ -105,15 +105,15 @@ export default async function HomePage() {
               </div>
 
               {/* Kartica 3 - Originalni proizvodi */}
-              <div className="group flex-1 relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-indigo-500/10 via-slate-400/5 to-indigo-500/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(99,102,241,0.1)] hover:shadow-[0_8px_32px_rgba(99,102,241,0.2)] hover:scale-[1.02] transition-all duration-300">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/10 pointer-events-none" />
+              <div className="group flex-1 relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-neutral-900/10 via-amber-100/20 to-amber-600/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(113,63,18,0.12)] hover:shadow-[0_8px_32px_rgba(113,63,18,0.22)] hover:scale-[1.02] transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-amber-50/20 to-amber-900/5 pointer-events-none" />
                 <div className="relative flex items-start gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/80 shadow-lg shadow-indigo-500/20 backdrop-blur-sm border border-white/50">
-                    <Award className="h-6 w-6 text-indigo-500" />
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-b from-amber-800 to-amber-950 shadow-lg shadow-amber-900/25 backdrop-blur-sm border border-amber-700/30">
+                    <Award className="h-6 w-6 text-amber-200" />
                   </div>
                   <div>
                     <h3 className="font-bold text-gray-900 mb-1">ORIGINALNI PROIZVODI</h3>
-                    <p className="text-sm text-gray-700">
+                    <p className="text-sm text-amber-950/70">
                       100% originalni proizvodi renomiranih brendova sa garancijom.
                     </p>
                   </div>
@@ -207,19 +207,22 @@ export default async function HomePage() {
               )}
 
               {/* Ostali proizvodi - desno */}
-              {featuredProducts.slice(1, 4).map((product, index) => (
+              {featuredProducts.slice(1, 4).map((product) => (
                 <Link
                   key={product.id}
                   href={`/product/${product.slug}`}
-                  className={`group relative overflow-hidden rounded-2xl min-h-[160px] ${
-                    index === 0
-                      ? 'bg-gradient-to-br from-blue-500/20 via-indigo-500/10 to-violet-500/20'
-                      : index === 1
-                        ? 'bg-gradient-to-br from-emerald-500/20 via-green-500/10 to-teal-500/20'
-                        : 'bg-gradient-to-br from-purple-500/20 via-pink-500/10 to-rose-500/20'
-                  } backdrop-blur-xl border-[5px] border-white/80 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300`}
+                  className="group relative overflow-hidden rounded-2xl min-h-[160px] bg-gradient-to-br from-white/90 via-white/80 to-amber-50/80 backdrop-blur-xl border-[5px] border-white/80 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-white/20 pointer-events-none" />
+                  {product.images[0] && (
+                    <img
+                      src={product.images[0].url}
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute inset-0 h-full w-full object-cover scale-125 blur-2xl opacity-25 saturate-150 transition duration-500 group-hover:opacity-35 group-hover:scale-150"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-white/60 to-white/30 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-amber-950/10 via-transparent to-white/20 pointer-events-none" />
 
                   <div className="relative h-full p-5 flex gap-4">
                     {/* Slika proizvoda */}
@@ -377,65 +380,65 @@ export default async function HomePage() {
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-orange-100 to-amber-100 rounded-full mb-4">
-              <Sparkles className="h-4 w-4 text-orange-500" />
-              <span className="text-orange-600 uppercase tracking-wider text-xs font-bold">Zašto GlossDrive</span>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-amber-950 via-amber-900 to-neutral-900 rounded-full mb-4 shadow-lg shadow-amber-950/15">
+              <Sparkles className="h-4 w-4 text-amber-200" />
+              <span className="text-amber-100 uppercase tracking-wider text-xs font-bold">Zašto GlossDrive</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Prednosti kupovine kod nas</h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* Kartica 1 */}
-            <div className="group relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-orange-500/10 via-amber-400/5 to-yellow-500/10 border-[5px] border-white/80 shadow-[0_4px_24px_rgba(249,115,22,0.1)] hover:shadow-[0_8px_32px_rgba(249,115,22,0.2)] hover:scale-[1.03] transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-white/20 pointer-events-none" />
+            <div className="group relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-amber-950/10 via-amber-100/25 to-yellow-700/10 border-[5px] border-white/80 shadow-[0_4px_24px_rgba(120,53,15,0.12)] hover:shadow-[0_8px_32px_rgba(120,53,15,0.24)] hover:scale-[1.03] transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/65 via-amber-50/25 to-amber-900/5 pointer-events-none" />
               <div className="relative text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center shadow-lg shadow-orange-500/30 group-hover:scale-110 transition-transform duration-300">
-                  <CheckCircle className="text-white" size={28} />
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-b from-amber-900 to-amber-950 flex items-center justify-center shadow-lg shadow-amber-950/30 border border-amber-700/30 group-hover:scale-110 transition-transform duration-300">
+                  <CheckCircle className="text-amber-200" size={28} />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Provjereni proizvodi</h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-amber-950/70 text-sm">
                   Testirani od strane našeg tima stručnjaka
                 </p>
               </div>
             </div>
 
             {/* Kartica 2 */}
-            <div className="group relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/10 via-indigo-400/5 to-violet-500/10 border-[5px] border-white/80 shadow-[0_4px_24px_rgba(59,130,246,0.1)] hover:shadow-[0_8px_32px_rgba(59,130,246,0.2)] hover:scale-[1.03] transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-white/20 pointer-events-none" />
+            <div className="group relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-neutral-900/10 via-amber-100/25 to-amber-600/10 border-[5px] border-white/80 shadow-[0_4px_24px_rgba(113,63,18,0.12)] hover:shadow-[0_8px_32px_rgba(113,63,18,0.24)] hover:scale-[1.03] transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/65 via-amber-50/25 to-amber-900/5 pointer-events-none" />
               <div className="relative text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform duration-300">
-                  <Truck className="text-white" size={28} />
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-b from-amber-800 to-amber-950 flex items-center justify-center shadow-lg shadow-amber-950/30 border border-amber-700/30 group-hover:scale-110 transition-transform duration-300">
+                  <Truck className="text-amber-200" size={28} />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Brza dostava</h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-amber-950/70 text-sm">
                   1-3 radna dana na vašu adresu u BiH
                 </p>
               </div>
             </div>
 
             {/* Kartica 3 */}
-            <div className="group relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-emerald-500/10 via-green-400/5 to-teal-500/10 border-[5px] border-white/80 shadow-[0_4px_24px_rgba(16,185,129,0.1)] hover:shadow-[0_8px_32px_rgba(16,185,129,0.2)] hover:scale-[1.03] transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-white/20 pointer-events-none" />
+            <div className="group relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-amber-900/10 via-stone-100/30 to-amber-700/10 border-[5px] border-white/80 shadow-[0_4px_24px_rgba(146,64,14,0.12)] hover:shadow-[0_8px_32px_rgba(146,64,14,0.24)] hover:scale-[1.03] transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/65 via-amber-50/25 to-amber-800/5 pointer-events-none" />
               <div className="relative text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform duration-300">
-                  <Shield className="text-white" size={28} />
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-b from-amber-900 to-neutral-950 flex items-center justify-center shadow-lg shadow-amber-950/30 border border-amber-700/30 group-hover:scale-110 transition-transform duration-300">
+                  <Shield className="text-amber-200" size={28} />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Sigurna kupovina</h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-amber-950/70 text-sm">
                   Plaćanje pouzećem - bez rizika
                 </p>
               </div>
             </div>
 
             {/* Kartica 4 */}
-            <div className="group relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-purple-500/10 via-pink-400/5 to-rose-500/10 border-[5px] border-white/80 shadow-[0_4px_24px_rgba(168,85,247,0.1)] hover:shadow-[0_8px_32px_rgba(168,85,247,0.2)] hover:scale-[1.03] transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-white/20 pointer-events-none" />
+            <div className="group relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-stone-950/10 via-amber-100/25 to-yellow-800/10 border-[5px] border-white/80 shadow-[0_4px_24px_rgba(92,51,23,0.12)] hover:shadow-[0_8px_32px_rgba(92,51,23,0.24)] hover:scale-[1.03] transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/65 via-amber-50/25 to-amber-900/5 pointer-events-none" />
               <div className="relative text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30 group-hover:scale-110 transition-transform duration-300">
-                  <Award className="text-white" size={28} />
+                <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-b from-amber-800 via-amber-900 to-neutral-950 flex items-center justify-center shadow-lg shadow-amber-950/30 border border-amber-700/30 group-hover:scale-110 transition-transform duration-300">
+                  <Award className="text-amber-200" size={28} />
                 </div>
                 <h3 className="font-bold text-gray-900 mb-2">Garancija kvaliteta</h3>
-                <p className="text-gray-600 text-sm">
+                <p className="text-amber-950/70 text-sm">
                   100% originalni brendirani proizvodi
                 </p>
               </div>

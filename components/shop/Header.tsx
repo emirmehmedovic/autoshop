@@ -41,12 +41,15 @@ export function Header() {
   const totalItems = useCartStore((state) => state.getTotalItems())
 
   useEffect(() => {
-    setMounted(true)
+    const frame = requestAnimationFrame(() => setMounted(true))
+    return () => cancelAnimationFrame(frame)
   }, [])
 
   return (
     <header className="sticky top-4 z-50 mx-4 lg:mx-8">
-      <nav className="mx-auto max-w-7xl rounded-2xl border border-white/20 bg-white/70 px-4 py-3 shadow-lg shadow-black/5 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60">
+      <nav className="relative mx-auto max-w-7xl rounded-2xl border border-amber-100/50 bg-gradient-to-r from-amber-950/10 via-white/70 to-amber-700/10 px-4 py-3 shadow-lg shadow-amber-950/10 backdrop-blur-xl supports-[backdrop-filter]:bg-white/55">
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/45 via-amber-50/20 to-amber-900/10 pointer-events-none" />
+        <div className="relative">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
@@ -61,7 +64,7 @@ export function Header() {
           <div className="hidden lg:flex items-center space-x-1">
             <Link
               href="/shop"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition"
+              className="px-4 py-2 text-sm font-medium text-amber-950/75 hover:text-amber-900 hover:bg-amber-50/75 rounded-lg transition"
             >
               Svi Proizvodi
             </Link>
@@ -71,29 +74,29 @@ export function Header() {
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 onBlur={() => setTimeout(() => setDropdownOpen(false), 200)}
-                className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition"
+                className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-amber-950/75 hover:text-amber-900 hover:bg-amber-50/75 rounded-lg transition"
               >
                 Kategorije
                 <ChevronDown className={`h-4 w-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {dropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-80 rounded-xl border border-white/20 bg-white/80 p-2 shadow-xl backdrop-blur-xl">
+                <div className="absolute top-full left-0 mt-2 w-80 rounded-xl border border-amber-100/60 bg-gradient-to-br from-white/85 via-amber-50/75 to-amber-100/65 p-2 shadow-xl shadow-amber-950/15 backdrop-blur-xl">
                   <div className="grid gap-1">
                     {categories.map((category) => (
                       <Link
                         key={category.href}
                         href={category.href}
-                        className="flex items-start gap-3 rounded-lg p-3 hover:bg-orange-50 transition group"
+                        className="flex items-start gap-3 rounded-lg p-3 hover:bg-white/70 transition group"
                       >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-100 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-b from-amber-900 to-neutral-950 text-amber-200 shadow-sm shadow-amber-950/20 group-hover:from-amber-800 group-hover:to-amber-950 transition">
                           <category.icon className="h-5 w-5" />
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900 group-hover:text-orange-500 transition">
+                          <div className="font-medium text-gray-900 group-hover:text-amber-800 transition">
                             {category.title}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-amber-950/55">
                             {category.description}
                           </div>
                         </div>
@@ -106,7 +109,7 @@ export function Header() {
 
             <Link
               href="/blog"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition"
+              className="px-4 py-2 text-sm font-medium text-amber-950/75 hover:text-amber-900 hover:bg-amber-50/75 rounded-lg transition"
             >
               Blog
             </Link>
@@ -117,20 +120,20 @@ export function Header() {
             {/* Telefon */}
             <a
               href="tel:+38761577576"
-              className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-orange-500 transition"
+              className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-950/75 hover:text-amber-900 transition"
             >
-              <Phone className="h-4 w-4 text-orange-500" />
+              <Phone className="h-4 w-4 text-amber-800" />
               <span>+387 61 577 576</span>
             </a>
 
             {/* Korpa */}
             <Link
               href="/cart"
-              className="relative flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition"
+              className="relative flex h-10 w-10 items-center justify-center rounded-lg text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900 transition"
             >
               <ShoppingCart className="h-5 w-5" />
               {mounted && totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-amber-900 to-neutral-950 text-xs font-bold text-amber-100 shadow-sm shadow-amber-950/30">
                   {totalItems}
                 </span>
               )}
@@ -141,7 +144,7 @@ export function Header() {
               <div className="hidden sm:flex items-center space-x-1">
                 <Link
                   href={session.user.role === "ADMIN" ? "/admin" : "/account"}
-                  className="flex h-10 items-center gap-2 rounded-lg px-3 text-gray-700 hover:bg-orange-50 hover:text-orange-500 transition"
+                  className="flex h-10 items-center gap-2 rounded-lg px-3 text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900 transition"
                 >
                   <User className="h-5 w-5" />
                   <span className="text-sm font-medium">{session.user.name || 'Account'}</span>
@@ -158,7 +161,7 @@ export function Header() {
 
             {/* Mobile menu button */}
             <button
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-orange-50 lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-amber-950/75 hover:bg-amber-50/75 lg:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -168,17 +171,17 @@ export function Header() {
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="mt-4 border-t border-gray-200/50 pt-4 lg:hidden">
+          <div className="mt-4 border-t border-amber-100/70 pt-4 lg:hidden">
             <div className="space-y-1">
               <Link
                 href="/shop"
-                className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                className="block rounded-lg px-4 py-3 text-sm font-medium text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Svi Proizvodi
               </Link>
 
-              <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+              <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-amber-950/50">
                 Kategorije
               </div>
 
@@ -186,17 +189,17 @@ export function Header() {
                 <Link
                   key={category.href}
                   href={category.href}
-                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <category.icon className="h-5 w-5 text-orange-500" />
+                  <category.icon className="h-5 w-5 text-amber-800" />
                   {category.title}
                 </Link>
               ))}
 
               <Link
                 href="/blog"
-                className="block rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                className="block rounded-lg px-4 py-3 text-sm font-medium text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Blog
@@ -204,18 +207,18 @@ export function Header() {
 
               <a
                 href="tel:+38761577576"
-                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
               >
-                <Phone className="h-5 w-5 text-orange-500" />
+                <Phone className="h-5 w-5 text-amber-800" />
                 +387 61 577 576
               </a>
 
               {session && (
                 <>
-                  <div className="my-2 border-t border-gray-200/50" />
+                  <div className="my-2 border-t border-amber-100/70" />
                   <Link
                     href={session.user.role === "ADMIN" ? "/admin" : "/account"}
-                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-gray-700 hover:bg-orange-50 hover:text-orange-500"
+                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <User className="h-5 w-5" />
@@ -236,6 +239,7 @@ export function Header() {
             </div>
           </div>
         )}
+        </div>
       </nav>
     </header>
   )
