@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { ShoppingCart, Plus, Minus, Check } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { ShoppingCart, Plus, Minus, Check, ArrowRight } from "lucide-react"
 import { useCartStore } from "@/lib/store/cartStore"
 import { trackAddToCart } from "@/lib/analytics/meta-pixel"
 
@@ -33,6 +34,7 @@ interface AddToCartButtonProps {
 }
 
 export function AddToCartButton({ product }: AddToCartButtonProps) {
+  const router = useRouter()
   const [quantity, setQuantity] = useState(1)
   const [justAdded, setJustAdded] = useState(false)
   const addItem = useCartStore((state) => state.addItem)
@@ -69,8 +71,8 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
 
   const totalPrice = calculateTotalPrice()
 
-  const handleAddToCart = () => {
-    if (product.stock === 0) return
+  const addSelectedProductToCart = () => {
+    if (product.stock === 0) return false
 
     // Build selected options array for the cart
     const selectedOptionsArray = product.options?.map((option) => {
@@ -108,8 +110,20 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
       quantity,
     })
 
+    return true
+  }
+
+  const handleAddToCart = () => {
+    if (!addSelectedProductToCart()) return
+
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 2000)
+  }
+
+  const handleBuyNow = () => {
+    if (!addSelectedProductToCart()) return
+
+    router.push("/checkout")
   }
 
   const decreaseQuantity = () => {
@@ -203,27 +217,36 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         </div>
       </div>
 
-      {/* Dodaj u korpu dugme */}
-      <button
-        onClick={handleAddToCart}
-        className={`w-full py-4 px-6 rounded-full font-bold text-white transition-all duration-300 flex items-center justify-center gap-3 ${
-          justAdded
-            ? "bg-gradient-to-r from-emerald-500 to-green-500 shadow-lg shadow-emerald-500/30"
-            : "bg-gradient-to-r from-amber-900 to-neutral-950 text-amber-100 hover:from-amber-800 hover:to-amber-950 shadow-lg shadow-amber-950/30"
-        }`}
-      >
-        {justAdded ? (
-          <>
-            <Check size={24} />
-            Dodato u korpu
-          </>
-        ) : (
-          <>
-            <ShoppingCart size={24} />
-            Dodaj u korpu
-          </>
-        )}
-      </button>
+      {/* Akcije */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <button
+          onClick={handleAddToCart}
+          className={`w-full py-4 px-6 rounded-full font-bold text-white transition-all duration-300 flex items-center justify-center gap-3 ${
+            justAdded
+              ? "bg-gradient-to-r from-emerald-500 to-green-500 shadow-lg shadow-emerald-500/30"
+              : "bg-gradient-to-r from-amber-900 to-neutral-950 text-amber-100 hover:from-amber-800 hover:to-amber-950 shadow-lg shadow-amber-950/30"
+          }`}
+        >
+          {justAdded ? (
+            <>
+              <Check size={22} />
+              Dodato u korpu
+            </>
+          ) : (
+            <>
+              <ShoppingCart size={22} />
+              Dodaj u korpu
+            </>
+          )}
+        </button>
+        <button
+          onClick={handleBuyNow}
+          className="w-full py-4 px-6 rounded-full border border-amber-800/30 bg-amber-50/80 text-amber-950 font-bold transition-all duration-300 flex items-center justify-center gap-3 hover:bg-amber-100 hover:border-amber-800/50 shadow-sm shadow-amber-950/10"
+        >
+          Naruči odmah
+          <ArrowRight size={22} />
+        </button>
+      </div>
     </div>
   )
 }
