@@ -77,8 +77,7 @@ export default function UsloviPage() {
                 <ul className="list-disc pl-6 space-y-2 text-gray-600">
                   <li>Dostava se vrši na teritoriji Bosne i Hercegovine.</li>
                   <li>Standardno vrijeme dostave iznosi 1-3 radna dana.</li>
-                  <li>Cijena dostave iznosi 7 KM za narudžbe ispod 100 KM.</li>
-                  <li>Dostava je besplatna za narudžbe iznad 100 KM.</li>
+                  <li>Cijena dostave iznosi 10 KM po narudžbi.</li>
                   <li>Rizik gubitka ili oštećenja proizvoda prelazi na kupca u trenutku isporuke.</li>
                 </ul>
               </section>

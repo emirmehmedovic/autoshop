@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth"
 import { z } from "zod"
 import { sendOrderConfirmationToCustomer, sendNewOrderToAdmin } from "@/lib/notifications/email"
 import { notifyNewOrder } from "@/lib/notifications/telegram"
+import { SHIPPING_COST } from "@/lib/shipping"
 
 const orderItemSchema = z.object({
   productId: z.string(),
@@ -71,7 +72,6 @@ export async function POST(request: NextRequest) {
     // Kalkulacija totala
     let subtotal = 0
     const orderItemsData = items.map((item) => {
-      const product = products.find((p) => p.id === item.productId)!
       const total = item.unitPrice * item.quantity
       subtotal += total
 
@@ -83,7 +83,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    const shippingCost = 0 // Besplatna dostava
+    const shippingCost = SHIPPING_COST
     const total = subtotal + shippingCost
 
     // Generisanje order numbera

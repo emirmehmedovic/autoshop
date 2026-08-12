@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Loader2, Minus, Plus, Check, ShoppingBag } from "lucide-react"
 import { z } from "zod"
+import { SHIPPING_COST } from "@/lib/shipping"
 
 interface ProductOptionValue {
   id: string
@@ -106,7 +107,8 @@ export function LandingOrderForm({ product }: LandingOrderFormProps) {
     return price
   })()
 
-  const total = calculateTotal()
+  const subtotal = calculateTotal()
+  const total = subtotal + SHIPPING_COST
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -445,7 +447,7 @@ export function LandingOrderForm({ product }: LandingOrderFormProps) {
         </div>
         <div className="flex items-center gap-1.5">
           <Check className="h-4 w-4 text-amber-600" />
-          <span>Besplatna dostava</span>
+          <span>Dostava {SHIPPING_COST.toFixed(2)} KM</span>
         </div>
       </div>
     </form>

@@ -287,8 +287,8 @@ export default function VeleprodajaPage() {
                 <div className="flex items-start gap-4 p-4 rounded-xl bg-blue-50">
                   <Truck className="w-6 h-6 text-blue-500 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-bold text-gray-900">Besplatna dostava</h3>
-                    <p className="text-gray-600 text-sm">Za narudžbe iznad 300 KM</p>
+                    <h3 className="font-bold text-gray-900">Dostava 10 KM</h3>
+                    <p className="text-gray-600 text-sm">Fiksna cijena dostave po narudžbi</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4 p-4 rounded-xl bg-emerald-50">

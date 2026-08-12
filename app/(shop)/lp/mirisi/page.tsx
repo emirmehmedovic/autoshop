@@ -573,7 +573,7 @@ export default async function CarScentsLandingPage() {
           <div className="flex flex-wrap justify-center gap-8 text-sm text-amber-300/50">
             <div className="flex items-center gap-2">
               <Check className="h-4 w-4 text-amber-500/60" />
-              <span>Besplatna dostava iznad 50 KM</span>
+              <span>Dostava 10 KM</span>
             </div>
             <div className="flex items-center gap-2">
               <Check className="h-4 w-4 text-amber-500/60" />

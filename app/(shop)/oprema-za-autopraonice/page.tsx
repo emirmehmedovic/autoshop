@@ -41,7 +41,7 @@ const faqItems = [
   },
   {
     question: "Koliki su minimalni iznosi narudžbe?",
-    answer: "Minimalna narudžba za nove kupce iznosi 200 KM. Za redovne partnere nema minimalnog iznosa. Besplatna dostava za narudžbe iznad 300 KM.",
+    answer: "Minimalna narudžba za nove kupce iznosi 200 KM. Za redovne partnere nema minimalnog iznosa. Dostava se obračunava 10 KM po narudžbi.",
   },
 ]
 
@@ -272,7 +272,7 @@ export default function OpremaZaAutopraonicePage() {
 
               <div className="space-y-4">
                 {[
-                  "Besplatna dostava za narudžbe iznad 300 KM",
+                  "Dostava 10 KM po narudžbi",
                   "Popusti do 40% za redovne partnere",
                   "Plaćanje na odgodu do 45 dana",
                   "Stručna podrška pri odabiru",

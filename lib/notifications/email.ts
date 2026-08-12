@@ -11,6 +11,8 @@ function getResendClient() {
 interface Order {
   id: string
   orderNumber: string
+  subtotal: number
+  shippingCost: number
   total: number
   shippingName: string
   shippingPhone: string
@@ -117,11 +119,11 @@ export async function sendOrderConfirmationToCustomer(order: Order) {
     <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
       <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
         <span>Ukupno proizvodi:</span>
-        <strong>${order.total.toFixed(2)} KM</strong>
+        <strong>${order.subtotal.toFixed(2)} KM</strong>
       </div>
       <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
         <span>Dostava:</span>
-        <strong style="color: #059669;">Besplatna</strong>
+        <strong>${order.shippingCost.toFixed(2)} KM</strong>
       </div>
       <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 2px solid #e5e7eb; font-size: 18px;">
         <strong>Ukupno za plaćanje:</strong>

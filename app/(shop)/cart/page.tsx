@@ -4,11 +4,13 @@ import { useCartStore } from "@/lib/store/cartStore"
 import Image from "next/image"
 import Link from "next/link"
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight, Shield } from "lucide-react"
+import { SHIPPING_COST } from "@/lib/shipping"
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getTotalPrice, getTotalItems } = useCartStore()
 
-  const total = getTotalPrice()
+  const subtotal = getTotalPrice()
+  const total = subtotal + SHIPPING_COST
   const itemCount = getTotalItems()
 
   if (items.length === 0) {
@@ -189,11 +191,11 @@ export default function CartPage() {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between text-gray-600">
                     <span>Proizvodi ({itemCount}):</span>
-                    <span className="font-semibold text-gray-900">{total.toFixed(2)} KM</span>
+                    <span className="font-semibold text-gray-900">{subtotal.toFixed(2)} KM</span>
                   </div>
                   <div className="flex justify-between text-gray-600">
                     <span>Dostava:</span>
-                    <span className="text-emerald-600 font-bold">Besplatna</span>
+                    <span className="font-bold text-gray-900">{SHIPPING_COST.toFixed(2)} KM</span>
                   </div>
                   <div className="border-t border-gray-200/50 pt-4 flex justify-between items-center">
                     <span className="text-gray-700 text-lg">Ukupno:</span>

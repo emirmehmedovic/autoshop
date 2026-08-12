@@ -4,11 +4,11 @@ import { useCartStore } from "@/lib/store/cartStore"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
-import Link from "next/link"
 import Image from "next/image"
 import { ShoppingBag, Loader2 } from "lucide-react"
 import { z } from "zod"
 import { trackInitiateCheckout, trackPurchase } from "@/lib/analytics/meta-pixel"
+import { SHIPPING_COST } from "@/lib/shipping"
 
 const checkoutSchema = z.object({
   name: z.string().min(2, "Ime mora imati najmanje 2 karaktera"),
@@ -43,11 +43,15 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     if (session?.user) {
-      setFormData((prev) => ({
-        ...prev,
-        name: session.user.name || prev.name,
-        email: session.user.email || prev.email,
-      }))
+      const frame = requestAnimationFrame(() => {
+        setFormData((prev) => ({
+          ...prev,
+          name: session.user.name || prev.name,
+          email: session.user.email || prev.email,
+        }))
+      })
+
+      return () => cancelAnimationFrame(frame)
     }
   }, [session])
 
@@ -68,12 +72,13 @@ export default function CheckoutPage() {
           price: item.price,
           quantity: item.quantity,
         })),
-        total: getTotalPrice(),
+        total: getTotalPrice() + SHIPPING_COST,
       })
     }
   }, []) // Samo prvi put kada se stranica učita
 
-  const total = getTotalPrice()
+  const subtotal = getTotalPrice()
+  const total = subtotal + SHIPPING_COST
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -139,8 +144,8 @@ export default function CheckoutPage() {
 
       // Redirect na potvrdu
       router.push(`/order/${data.orderId}`)
-    } catch (error: any) {
-      setServerError(error.message)
+    } catch (error: unknown) {
+      setServerError(error instanceof Error ? error.message : "Greška pri kreiranju narudžbe")
     } finally {
       setLoading(false)
     }
@@ -368,11 +373,11 @@ export default function CheckoutPage() {
               <div className="space-y-3 pt-6 border-t border-gray-200/50">
                 <div className="flex justify-between text-gray-600">
                   <span>Proizvodi:</span>
-                  <span className="text-gray-900 font-semibold">{total.toFixed(2)} KM</span>
+                  <span className="text-gray-900 font-semibold">{subtotal.toFixed(2)} KM</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Dostava:</span>
-                  <span className="text-emerald-600 font-semibold">Besplatna</span>
+                  <span className="text-gray-900 font-semibold">{SHIPPING_COST.toFixed(2)} KM</span>
                 </div>
                 <div className="flex justify-between text-xl font-bold text-gray-900 pt-3 border-t border-gray-200/50">
                   <span>Ukupno:</span>

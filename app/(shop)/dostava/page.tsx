@@ -148,8 +148,8 @@ export default function DostavaPage() {
                     <div>
                       <h3 className="font-bold text-gray-900 mb-1">Cijena dostave</h3>
                       <p className="text-gray-600 text-sm">
-                        Standardna dostava: <strong>7 KM</strong><br />
-                        Besplatna dostava za narudžbe iznad <strong>100 KM</strong>
+                        Standardna dostava: <strong>10 KM</strong><br />
+                        Dostava se obračunava po narudžbi.
                       </p>
                     </div>
                   </div>
