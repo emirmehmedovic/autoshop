@@ -22,6 +22,7 @@ import {
   RotateCcw,
   Loader,
   ArrowLeft,
+  Pencil,
 } from "lucide-react"
 
 export default async function OrderDetailPage({
@@ -128,13 +129,22 @@ export default async function OrderDetailPage({
             </div>
           </div>
 
-          <Link
-            href="/admin/orders"
-            className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
-          >
-            <ArrowLeft size={18} />
-            Nazad na listu
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href={`/admin/orders/${order.id}/edit`}
+              className="flex items-center gap-2 px-4 py-2 text-orange-600 hover:text-orange-700 hover:bg-orange-50 rounded-lg transition"
+            >
+              <Pencil size={18} />
+              Uredi narudžbu
+            </Link>
+            <Link
+              href="/admin/orders"
+              className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+            >
+              <ArrowLeft size={18} />
+              Nazad na listu
+            </Link>
+          </div>
         </div>
       </div>
 

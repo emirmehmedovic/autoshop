@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { Eye } from "lucide-react"
+import { Eye, Pencil, Plus } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 
 export const dynamic = "force-dynamic"
@@ -40,12 +40,18 @@ export default async function OrdersPage() {
       <Breadcrumbs items={[{ label: "Narudžbe" }]} />
 
       <div className="relative overflow-hidden rounded-2xl p-6 mb-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/5 via-white/80 to-indigo-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
-        <div className="flex items-center space-x-3">
-          <div className="w-1 h-12 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-lg shadow-orange-500/30" />
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900">Narudžbe</h1>
-            <p className="text-gray-600 mt-1">{orders.length} aktivnih narudžbi</p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-1 h-12 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-lg shadow-orange-500/30" />
+            <div>
+              <h1 className="text-4xl font-bold text-gray-900">Narudžbe</h1>
+              <p className="text-gray-600 mt-1">{orders.length} aktivnih narudžbi</p>
+            </div>
           </div>
+          <Link href="/admin/orders/new" className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 font-semibold text-white shadow-lg shadow-orange-500/25 transition hover:bg-orange-600">
+            <Plus size={18} />
+            Nova narudžba
+          </Link>
         </div>
       </div>
 
@@ -76,9 +82,12 @@ export default async function OrdersPage() {
                       {statusLabels[order.status]}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-right space-x-1">
                     <Link href={`/admin/orders/${order.id}`} className="inline-flex p-2 text-orange-500 hover:bg-orange-50 rounded-lg transition border border-transparent hover:border-orange-200">
                       <Eye size={18} />
+                    </Link>
+                    <Link href={`/admin/orders/${order.id}/edit`} className="inline-flex p-2 text-gray-500 hover:bg-gray-50 rounded-lg transition border border-transparent hover:border-gray-200">
+                      <Pencil size={18} />
                     </Link>
                   </td>
                 </tr>
