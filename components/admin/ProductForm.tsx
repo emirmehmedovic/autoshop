@@ -23,6 +23,7 @@ interface ProductFormData {
   shortDesc: string
   sku: string
   price: number
+  purchasePrice: number
   comparePrice: number | null
   stock: number
   lowStockAlert: number
@@ -68,6 +69,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
     shortDesc: initialData?.shortDesc || "",
     sku: initialData?.sku || "",
     price: initialData?.price || 0,
+    purchasePrice: initialData?.purchasePrice || 0,
     comparePrice: initialData?.comparePrice || null,
     stock: initialData?.stock || 0,
     lowStockAlert: initialData?.lowStockAlert || 5,
@@ -127,6 +129,9 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
     }
     if (!formData.price || formData.price <= 0) {
       newErrors.price = "Cijena mora biti veća od 0"
+    }
+    if (formData.purchasePrice < 0) {
+      newErrors.purchasePrice = "Nabavna cijena ne može biti negativna"
     }
     if (!formData.categoryId) {
       newErrors.categoryId = "Kategorija je obavezna"
@@ -275,7 +280,7 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
           <h2 className="text-2xl font-bold text-gray-900">Cijene</h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Price */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
@@ -294,6 +299,29 @@ export function ProductForm({ categories, initialData, productId }: ProductFormP
             {errors.price && (
               <p className="text-red-500 text-sm mt-2">{errors.price}</p>
             )}
+          </div>
+
+          {/* Purchase Price */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
+              Nabavna cijena (KM)
+            </label>
+            <input
+              type="number"
+              name="purchasePrice"
+              value={formData.purchasePrice || ""}
+              onChange={handleChange}
+              step="0.01"
+              min="0"
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
+              placeholder="0.00"
+            />
+            {errors.purchasePrice && (
+              <p className="text-red-500 text-sm mt-2">{errors.purchasePrice}</p>
+            )}
+            <p className="text-gray-500 text-xs mt-1">
+              Koristi se samo u admin kalkulacijama
+            </p>
           </div>
 
           {/* Compare Price */}

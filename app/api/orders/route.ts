@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
     // Kalkulacija totala
     let subtotal = 0
     const orderItemsData = items.map((item) => {
+      const product = products.find((p) => p.id === item.productId)
       const total = item.unitPrice * item.quantity
       subtotal += total
 
@@ -84,6 +85,7 @@ export async function POST(request: NextRequest) {
         productId: item.productId,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
+        purchasePrice: product?.purchasePrice || 0,
         total,
         selectedOptions: item.selectedOptions?.length ? item.selectedOptions : undefined,
       }

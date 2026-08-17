@@ -236,6 +236,7 @@ export async function PUT(
 
     const subtotal = data.items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0)
     const total = Math.max(0, subtotal + data.shippingCost - data.discount)
+    const productMap = new Map(products.map((product) => [product.id, product]))
 
     const order = await prisma.$transaction(async (tx) => {
       for (const productId of productIds) {
@@ -279,6 +280,7 @@ export async function PUT(
               productId: item.productId,
               quantity: item.quantity,
               unitPrice: item.unitPrice,
+              purchasePrice: productMap.get(item.productId)?.purchasePrice || 0,
               total: item.unitPrice * item.quantity,
               selectedOptions: item.selectedOptions.length ? item.selectedOptions : undefined,
             })),

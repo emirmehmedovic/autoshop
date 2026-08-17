@@ -50,6 +50,7 @@ export default async function EditProductPage({
     shortDesc: product.shortDesc || "",
     sku: product.sku,
     price: product.price,
+    purchasePrice: product.purchasePrice,
     comparePrice: product.comparePrice,
     stock: product.stock,
     lowStockAlert: product.lowStockAlert,

@@ -33,11 +33,11 @@ export function AnalyticsCharts({ revenueByDate, adSpendByDate }: AnalyticsChart
 
   return (
     <div className="space-y-8">
-      {/* Prihod vs Ad Spend */}
+      {/* Promet bez poštarine vs Ad Spend */}
       <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
           <div className="w-1 h-6 bg-orange-500 rounded-full mr-3" />
-          Prihod vs Ad Spend
+          Promet bez poštarine vs Ad Spend
         </h2>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
@@ -60,7 +60,7 @@ export function AnalyticsCharts({ revenueByDate, adSpendByDate }: AnalyticsChart
               dataKey="prihod"
               stroke="#f97316"
               strokeWidth={3}
-              name="Prihod"
+              name="Promet bez poštarine"
               dot={{ fill: '#f97316', r: 4 }}
             />
             <Line

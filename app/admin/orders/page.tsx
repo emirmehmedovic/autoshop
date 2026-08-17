@@ -1,39 +1,73 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { Eye, Pencil, Plus } from "lucide-react"
+import { Eye, Filter, Pencil, Plus, X } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
+import { OrderStatus, Prisma } from "@prisma/client"
 
 export const dynamic = "force-dynamic"
 
-export default async function OrdersPage() {
+interface SearchParams {
+  from?: string
+  to?: string
+  status?: string
+}
+
+const statusLabels: Record<OrderStatus, string> = {
+  PENDING: "Na čekanju",
+  CONFIRMED: "Potvrđena",
+  PROCESSING: "U pripremi",
+  SHIPPED: "Poslana",
+  DELIVERED: "Dostavljena",
+  CANCELLED: "Otkazana",
+  RETURNED: "Vraćena",
+}
+
+const statusColors: Record<OrderStatus, string> = {
+  PENDING: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  CONFIRMED: "bg-blue-50 text-blue-700 border-blue-200",
+  PROCESSING: "bg-purple-50 text-purple-700 border-purple-200",
+  SHIPPED: "bg-indigo-50 text-indigo-700 border-indigo-200",
+  DELIVERED: "bg-green-50 text-green-700 border-green-200",
+  CANCELLED: "bg-red-50 text-red-700 border-red-200",
+  RETURNED: "bg-gray-50 text-gray-700 border-gray-200",
+}
+
+function dateFromInput(value?: string, endOfDay = false) {
+  if (!value) return undefined
+  const date = new Date(`${value}T${endOfDay ? "23:59:59.999" : "00:00:00.000"}`)
+  return Number.isNaN(date.getTime()) ? undefined : date
+}
+
+export default async function OrdersPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>
+}) {
+  const params = await searchParams
+  const from = dateFromInput(params.from)
+  const to = dateFromInput(params.to, true)
+  const selectedStatus = Object.values(OrderStatus).includes(params.status as OrderStatus)
+    ? params.status as OrderStatus
+    : undefined
+
+  const where: Prisma.OrderWhereInput = {
+    ...(from || to ? { createdAt: { ...(from ? { gte: from } : {}), ...(to ? { lte: to } : {}) } } : {}),
+    ...(selectedStatus ? { status: selectedStatus } : {}),
+  }
+
   const orders = await prisma.order.findMany({
+    where,
     include: {
       user: true,
       items: { include: { product: true } },
     },
     orderBy: { createdAt: "desc" },
-    take: 50,
+    take: 200,
   })
 
-  const statusLabels: Record<string, string> = {
-    PENDING: "Na čekanju",
-    CONFIRMED: "Potvrđena",
-    PROCESSING: "U pripremi",
-    SHIPPED: "Poslana",
-    DELIVERED: "Dostavljena",
-    CANCELLED: "Otkazana",
-    RETURNED: "Vraćena",
-  }
-
-  const statusColors: Record<string, string> = {
-    PENDING: "bg-yellow-50 text-yellow-700 border-yellow-200",
-    CONFIRMED: "bg-blue-50 text-blue-700 border-blue-200",
-    PROCESSING: "bg-purple-50 text-purple-700 border-purple-200",
-    SHIPPED: "bg-indigo-50 text-indigo-700 border-indigo-200",
-    DELIVERED: "bg-green-50 text-green-700 border-green-200",
-    CANCELLED: "bg-red-50 text-red-700 border-red-200",
-    RETURNED: "bg-gray-50 text-gray-700 border-gray-200",
-  }
+  const netRevenue = orders.reduce((sum, order) => sum + Math.max(0, order.subtotal - order.discount), 0)
+  const shippingTotal = orders.reduce((sum, order) => sum + order.shippingCost, 0)
+  const grossTotal = orders.reduce((sum, order) => sum + order.total, 0)
 
   return (
     <div>
@@ -54,6 +88,64 @@ export default async function OrdersPage() {
           </Link>
         </div>
       </div>
+
+      <form action="/admin/orders" className="relative overflow-hidden rounded-2xl p-6 mb-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/5 via-white/80 to-indigo-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr_1fr_auto_auto] md:items-end">
+          <label className="block">
+            <span className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">Od datuma</span>
+            <input
+              type="date"
+              name="from"
+              defaultValue={params.from || ""}
+              className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </label>
+          <label className="block">
+            <span className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">Do datuma</span>
+            <input
+              type="date"
+              name="to"
+              defaultValue={params.to || ""}
+              className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            />
+          </label>
+          <label className="block">
+            <span className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">Status</span>
+            <select
+              name="status"
+              defaultValue={selectedStatus || ""}
+              className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+            >
+              <option value="">Svi statusi</option>
+              {Object.values(OrderStatus).map((status) => (
+                <option key={status} value={status}>{statusLabels[status]}</option>
+              ))}
+            </select>
+          </label>
+          <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 font-semibold text-white transition hover:bg-orange-600">
+            <Filter size={18} />
+            Filtriraj
+          </button>
+          <Link href="/admin/orders" className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-3 font-semibold text-gray-700 transition hover:bg-gray-50">
+            <X size={18} />
+            Reset
+          </Link>
+        </div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3">
+          <div className="rounded-xl border border-gray-200 bg-white/80 p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Promet bez poštarine</p>
+            <p className="mt-1 text-xl font-bold text-gray-900">{netRevenue.toFixed(2)} <span className="text-orange-500">KM</span></p>
+          </div>
+          <div className="rounded-xl border border-gray-200 bg-white/80 p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Poštarina izbijena</p>
+            <p className="mt-1 text-xl font-bold text-gray-900">{shippingTotal.toFixed(2)} <span className="text-orange-500">KM</span></p>
+          </div>
+          <div className="rounded-xl border border-gray-200 bg-white/80 p-4">
+            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Ukupno sa poštarinom</p>
+            <p className="mt-1 text-xl font-bold text-gray-900">{grossTotal.toFixed(2)} <span className="text-orange-500">KM</span></p>
+          </div>
+        </div>
+      </form>
 
       <div className="relative overflow-hidden rounded-2xl backdrop-blur-xl bg-gradient-to-br from-orange-500/5 via-white/80 to-amber-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
         <div className="overflow-x-auto">

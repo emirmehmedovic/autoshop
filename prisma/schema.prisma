@@ -110,6 +110,7 @@ model Product {
   shortDesc      String?
   sku            String              @unique
   price          Float // B2C cijena
+  purchasePrice  Float               @default(0) // Nabavna cijena za interne kalkulacije
   comparePrice   Float? // Prekrižena cijena
   stock          Int                 @default(0)
   lowStockAlert  Int                 @default(5) // Upozorenje kad padne ispod
@@ -238,6 +239,7 @@ model OrderItem {
   product         Product @relation(fields: [productId], references: [id])
   quantity        Int
   unitPrice       Float   // Snapshot cijene u trenutku narudžbe
+  purchasePrice   Float   @default(0) // Snapshot nabavne cijene u trenutku narudžbe
   total           Float
   selectedOptions Json?   // Odabrane opcije: [{ name: "Miris", value: "Vanila", price: 0 }]
 }
@@ -292,6 +294,8 @@ model AdSpendRecord {
   id           String   @id @default(cuid())
   platform     String // "meta", "google"
   date         DateTime
+  dateFrom     DateTime?
+  dateTo       DateTime?
   spend        Float
   impressions  Int?
   clicks       Int?
