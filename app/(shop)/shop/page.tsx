@@ -9,6 +9,7 @@ interface SearchParams {
   search?: string
   minPrice?: string
   maxPrice?: string
+  stock?: string
 }
 
 export default async function ShopPage({
@@ -17,7 +18,7 @@ export default async function ShopPage({
   searchParams: Promise<SearchParams>
 }) {
   const params = await searchParams
-  const { category, search, minPrice, maxPrice } = params
+  const { category, search, minPrice, maxPrice, stock } = params
 
   // Fetch kategorije za sidebar
   const categories = await prisma.category.findMany({
@@ -48,6 +49,8 @@ export default async function ShopPage({
       }),
       ...(minPrice && { price: { gte: parseFloat(minPrice) } }),
       ...(maxPrice && { price: { lte: parseFloat(maxPrice) } }),
+      ...(stock === "in" && { stock: { gt: 0 } }),
+      ...(stock === "out" && { stock: { equals: 0 } }),
     },
     include: {
       category: true,
@@ -108,6 +111,7 @@ export default async function ShopPage({
               selectedCategory={category}
               minPrice={minPrice}
               maxPrice={maxPrice}
+              selectedStock={stock}
             />
           </aside>
 

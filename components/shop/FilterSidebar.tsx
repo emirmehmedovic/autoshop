@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useState } from "react"
-import { ChevronDown, Filter, X } from "lucide-react"
+import { ChevronDown, Filter, X, Package } from "lucide-react"
 
 interface Category {
   id: string
@@ -19,6 +19,7 @@ interface FilterSidebarProps {
   selectedCategory?: string
   minPrice?: string
   maxPrice?: string
+  selectedStock?: string
 }
 
 export function FilterSidebar({
@@ -26,6 +27,7 @@ export function FilterSidebar({
   selectedCategory,
   minPrice: initialMinPrice,
   maxPrice: initialMaxPrice,
+  selectedStock,
 }: FilterSidebarProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -51,13 +53,25 @@ export function FilterSidebar({
     router.push(`/shop?${params.toString()}`)
   }
 
+  const handleStockFilter = (stockValue: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (stockValue) {
+      params.set("stock", stockValue)
+    } else {
+      params.delete("stock")
+    }
+
+    router.push(`/shop?${params.toString()}`)
+  }
+
   const clearFilters = () => {
     setMinPrice("")
     setMaxPrice("")
     router.push("/shop")
   }
 
-  const hasFilters = selectedCategory || minPrice || maxPrice
+  const hasFilters = selectedCategory || minPrice || maxPrice || selectedStock
 
   return (
     <div className="space-y-6">
@@ -128,6 +142,52 @@ export function FilterSidebar({
               </li>
             ))}
           </ul>
+        </div>
+      </div>
+
+      {/* Stanje zaliha */}
+      <div className="relative overflow-hidden rounded-2xl p-6 backdrop-blur-xl bg-gradient-to-br from-emerald-950/10 via-white/75 to-emerald-700/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(16,85,50,0.12)]">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/55 via-emerald-50/25 to-emerald-900/5 pointer-events-none" />
+        <div className="relative">
+          <h3 className="font-bold text-gray-900 text-lg mb-5">Stanje zaliha</h3>
+          <div className="space-y-2">
+            <button
+              onClick={() => handleStockFilter("")}
+              className={`w-full text-left py-3 px-4 rounded-xl transition-all duration-300 ${
+                !selectedStock
+                  ? "bg-gradient-to-r from-emerald-700 to-emerald-900 text-emerald-100 font-bold shadow-lg shadow-emerald-950/30"
+                  : "text-emerald-950/75 hover:bg-emerald-50/70 backdrop-blur-sm"
+              }`}
+            >
+              Svi proizvodi
+            </button>
+            <button
+              onClick={() => handleStockFilter("in")}
+              className={`w-full text-left py-3 px-4 rounded-xl transition-all duration-300 ${
+                selectedStock === "in"
+                  ? "bg-gradient-to-r from-emerald-700 to-emerald-900 text-emerald-100 font-bold shadow-lg shadow-emerald-950/30"
+                  : "text-emerald-950/75 hover:bg-emerald-50/70 backdrop-blur-sm"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+                Na stanju
+              </span>
+            </button>
+            <button
+              onClick={() => handleStockFilter("out")}
+              className={`w-full text-left py-3 px-4 rounded-xl transition-all duration-300 ${
+                selectedStock === "out"
+                  ? "bg-gradient-to-r from-emerald-700 to-emerald-900 text-emerald-100 font-bold shadow-lg shadow-emerald-950/30"
+                  : "text-emerald-950/75 hover:bg-emerald-50/70 backdrop-blur-sm"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                Nije na stanju
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
