@@ -1,7 +1,8 @@
 import Link from "next/link"
-import { ArrowRight, Package2, Sparkles, Clock, Truck, Shield, Award, CheckCircle, Star } from "lucide-react"
+import { ArrowRight, Package2, Sparkles, Clock, Truck, Shield, Award, CheckCircle, Star, ShoppingBag } from "lucide-react"
 import { prisma } from "@/lib/prisma"
 import { ProductCard } from "@/components/shop/ProductCard"
+import { LoadMoreProducts } from "@/components/shop/LoadMoreProducts"
 
 export default async function HomePage() {
   // Fetch istaknuti proizvodi
@@ -18,6 +19,23 @@ export default async function HomePage() {
       },
     },
     take: 4,
+    orderBy: { createdAt: "desc" },
+  })
+
+  // Fetch ostali proizvodi (ne-istaknuti) - prvih 10
+  const otherProducts = await prisma.product.findMany({
+    where: {
+      isActive: true,
+      isFeatured: false,
+    },
+    include: {
+      category: true,
+      images: {
+        orderBy: { sortOrder: "asc" },
+        take: 1,
+      },
+    },
+    take: 10,
     orderBy: { createdAt: "desc" },
   })
 
@@ -265,6 +283,42 @@ export default async function HomePage() {
                 </Link>
               ))}
             </div>
+
+            <div className="mt-8 md:hidden text-center">
+              <Link
+                href="/shop"
+                className="inline-flex items-center text-gray-900 hover:text-orange-500 font-semibold transition"
+              >
+                Vidi sve proizvode
+                <ArrowRight className="ml-2" size={20} />
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Ostali proizvodi */}
+      {otherProducts.length > 0 && (
+        <section className="py-16 bg-gradient-to-b from-transparent via-amber-50/30 to-transparent">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-end mb-10">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-100 rounded-full mb-3">
+                  <ShoppingBag className="h-4 w-4 text-amber-600" />
+                  <span className="text-amber-700 uppercase tracking-wider text-xs font-bold">Katalog</span>
+                </div>
+                <h2 className="text-3xl font-bold text-gray-900">Ostali proizvodi</h2>
+              </div>
+              <Link
+                href="/shop"
+                className="hidden md:inline-flex items-center text-gray-900 hover:text-orange-500 font-semibold transition"
+              >
+                Vidi sve proizvode
+                <ArrowRight className="ml-2" size={20} />
+              </Link>
+            </div>
+
+            <LoadMoreProducts initialProducts={otherProducts} initialOffset={10} />
 
             <div className="mt-8 md:hidden text-center">
               <Link
