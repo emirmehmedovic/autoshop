@@ -60,7 +60,7 @@ export function LoadMoreProducts({ initialProducts, initialOffset }: LoadMorePro
           <button
             onClick={loadMore}
             disabled={isPending}
-            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-amber-900 to-neutral-950 text-amber-100 rounded-full font-bold hover:from-amber-800 hover:to-amber-950 transition shadow-lg shadow-amber-950/30 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-yellow-500 to-amber-500 text-gray-900 rounded-full font-bold hover:from-yellow-400 hover:to-amber-400 transition shadow-lg shadow-yellow-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPending ? (
               <>

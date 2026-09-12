@@ -7,6 +7,7 @@ export async function getMoreProducts(offset: number, limit: number) {
     where: {
       isActive: true,
       isFeatured: false,
+      stock: { gt: 0 },
     },
     include: {
       category: true,
