@@ -1,9 +1,10 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import Image from "next/image"
 import { Plus, Search, Edit, AlertCircle } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { DeleteProductButton } from "@/components/admin/DeleteProductButton"
+import { CopyNameButton } from "@/components/admin/CopyNameButton"
+import { ImageHoverPreview } from "@/components/admin/ImageHoverPreview"
 
 export const dynamic = "force-dynamic"
 
@@ -21,6 +22,22 @@ export default async function ProductsPage({
   const params = await searchParams
   const { search, category, filter } = params
 
+  // Build stock filter conditions
+  const stockFilter = (() => {
+    switch (filter) {
+      case "inStock":
+        return { stock: { gt: 0 } }
+      case "outOfStock":
+        return { stock: { equals: 0 } }
+      case "lowStock":
+        return { stock: { gt: 0, lte: 10 } } // Niske zalihe (1-10)
+      case "featured":
+        return { isFeatured: true }
+      default:
+        return {}
+    }
+  })()
+
   const products = await prisma.product.findMany({
     where: {
       ...(search && {
@@ -30,9 +47,7 @@ export default async function ProductsPage({
         ],
       }),
       ...(category && { categoryId: category }),
-      ...(filter === "lowStock" && {
-        stock: { lte: prisma.product.fields.lowStockAlert },
-      }),
+      ...stockFilter,
     },
     include: {
       category: true,
@@ -72,8 +87,8 @@ export default async function ProductsPage({
       </div>
 
       {/* Filteri */}
-      <div className="relative overflow-hidden rounded-2xl p-6 mb-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/5 via-white/80 to-indigo-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <form method="GET" className="relative overflow-hidden rounded-2xl p-6 mb-6 backdrop-blur-xl bg-gradient-to-br from-blue-500/5 via-white/80 to-indigo-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Search */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
@@ -83,6 +98,7 @@ export default async function ProductsPage({
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input
                 type="text"
+                name="search"
                 placeholder="Naziv ili SKU..."
                 defaultValue={search}
                 className="w-full pl-10 pr-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
@@ -96,6 +112,7 @@ export default async function ProductsPage({
               Kategorija
             </label>
             <select
+              name="category"
               defaultValue={category}
               className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
             >
@@ -108,23 +125,35 @@ export default async function ProductsPage({
             </select>
           </div>
 
-          {/* Filter */}
+          {/* Stanje zaliha */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
-              Filter
+              Stanje zaliha
             </label>
             <select
+              name="filter"
               defaultValue={filter}
               className="w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition"
             >
               <option value="">Svi proizvodi</option>
-              <option value="lowStock">Niske zalihe</option>
-              <option value="outOfStock">Rasprodato</option>
-              <option value="featured">Istaknuti</option>
+              <option value="inStock">✓ Na stanju</option>
+              <option value="outOfStock">✗ Nije na stanju</option>
+              <option value="lowStock">⚠ Niske zalihe</option>
+              <option value="featured">★ Istaknuti</option>
             </select>
           </div>
+
+          {/* Dugme za filter */}
+          <div className="flex items-end">
+            <button
+              type="submit"
+              className="w-full px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition font-bold shadow-md"
+            >
+              Filtriraj
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
 
       {/* Tabela proizvoda */}
       <div className="relative overflow-hidden rounded-2xl backdrop-blur-xl bg-gradient-to-br from-orange-500/5 via-white/80 to-amber-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
@@ -158,21 +187,19 @@ export default async function ProductsPage({
             <tbody className="divide-y divide-gray-200">
               {products.map((product) => (
                 <tr key={product.id} className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="relative w-12 h-12 bg-gray-100 rounded-xl border border-gray-200 flex-shrink-0 overflow-hidden">
-                        <Image
-                          src={product.images[0]?.url || "/placeholder-product.svg"}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                          sizes="48px"
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="font-bold text-gray-900 line-clamp-1">
-                          {product.name}
-                        </p>
+                      <ImageHoverPreview
+                        src={product.images[0]?.url || "/placeholder-product.svg"}
+                        alt={product.name}
+                      />
+                      <div className="min-w-0 max-w-[200px]">
+                        <div className="flex items-center gap-1.5">
+                          <p className="text-sm font-medium text-gray-900 line-clamp-2 leading-tight">
+                            {product.name}
+                          </p>
+                          <CopyNameButton name={product.name} />
+                        </div>
                       </div>
                     </div>
                   </td>
