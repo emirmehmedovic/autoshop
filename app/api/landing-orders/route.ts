@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
+import { sendTelegramNotification } from "@/lib/notifications/telegram"
 
 // Product slugs for the two collections
 const PRODUCT_SLUGS: Record<string, string> = {
@@ -101,6 +102,31 @@ export async function POST(req: NextRequest) {
         items: true,
       },
     })
+
+    // Send Telegram notification
+    const itemsList = data.items
+      .map((item) => `  • ${item.collection} - ${item.scent}`)
+      .join("\n")
+
+    const telegramMessage = `
+🎁 <b>Nova narudžba sa landing stranice!</b>
+
+📦 Broj: <code>#${order.orderNumber}</code>
+👤 Kupac: ${data.customer.name}
+📞 Tel: ${data.customer.phone}
+📍 Grad: ${data.customer.city}
+💰 Iznos: <b>${data.total.toFixed(2)} KM</b> (pouzećem)
+${data.savings && data.savings > 0 ? `💚 Ušteda: ${data.savings} KM` : ""}
+
+<b>Mirisi (${data.packSize}x):</b>
+${itemsList}
+
+<b>Adresa dostave:</b>
+${data.customer.address}
+${data.customer.zip ? data.customer.zip + " " : ""}${data.customer.city}
+    `.trim()
+
+    sendTelegramNotification(telegramMessage).catch(console.error)
 
     return NextResponse.json({
       success: true,
