@@ -56,19 +56,26 @@ export function LoadMoreProducts({ initialProducts, initialOffset }: LoadMorePro
       </div>
 
       {hasMore && (
-        <div className="mt-10 text-center">
+        <div className="mt-12 text-center">
           <button
             onClick={loadMore}
             disabled={isPending}
-            className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-yellow-500 to-amber-500 text-gray-900 rounded-full font-bold hover:from-yellow-400 hover:to-amber-400 transition shadow-lg shadow-yellow-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group inline-flex items-center gap-3 pl-7 pr-3 py-2.5 bg-gradient-to-r from-violet-500 to-purple-600 text-white rounded-full font-semibold hover:from-violet-600 hover:to-purple-700 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] shadow-xl shadow-violet-500/25 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
           >
             {isPending ? (
               <>
-                <Loader2 className="animate-spin" size={18} />
-                Učitavanje...
+                <Loader2 className="animate-spin" size={16} />
+                <span>Učitavanje...</span>
               </>
             ) : (
-              "Učitaj više"
+              <>
+                <span>Učitaj više</span>
+                <span className="flex items-center justify-center w-7 h-7 rounded-full bg-white/15 group-hover:bg-amber-500 transition-colors duration-300">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </span>
+              </>
             )}
           </button>
         </div>

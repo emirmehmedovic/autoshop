@@ -60,104 +60,108 @@ export function FilterSidebar({
   const hasFilters = selectedCategory || minPrice || maxPrice
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Kategorije */}
-      <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-lg">
-        <div className="flex items-center justify-between gap-3 mb-5">
-          <div className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 to-amber-500 flex items-center justify-center shadow-lg shadow-yellow-500/25">
-              <Filter className="text-white" size={18} />
+      <div className="rounded-[1.5rem] p-1 bg-gradient-to-br from-violet-50/60 via-white/80 to-purple-50/40 ring-1 ring-violet-200/40 shadow-[0_4px_20px_rgba(139,92,246,0.06)]">
+        <div className="rounded-[calc(1.5rem-0.25rem)] bg-white/80 backdrop-blur-sm p-5">
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center shadow-md shadow-violet-500/20">
+                <Filter className="text-white" size={16} strokeWidth={1.5} />
+              </div>
+              <h3 className="font-semibold text-gray-900 tracking-tight">Kategorije</h3>
             </div>
-            <h3 className="font-bold text-gray-900 text-lg">Kategorije</h3>
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowMobileCategories((isOpen) => !isOpen)}
-            aria-expanded={showMobileCategories}
-            aria-controls="mobile-category-list"
-            className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100 text-gray-600 shadow-sm transition hover:bg-gray-200"
-          >
-            <ChevronDown
-              size={20}
-              className={`transition-transform duration-300 ${showMobileCategories ? "rotate-180" : ""}`}
-            />
-            <span className="sr-only">
-              {showMobileCategories ? "Sakrij kategorije" : "Prikaži kategorije"}
-            </span>
-          </button>
-        </div>
-        <ul
-          id="mobile-category-list"
-          className={`${showMobileCategories ? "block" : "hidden"} space-y-2 lg:block`}
-        >
-          <li>
-            <Link
-              href="/shop"
-              className={`block py-3 px-4 rounded-xl transition-all duration-300 ${
-                !selectedCategory
-                  ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-gray-900 font-bold shadow-lg shadow-yellow-500/25"
-                  : "text-gray-700 hover:bg-gray-50"
-              }`}
+            <button
+              type="button"
+              onClick={() => setShowMobileCategories((isOpen) => !isOpen)}
+              aria-expanded={showMobileCategories}
+              aria-controls="mobile-category-list"
+              className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg bg-stone-100 text-stone-600 transition-all duration-300 hover:bg-stone-200 active:scale-95"
             >
-              Sve kategorije
-            </Link>
-          </li>
-          {categories.map((category) => (
-            <li key={category.id}>
+              <ChevronDown
+                size={18}
+                className={`transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${showMobileCategories ? "rotate-180" : ""}`}
+              />
+              <span className="sr-only">
+                {showMobileCategories ? "Sakrij kategorije" : "Prikaži kategorije"}
+              </span>
+            </button>
+          </div>
+          <ul
+            id="mobile-category-list"
+            className={`${showMobileCategories ? "block" : "hidden"} space-y-1 lg:block`}
+          >
+            <li>
               <Link
-                href={`/shop?category=${category.slug}`}
-                className={`block py-3 px-4 rounded-xl transition-all duration-300 ${
-                  selectedCategory === category.slug
-                    ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-gray-900 font-bold shadow-lg shadow-yellow-500/25"
-                    : "text-gray-700 hover:bg-gray-50"
+                href="/shop"
+                className={`block py-2.5 px-3 rounded-lg transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] text-sm ${
+                  !selectedCategory
+                    ? "bg-gradient-to-r from-violet-500 to-purple-600 text-white font-medium shadow-md shadow-violet-500/25"
+                    : "text-gray-600 hover:bg-violet-50 hover:text-violet-700"
                 }`}
               >
-                <span className="flex justify-between items-center">
-                  <span>{category.name}</span>
-                  <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${
-                    selectedCategory === category.slug
-                      ? "bg-white/50 text-gray-800"
-                      : "bg-gray-100 text-gray-600"
-                  }`}>
-                    {category._count.products}
-                  </span>
-                </span>
+                Sve kategorije
               </Link>
             </li>
-          ))}
-        </ul>
+            {categories.map((category) => (
+              <li key={category.id}>
+                <Link
+                  href={`/shop?category=${category.slug}`}
+                  className={`block py-2.5 px-3 rounded-lg transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] text-sm ${
+                    selectedCategory === category.slug
+                      ? "bg-gradient-to-r from-violet-500 to-purple-600 text-white font-medium shadow-md shadow-violet-500/25"
+                      : "text-gray-600 hover:bg-violet-50 hover:text-violet-700"
+                  }`}
+                >
+                  <span className="flex justify-between items-center">
+                    <span>{category.name}</span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold tabular-nums ${
+                      selectedCategory === category.slug
+                        ? "bg-white/20 text-white"
+                        : "bg-stone-100 text-stone-500"
+                    }`}>
+                      {category._count.products}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       {/* Cijena */}
-      <div className="hidden lg:block bg-white rounded-2xl p-6 border border-gray-100 shadow-lg">
-        <h3 className="font-bold text-gray-900 text-lg mb-5">Cijena (KM)</h3>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm text-gray-600 mb-2 font-medium">Od</label>
-            <input
-              type="number"
-              value={minPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-              placeholder="0"
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
-            />
+      <div className="hidden lg:block rounded-[1.5rem] p-1 bg-gradient-to-br from-emerald-50/60 via-white/80 to-teal-50/40 ring-1 ring-emerald-200/40 shadow-[0_4px_20px_rgba(16,185,129,0.06)]">
+        <div className="rounded-[calc(1.5rem-0.25rem)] bg-white/80 backdrop-blur-sm p-5">
+          <h3 className="font-semibold text-gray-900 mb-4 tracking-tight">Cijena (KM)</h3>
+          <div className="space-y-3">
+            <div>
+              <label className="block text-xs text-gray-500 mb-1.5 font-medium">Od</label>
+              <input
+                type="number"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                placeholder="0"
+                className="w-full px-3 py-2.5 bg-white border-0 ring-1 ring-emerald-200 rounded-lg text-gray-900 text-sm placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1.5 font-medium">Do</label>
+              <input
+                type="number"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                placeholder="1000"
+                className="w-full px-3 py-2.5 bg-white border-0 ring-1 ring-emerald-200 rounded-lg text-gray-900 text-sm placeholder-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300"
+              />
+            </div>
+            <button
+              onClick={handlePriceFilter}
+              className="w-full py-2.5 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] font-medium text-sm shadow-md shadow-emerald-500/25 active:scale-[0.98]"
+            >
+              Primijeni filter
+            </button>
           </div>
-          <div>
-            <label className="block text-sm text-gray-600 mb-2 font-medium">Do</label>
-            <input
-              type="number"
-              value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
-              placeholder="1000"
-              className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition"
-            />
-          </div>
-          <button
-            onClick={handlePriceFilter}
-            className="w-full py-3 px-4 bg-gradient-to-r from-yellow-500 to-amber-500 text-gray-900 rounded-xl hover:from-yellow-400 hover:to-amber-400 transition font-bold shadow-lg shadow-yellow-500/25"
-          >
-            Primijeni filter
-          </button>
         </div>
       </div>
 
@@ -165,9 +169,9 @@ export function FilterSidebar({
       {hasFilters && (
         <button
           onClick={clearFilters}
-          className="w-full py-3 px-4 bg-red-50 border border-red-200 rounded-xl text-red-600 hover:bg-red-100 transition font-semibold flex items-center justify-center space-x-2"
+          className="w-full py-2.5 px-4 bg-rose-50 ring-1 ring-rose-200 rounded-xl text-rose-600 hover:bg-rose-100 transition-all duration-300 font-medium text-sm flex items-center justify-center gap-2 active:scale-[0.98]"
         >
-          <X size={18} />
+          <X size={16} strokeWidth={1.5} />
           <span>Očisti sve filtere</span>
         </button>
       )}

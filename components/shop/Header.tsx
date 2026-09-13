@@ -47,8 +47,7 @@ export function Header() {
 
   return (
     <header className="sticky top-4 z-50 mx-4 lg:mx-8">
-      <nav className="relative mx-auto max-w-7xl rounded-2xl border border-amber-100/50 bg-gradient-to-r from-amber-950/10 via-white/70 to-amber-700/10 px-4 py-3 shadow-lg shadow-amber-950/10 backdrop-blur-xl supports-[backdrop-filter]:bg-white/55">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/45 via-amber-50/20 to-amber-900/10 pointer-events-none" />
+      <nav className="relative mx-auto max-w-7xl rounded-full px-5 py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-xl bg-white/80 ring-1 ring-black/[0.04]">
         <div className="relative">
         <div className="flex items-center justify-between">
           {/* Logo */}
@@ -61,10 +60,10 @@ export function Header() {
           </Link>
 
           {/* Desktop navigacija */}
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center gap-1">
             <Link
               href="/shop"
-              className="px-4 py-2 text-sm font-medium text-amber-950/75 hover:text-amber-900 hover:bg-amber-50/75 rounded-lg transition"
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-full transition-colors duration-300"
             >
               Svi Proizvodi
             </Link>
@@ -74,29 +73,29 @@ export function Header() {
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 onBlur={() => setTimeout(() => setDropdownOpen(false), 200)}
-                className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-amber-950/75 hover:text-amber-900 hover:bg-amber-50/75 rounded-lg transition"
+                className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-full transition-colors duration-300"
               >
                 Kategorije
-                <ChevronDown className={`h-4 w-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] ${dropdownOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {dropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-80 rounded-xl border border-amber-100/60 bg-gradient-to-br from-white/85 via-amber-50/75 to-amber-100/65 p-2 shadow-xl shadow-amber-950/15 backdrop-blur-xl">
+                <div className="absolute top-full left-0 mt-3 w-72 rounded-2xl bg-white/95 backdrop-blur-xl p-2 shadow-xl shadow-black/10 ring-1 ring-black/[0.04]">
                   <div className="grid gap-1">
                     {categories.map((category) => (
                       <Link
                         key={category.href}
                         href={category.href}
-                        className="flex items-start gap-3 rounded-lg p-3 hover:bg-white/70 transition group"
+                        className="flex items-start gap-3 rounded-xl p-3 hover:bg-stone-50 transition-colors duration-200 group"
                       >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-b from-amber-900 to-neutral-950 text-amber-200 shadow-sm shadow-amber-950/20 group-hover:from-amber-800 group-hover:to-amber-950 transition">
-                          <category.icon className="h-5 w-5" />
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-stone-100 text-stone-600 group-hover:bg-amber-100 group-hover:text-amber-700 transition-colors duration-200">
+                          <category.icon className="h-4 w-4" strokeWidth={1.5} />
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900 group-hover:text-amber-800 transition">
+                          <div className="font-medium text-gray-900 text-sm group-hover:text-amber-700 transition-colors duration-200">
                             {category.title}
                           </div>
-                          <div className="text-sm text-amber-950/55">
+                          <div className="text-xs text-gray-500">
                             {category.description}
                           </div>
                         </div>
@@ -109,31 +108,31 @@ export function Header() {
 
             <Link
               href="/blog"
-              className="px-4 py-2 text-sm font-medium text-amber-950/75 hover:text-amber-900 hover:bg-amber-50/75 rounded-lg transition"
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-full transition-colors duration-300"
             >
               Blog
             </Link>
           </div>
 
           {/* Desna strana - Akcije */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-1">
             {/* Telefon */}
             <a
               href="tel:+38761577576"
-              className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium text-amber-950/75 hover:text-amber-900 transition"
+              className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-300"
             >
-              <Phone className="h-4 w-4 text-amber-800" />
+              <Phone className="h-4 w-4 text-amber-600" strokeWidth={1.5} />
               <span>+387 61 577 576</span>
             </a>
 
             {/* Korpa */}
             <Link
               href="/cart"
-              className="relative flex h-10 w-10 items-center justify-center rounded-lg text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900 transition"
+              className="relative flex h-9 w-9 items-center justify-center rounded-full text-gray-600 hover:bg-stone-100 hover:text-gray-900 transition-colors duration-300"
             >
-              <ShoppingCart className="h-5 w-5" />
+              <ShoppingCart className="h-[18px] w-[18px]" strokeWidth={1.5} />
               {mounted && totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-amber-900 to-neutral-950 text-xs font-bold text-amber-100 shadow-sm shadow-amber-950/30">
+                <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white shadow-sm">
                   {totalItems}
                 </span>
               )}
@@ -141,47 +140,47 @@ export function Header() {
 
             {/* User - samo ako je ulogovan */}
             {session && (
-              <div className="hidden sm:flex items-center space-x-1">
+              <div className="hidden sm:flex items-center gap-1">
                 <Link
                   href={session.user.role === "ADMIN" ? "/admin" : "/account"}
-                  className="flex h-10 items-center gap-2 rounded-lg px-3 text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900 transition"
+                  className="flex h-9 items-center gap-2 rounded-full px-3 text-gray-600 hover:bg-stone-100 hover:text-gray-900 transition-colors duration-300"
                 >
-                  <User className="h-5 w-5" />
+                  <User className="h-[18px] w-[18px]" strokeWidth={1.5} />
                   <span className="text-sm font-medium">{session.user.name || 'Account'}</span>
                 </Link>
                 <button
                   onClick={() => signOut()}
-                  className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-red-50 hover:text-red-500 transition"
+                  className="flex h-9 w-9 items-center justify-center rounded-full text-gray-500 hover:bg-rose-50 hover:text-rose-500 transition-colors duration-300"
                   title="Odjavi se"
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="h-4 w-4" strokeWidth={1.5} />
                 </button>
               </div>
             )}
 
             {/* Mobile menu button */}
             <button
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-amber-950/75 hover:bg-amber-50/75 lg:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-gray-600 hover:bg-stone-100 lg:hidden transition-colors duration-300"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {mobileMenuOpen ? <X className="h-5 w-5" strokeWidth={1.5} /> : <Menu className="h-5 w-5" strokeWidth={1.5} />}
             </button>
           </div>
         </div>
 
         {/* Mobile menu */}
         {mobileMenuOpen && (
-          <div className="mt-4 border-t border-amber-100/70 pt-4 lg:hidden">
+          <div className="mt-4 border-t border-stone-100 pt-4 lg:hidden">
             <div className="space-y-1">
               <Link
                 href="/shop"
-                className="block rounded-lg px-4 py-3 text-sm font-medium text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
+                className="block rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-stone-50 hover:text-gray-900 transition-colors duration-200"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Svi Proizvodi
               </Link>
 
-              <div className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-amber-950/50">
+              <div className="px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-gray-400">
                 Kategorije
               </div>
 
@@ -189,17 +188,17 @@ export function Header() {
                 <Link
                   key={category.href}
                   href={category.href}
-                  className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
+                  className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-gray-600 hover:bg-stone-50 hover:text-gray-900 transition-colors duration-200"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <category.icon className="h-5 w-5 text-amber-800" />
+                  <category.icon className="h-4 w-4 text-amber-600" strokeWidth={1.5} />
                   {category.title}
                 </Link>
               ))}
 
               <Link
                 href="/blog"
-                className="block rounded-lg px-4 py-3 text-sm font-medium text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
+                className="block rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-stone-50 hover:text-gray-900 transition-colors duration-200"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Blog
@@ -207,21 +206,21 @@ export function Header() {
 
               <a
                 href="tel:+38761577576"
-                className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-700 hover:bg-stone-50 hover:text-gray-900 transition-colors duration-200"
               >
-                <Phone className="h-5 w-5 text-amber-800" />
+                <Phone className="h-4 w-4 text-amber-600" strokeWidth={1.5} />
                 +387 61 577 576
               </a>
 
               {session && (
                 <>
-                  <div className="my-2 border-t border-amber-100/70" />
+                  <div className="my-2 border-t border-stone-100" />
                   <Link
                     href={session.user.role === "ADMIN" ? "/admin" : "/account"}
-                    className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-amber-950/75 hover:bg-amber-50/75 hover:text-amber-900"
+                    className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm text-gray-600 hover:bg-stone-50 hover:text-gray-900 transition-colors duration-200"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    <User className="h-5 w-5" />
+                    <User className="h-4 w-4" strokeWidth={1.5} />
                     {session.user.name || 'Moj račun'}
                   </Link>
                   <button
@@ -229,9 +228,9 @@ export function Header() {
                       signOut()
                       setMobileMenuOpen(false)
                     }}
-                    className="flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm text-red-600 hover:bg-red-50"
+                    className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm text-rose-600 hover:bg-rose-50 transition-colors duration-200"
                   >
-                    <LogOut className="h-5 w-5" />
+                    <LogOut className="h-4 w-4" strokeWidth={1.5} />
                     Odjavi se
                   </button>
                 </>
