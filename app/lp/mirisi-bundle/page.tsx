@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Check, Loader2, Wind, Sparkles, Clock, ChevronDown, Phone, ArrowRight } from "lucide-react"
+import { trackPurchase, trackInitiateCheckout } from "@/lib/analytics/meta-pixel"
 
 // Bundle pricing
 const BUNDLE_PRICES = {
@@ -114,6 +115,16 @@ export default function MirisiBundleLandingPage() {
       if (!response.ok) {
         throw new Error(data.error || "Greška pri kreiranju narudžbe")
       }
+
+      // Track purchase event for Meta Pixel
+      trackPurchase({
+        orderNumber: data.orderNumber || data.orderId,
+        total: total,
+        items: selections.slice(0, packSize).map((sel, index) => ({
+          productId: `${sel.collection.toLowerCase()}-${sel.scent.toLowerCase().replace(/\s+/g, "-")}`,
+          quantity: 1,
+        })),
+      })
 
       router.push(`/order/${data.orderId}`)
     } catch (error) {
@@ -454,7 +465,19 @@ export default function MirisiBundleLandingPage() {
               {/* Checkout Button / Form */}
               {!showCheckout ? (
                 <button
-                  onClick={() => setShowCheckout(true)}
+                  onClick={() => {
+                    // Track InitiateCheckout for Meta Pixel
+                    trackInitiateCheckout({
+                      items: selections.slice(0, packSize).map((sel) => ({
+                        id: `${sel.collection.toLowerCase()}-${sel.scent.toLowerCase().replace(/\s+/g, "-")}`,
+                        name: `${sel.collection} - ${sel.scent}`,
+                        price: subtotal / packSize,
+                        quantity: 1,
+                      })),
+                      total: total,
+                    })
+                    setShowCheckout(true)
+                  }}
                   className="w-full py-4 bg-[#d9ed99] text-[#20251b] rounded-lg font-bold text-sm hover:bg-[#e8f5b0] transition-colors flex items-center justify-center gap-6"
                 >
                   Nastavi na podatke za dostavu

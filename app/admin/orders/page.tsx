@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { Eye, Filter, Pencil, Plus, X } from "lucide-react"
+import { Download, Eye, Filter, Pencil, Plus, X } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { OrderStatus, Prisma } from "@prisma/client"
 
@@ -65,9 +65,13 @@ export default async function OrdersPage({
     take: 200,
   })
 
-  const netRevenue = orders.reduce((sum, order) => sum + Math.max(0, order.subtotal - order.discount), 0)
-  const shippingTotal = orders.reduce((sum, order) => sum + order.shippingCost, 0)
-  const grossTotal = orders.reduce((sum, order) => sum + order.total, 0)
+  // Only count orders that are not cancelled or returned
+  const SHIPPING_PER_ORDER = 10
+  const validOrders = orders.filter(
+    (order) => order.status !== "CANCELLED" && order.status !== "RETURNED"
+  )
+  const netRevenue = validOrders.reduce((sum, order) => sum + Math.max(0, order.subtotal - order.discount), 0)
+  const shippingTotal = validOrders.length * SHIPPING_PER_ORDER
 
   return (
     <div>
@@ -79,13 +83,15 @@ export default async function OrdersPage({
             <div className="w-1 h-12 bg-gradient-to-b from-orange-500 to-amber-500 rounded-full shadow-lg shadow-orange-500/30" />
             <div>
               <h1 className="text-4xl font-bold text-gray-900">Narudžbe</h1>
-              <p className="text-gray-600 mt-1">{orders.length} aktivnih narudžbi</p>
+              <p className="text-gray-600 mt-1">{orders.length} narudžbi</p>
             </div>
           </div>
-          <Link href="/admin/orders/new" className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 font-semibold text-white shadow-lg shadow-orange-500/25 transition hover:bg-orange-600">
-            <Plus size={18} />
-            Nova narudžba
-          </Link>
+          <div className="flex gap-3">
+            <Link href="/admin/orders/new" className="inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 font-semibold text-white shadow-lg shadow-orange-500/25 transition hover:bg-orange-600">
+              <Plus size={18} />
+              Nova narudžba
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -133,19 +139,47 @@ export default async function OrdersPage({
         </div>
         <div className="mt-5 grid gap-3 md:grid-cols-3">
           <div className="rounded-xl border border-gray-200 bg-white/80 p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Promet bez poštarine</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Promet (bez poštarine)</p>
             <p className="mt-1 text-xl font-bold text-gray-900">{netRevenue.toFixed(2)} <span className="text-orange-500">KM</span></p>
           </div>
           <div className="rounded-xl border border-gray-200 bg-white/80 p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Poštarina izbijena</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Poštarina naplaćena</p>
             <p className="mt-1 text-xl font-bold text-gray-900">{shippingTotal.toFixed(2)} <span className="text-orange-500">KM</span></p>
           </div>
           <div className="rounded-xl border border-gray-200 bg-white/80 p-4">
-            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Ukupno sa poštarinom</p>
-            <p className="mt-1 text-xl font-bold text-gray-900">{grossTotal.toFixed(2)} <span className="text-orange-500">KM</span></p>
+            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Uspješnih narudžbi</p>
+            <p className="mt-1 text-xl font-bold text-gray-900">{validOrders.length} <span className="text-gray-400 text-sm">/ {orders.length} ukupno</span></p>
           </div>
         </div>
       </form>
+
+      {/* Meta Pixel Export */}
+      <div className="relative overflow-hidden rounded-2xl p-6 mb-6 backdrop-blur-xl bg-gradient-to-br from-blue-600/10 via-white/80 to-indigo-600/10 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center">
+                <svg className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">Meta Pixel Export</h3>
+            </div>
+            <p className="text-sm text-gray-600">Eksportuj narudžbe u CSV format za upload u Meta Events Manager (Offline Conversions)</p>
+          </div>
+          <a
+            href={`/api/admin/orders/export-pixel${params.from || params.to || params.status ? `?${new URLSearchParams({
+              ...(params.from ? { from: params.from } : {}),
+              ...(params.to ? { to: params.to } : {}),
+              ...(params.status ? { status: params.status } : {}),
+            }).toString()}` : ""}`}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white shadow-lg shadow-blue-600/25 transition hover:bg-blue-700"
+          >
+            <Download size={18} />
+            Eksportuj za Pixel ({orders.length} narudžbi)
+          </a>
+        </div>
+      </div>
 
       <div className="relative overflow-hidden rounded-2xl backdrop-blur-xl bg-gradient-to-br from-orange-500/5 via-white/80 to-amber-500/5 border-[5px] border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
         <div className="overflow-x-auto">
