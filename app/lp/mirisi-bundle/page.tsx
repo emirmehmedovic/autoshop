@@ -16,9 +16,9 @@ const BUNDLE_PRICES = {
 const SHIPPING_COST = 10
 
 const SCENTS = [
-  { id: "million-miles", name: "Million Miles", description: "Svjež i energičan" },
-  { id: "citrus", name: "Citrus", description: "Osvježavajući citrus" },
-  { id: "joyful-bloom", name: "Joyful Bloom", description: "Cvjetni i topao" },
+  { id: "million-miles", name: "Million Miles", description: "Svjež i energičan", image: "/products/scent-million-miles.png" },
+  { id: "citrus", name: "Citrus", description: "Osvježavajući citrus", image: "/products/scent-citrus.png" },
+  { id: "joyful-bloom", name: "Joyful Bloom", description: "Cvjetni i topao", image: "/products/scent-joyful-bloom.png" },
 ] as const
 
 type PackSize = 1 | 2 | 3
@@ -138,7 +138,7 @@ export default function SignatureLandingPage() {
     <div className="min-h-screen bg-[#1a1816] text-[#f5f0e8]">
       {/* Top bar */}
       <div className="bg-[#c9a87c] text-[#1a1816] text-center py-2.5 text-xs tracking-wider font-medium">
-        BESPLATNA DOSTAVA ZA NARUDŽBE IZNAD 50 KM
+        DOSTAVA ŠIROM BiH · PLAĆANJE POUZEĆEM
       </div>
 
       <main>
@@ -245,7 +245,7 @@ export default function SignatureLandingPage() {
               <article key={scent.id} className="group rounded-2xl border border-[#2d2825] bg-[#211e1b] p-6 hover:border-[#c9a87c]/30 transition-all">
                 <div className="aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-[#d4c4a8] to-[#c9b896] mb-5">
                   <img
-                    src="/products/signature.png"
+                    src={scent.image}
                     alt={scent.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -368,7 +368,7 @@ export default function SignatureLandingPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-[#a8a097]">Dostava</span>
-                  <span>{total >= 60 ? <span className="text-[#c9a87c]">Besplatno</span> : `${SHIPPING_COST} KM`}</span>
+                  <span>{SHIPPING_COST} KM</span>
                 </div>
                 {savings > 0 && (
                   <div className="flex justify-between text-[#c9a87c]">
@@ -378,7 +378,7 @@ export default function SignatureLandingPage() {
                 )}
                 <div className="flex justify-between text-xl font-semibold pt-3">
                   <span>Ukupno</span>
-                  <span className="text-[#c9a87c]">{total >= 60 ? subtotal : total} KM</span>
+                  <span className="text-[#c9a87c]">{total} KM</span>
                 </div>
               </div>
 
@@ -499,7 +499,7 @@ export default function SignatureLandingPage() {
                       </>
                     ) : (
                       <>
-                        Potvrdi narudžbu — {total >= 60 ? subtotal : total} KM
+                        Potvrdi narudžbu — {total} KM
                       </>
                     )}
                   </button>
@@ -533,7 +533,7 @@ export default function SignatureLandingPage() {
               },
               {
                 q: "Koliko košta dostava?",
-                a: "Dostava iznosi 10 KM. Za narudžbe iznad 50 KM dostava je besplatna."
+                a: "Dostava iznosi 10 KM za sve narudžbe širom Bosne i Hercegovine."
               },
               {
                 q: "Kada stiže narudžba?",
@@ -575,7 +575,7 @@ export default function SignatureLandingPage() {
         <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
           <div>
             <p className="font-semibold">{packSize}x Signature</p>
-            <p className="text-xs text-[#a8a097]">{total >= 60 ? subtotal : total} KM ukupno</p>
+            <p className="text-xs text-[#a8a097]">{total} KM s dostavom</p>
           </div>
           <a
             href="#naruci"
