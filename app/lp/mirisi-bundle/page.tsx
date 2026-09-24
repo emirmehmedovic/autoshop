@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Check, Loader2, Wind, Sparkles, Clock, ChevronDown, Phone, ArrowRight } from "lucide-react"
+import { Check, Loader2, Wind, Sparkles, ChevronDown, ArrowRight, Leaf, Package } from "lucide-react"
 import { trackPurchase, trackInitiateCheckout } from "@/lib/analytics/meta-pixel"
 
 // Bundle pricing
@@ -15,25 +15,23 @@ const BUNDLE_PRICES = {
 
 const SHIPPING_COST = 10
 
-const COLLECTIONS = ["Signature", "Luxury"] as const
-const SCENTS = ["Million Miles", "Citrus", "Joyful Bloom"] as const
+const SCENTS = [
+  { id: "million-miles", name: "Million Miles", description: "Svjež i energičan" },
+  { id: "citrus", name: "Citrus", description: "Osvježavajući citrus" },
+  { id: "joyful-bloom", name: "Joyful Bloom", description: "Cvjetni i topao" },
+] as const
 
 type PackSize = 1 | 2 | 3
 
-interface ItemSelection {
-  collection: typeof COLLECTIONS[number]
-  scent: typeof SCENTS[number]
-}
-
-export default function MirisiBundleLandingPage() {
+export default function SignatureLandingPage() {
   const router = useRouter()
 
   // Order state
   const [packSize, setPackSize] = useState<PackSize>(2)
-  const [selections, setSelections] = useState<ItemSelection[]>([
-    { collection: "Signature", scent: "Million Miles" },
-    { collection: "Luxury", scent: "Citrus" },
-    { collection: "Signature", scent: "Joyful Bloom" },
+  const [selectedScents, setSelectedScents] = useState<string[]>([
+    "million-miles",
+    "citrus",
+    "joyful-bloom",
   ])
 
   // Form state
@@ -54,11 +52,11 @@ export default function MirisiBundleLandingPage() {
   const total = subtotal + SHIPPING_COST
   const savings = packSize * 25 - subtotal
 
-  const updateSelection = (index: number, key: keyof ItemSelection, value: string) => {
-    setSelections(prev => {
-      const newSelections = [...prev]
-      newSelections[index] = { ...newSelections[index], [key]: value }
-      return newSelections
+  const updateScent = (index: number, scentId: string) => {
+    setSelectedScents(prev => {
+      const newScents = [...prev]
+      newScents[index] = scentId
+      return newScents
     })
   }
 
@@ -88,12 +86,14 @@ export default function MirisiBundleLandingPage() {
     setServerError("")
 
     try {
-      // Build order items
-      const items = selections.slice(0, packSize).map((sel, index) => ({
-        collection: sel.collection,
-        scent: sel.scent,
-        price: subtotal / packSize, // Price per item in bundle
-      }))
+      const items = selectedScents.slice(0, packSize).map((scentId) => {
+        const scent = SCENTS.find(s => s.id === scentId)
+        return {
+          collection: "Signature",
+          scent: scent?.name || scentId,
+          price: subtotal / packSize,
+        }
+      })
 
       const response = await fetch("/api/landing-orders", {
         method: "POST",
@@ -106,7 +106,7 @@ export default function MirisiBundleLandingPage() {
           total,
           savings,
           customer: formData,
-          source: "mirisi-bundle-landing",
+          source: "signature-landing",
         }),
       })
 
@@ -116,12 +116,11 @@ export default function MirisiBundleLandingPage() {
         throw new Error(data.error || "Greška pri kreiranju narudžbe")
       }
 
-      // Track purchase event for Meta Pixel
       trackPurchase({
         orderNumber: data.orderNumber || data.orderId,
         total: total,
-        items: selections.slice(0, packSize).map((sel, index) => ({
-          productId: `${sel.collection.toLowerCase()}-${sel.scent.toLowerCase().replace(/\s+/g, "-")}`,
+        items: selectedScents.slice(0, packSize).map(() => ({
+          productId: "signature-collection-miris-za-auto",
           quantity: 1,
         })),
       })
@@ -136,403 +135,327 @@ export default function MirisiBundleLandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#141714] text-[#f4f1e9]">
+    <div className="min-h-screen bg-[#1a1816] text-[#f5f0e8]">
       {/* Top bar */}
-      <div className="bg-[#d9ed99] text-[#20251b] text-center py-2.5 text-xs tracking-wider font-medium">
-        DOSTAVA SIROM BiH · PLACANJE POUZECEM
+      <div className="bg-[#c9a87c] text-[#1a1816] text-center py-2.5 text-xs tracking-wider font-medium">
+        BESPLATNA DOSTAVA ZA NARUDŽBE IZNAD 50 KM
       </div>
 
       <main>
         {/* Hero Section */}
-        <section className="max-w-6xl mx-auto px-4 py-16 lg:py-20">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <section className="max-w-6xl mx-auto px-4 py-16 lg:py-24">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left - Content */}
             <div className="text-center lg:text-left">
-              <p className="text-[#d9ed99] text-[11px] uppercase tracking-[0.25em] font-bold mb-6">
-                Mali detalj. Tvoj potpis.
+              <p className="text-[#c9a87c] text-[11px] uppercase tracking-[0.3em] font-semibold mb-6">
+                Signature Collection
               </p>
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-medium leading-[1.04] tracking-tight mb-6">
-                Dobar stil se<br />vidi. <em className="font-serif text-[#d9ed99]">I osjeti.</em>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-[1.1] tracking-tight mb-6">
+                Prirodno.<br />
+                <span className="font-medium text-[#c9a87c]">Autentično.</span>
               </h1>
-              <p className="text-[#aeb5aa] text-lg mb-8 max-w-md mx-auto lg:mx-0">
-                Miris za auto koji zasluzuje mjesto u tvom enterijeru. Otkrij Signature i Luxury kolekcije s drvenim detaljima i diskretnim postavljanjem na ventilaciju.
+              <p className="text-[#a8a097] text-lg mb-8 max-w-md mx-auto lg:mx-0 leading-relaxed">
+                Premium miris za auto izrađen od pravog drveta. Diskretan, dugotrajan i savršen za svaki enterijer.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
                 <a
                   href="#naruci"
-                  className="inline-flex items-center justify-center gap-8 px-6 py-4 bg-[#d9ed99] text-[#20251b] rounded-lg font-bold text-sm hover:bg-[#e8f5b0] transition-colors"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#c9a87c] text-[#1a1816] rounded-full font-semibold text-sm hover:bg-[#d4b78f] transition-all hover:scale-105"
                 >
-                  Odaberi svoj miris
+                  Naruči odmah
                   <ArrowRight size={16} />
                 </a>
               </div>
-              <p className="text-[#aeb5aa] text-sm">Od 25 KM · Dostava 10 KM po narudzbi</p>
+              <div className="flex items-center justify-center lg:justify-start gap-6 text-sm text-[#a8a097]">
+                <span className="flex items-center gap-2">
+                  <Check size={16} className="text-[#c9a87c]" />
+                  Pravo drvo
+                </span>
+                <span className="flex items-center gap-2">
+                  <Check size={16} className="text-[#c9a87c]" />
+                  Pouzeće
+                </span>
+              </div>
             </div>
 
             {/* Right - Visual */}
             <div className="relative">
-              <div className="aspect-[1/1.08] rounded-[1.5rem] overflow-hidden bg-[#e5e1d7] relative">
+              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-[#d4c4a8] to-[#c9b896] relative shadow-2xl shadow-black/30">
                 <img
-                  src="/products/luxury.png"
-                  alt="Luxury Collection miris za automobil"
+                  src="/products/signature.png"
+                  alt="Signature Collection miris za automobil"
                   className="w-full h-full object-cover"
                 />
-                <span className="absolute top-5 left-5 bg-[#f4f1e9]/90 text-[#22281f] px-4 py-2 rounded-full text-xs font-medium">
-                  LUXURY COLLECTION
-                </span>
-                <div className="absolute bottom-5 left-5 right-5 bg-[#151914]/90 backdrop-blur-sm p-5 rounded-lg flex justify-between items-center">
-                  <div>
-                    <p className="font-medium">Detalj koji zaokruzuje enterijer.</p>
-                    <p className="text-sm text-[#c7ccbf]">Dvije kolekcije. Tvoj izbor.</p>
-                  </div>
-                  <p className="text-2xl font-bold">25 <span className="text-sm font-normal">KM</span></p>
-                </div>
+              </div>
+              {/* Floating price badge */}
+              <div className="absolute -bottom-4 -right-4 lg:bottom-8 lg:-right-8 bg-[#1a1816] border border-[#3d3632] px-6 py-4 rounded-2xl shadow-xl">
+                <p className="text-xs text-[#a8a097] mb-1">Od samo</p>
+                <p className="text-3xl font-semibold text-[#c9a87c]">25 <span className="text-lg font-normal">KM</span></p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Benefits Bar */}
-        <div className="max-w-6xl mx-auto px-4 py-6 border-y border-[#373d34]">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
-            <div className="flex items-center justify-center gap-3">
-              <Wind className="h-5 w-5 text-[#d9ed99]" />
-              <span>Postavljanje na ventilaciju</span>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <Sparkles className="h-5 w-5 text-[#d9ed99]" />
-              <span>Drveni detalji i elegantan izgled</span>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <Check className="h-5 w-5 text-[#d9ed99]" />
-              <span>Plati prilikom preuzimanja</span>
+        {/* Features Bar */}
+        <div className="border-y border-[#2d2825]">
+          <div className="max-w-6xl mx-auto px-4 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#c9a87c]/10 flex items-center justify-center">
+                  <Leaf className="h-5 w-5 text-[#c9a87c]" />
+                </div>
+                <div>
+                  <p className="font-medium text-sm">Prirodni materijali</p>
+                  <p className="text-xs text-[#a8a097]">Pravo drvo, premium miris</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#c9a87c]/10 flex items-center justify-center">
+                  <Wind className="h-5 w-5 text-[#c9a87c]" />
+                </div>
+                <div>
+                  <p className="font-medium text-sm">Jednostavna montaža</p>
+                  <p className="text-xs text-[#a8a097]">Postavi na ventilaciju</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-[#c9a87c]/10 flex items-center justify-center">
+                  <Package className="h-5 w-5 text-[#c9a87c]" />
+                </div>
+                <div>
+                  <p className="font-medium text-sm">Brza dostava</p>
+                  <p className="text-xs text-[#a8a097]">1-3 radna dana</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Collections Section */}
-        <section id="kolekcije" className="max-w-6xl mx-auto px-4 py-20">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-6">
-            <div>
-              <p className="text-[#d9ed99] text-[11px] uppercase tracking-[0.25em] font-bold mb-3">Odaberi svoj stil</p>
-              <h2 className="text-4xl md:text-5xl font-medium leading-tight tracking-tight">
-                Dvije kolekcije.<br />Isti osjecaj za detalje.
-              </h2>
-            </div>
-            <p className="text-[#aeb5aa] text-sm max-w-sm">
-              Toplina drveta ili upecatljiva zavrsna obrada? Izaberi izgled koji pristaje tvom automobilu.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Signature Collection */}
-            <article className="rounded-[1.25rem] border border-[#373d34] overflow-hidden group">
-              <div className="aspect-[1.35/1] overflow-hidden bg-[#ece9e0]">
-                <img
-                  src="/products/signature.png"
-                  alt="Signature Collection"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-2xl font-medium">Signature Collection</h3>
-                  <span className="text-[#d9ed99]">25 KM</span>
-                </div>
-                <p className="text-[#aeb5aa] text-sm mb-4">Drveni izgled i jednostavne linije za topao, skladan enterijer.</p>
-                <button
-                  onClick={() => {
-                    setSelections(prev => [{ ...prev[0], collection: "Signature" }, ...prev.slice(1)])
-                    document.getElementById("naruci")?.scrollIntoView({ behavior: "smooth" })
-                  }}
-                  className="text-[#d9ed99] text-sm font-medium hover:text-[#e8f5b0] transition-colors"
-                >
-                  Odaberi Signature
-                </button>
-              </div>
-            </article>
-
-            {/* Luxury Collection */}
-            <article className="rounded-[1.25rem] border border-[#373d34] overflow-hidden group">
-              <div className="aspect-[1.35/1] overflow-hidden bg-[#ece9e0]">
-                <img
-                  src="/products/luxury.png"
-                  alt="Luxury Collection"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-2">
-                  <h3 className="text-2xl font-medium">Luxury Collection</h3>
-                  <span className="text-[#d9ed99]">25 KM</span>
-                </div>
-                <p className="text-[#aeb5aa] text-sm mb-4">Drveni detalji i elegantna zavrsna obrada za izrazen zavrsni dodir.</p>
-                <button
-                  onClick={() => {
-                    setSelections(prev => [{ ...prev[0], collection: "Luxury" }, ...prev.slice(1)])
-                    document.getElementById("naruci")?.scrollIntoView({ behavior: "smooth" })
-                  }}
-                  className="text-[#d9ed99] text-sm font-medium hover:text-[#e8f5b0] transition-colors"
-                >
-                  Odaberi Luxury
-                </button>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        {/* How it works - Light section */}
-        <section className="bg-[#f4f1e9] text-[#242a21] py-20">
-          <div className="max-w-6xl mx-auto px-4">
-            <p className="text-[#63733e] text-[11px] uppercase tracking-[0.25em] font-bold mb-3">Za tvoju svakodnevnu voznju</p>
-            <h2 className="text-4xl md:text-5xl font-medium leading-tight tracking-tight mb-12">
-              Od izbora do enterijera.<br />Jednostavno.
+        {/* Product Showcase */}
+        <section className="max-w-6xl mx-auto px-4 py-20">
+          <div className="text-center mb-16">
+            <p className="text-[#c9a87c] text-[11px] uppercase tracking-[0.3em] font-semibold mb-4">Tri jedinstvena mirisa</p>
+            <h2 className="text-3xl md:text-4xl font-light tracking-tight">
+              Izaberi svoj <span className="text-[#c9a87c]">potpis</span>
             </h2>
+          </div>
 
-            <div className="grid md:grid-cols-3 gap-10">
-              <article>
-                <p className="text-4xl font-serif text-[#7b885f] border-b border-[#d8dbcd] pb-4 mb-4">01</p>
-                <h3 className="text-xl font-medium mb-2">Pronadi svoj izgled</h3>
-                <p className="text-[#62685d] text-sm">Izaberi Signature ili Luxury. U paketu mozes kombinovati obje kolekcije.</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {SCENTS.map((scent) => (
+              <article key={scent.id} className="group rounded-2xl border border-[#2d2825] bg-[#211e1b] p-6 hover:border-[#c9a87c]/30 transition-all">
+                <div className="aspect-[4/3] rounded-xl overflow-hidden bg-gradient-to-br from-[#d4c4a8] to-[#c9b896] mb-5">
+                  <img
+                    src="/products/signature.png"
+                    alt={scent.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <h3 className="text-xl font-medium mb-1">{scent.name}</h3>
+                <p className="text-sm text-[#a8a097] mb-4">{scent.description}</p>
+                <button
+                  onClick={() => {
+                    setSelectedScents([scent.id, selectedScents[1], selectedScents[2]])
+                    document.getElementById("naruci")?.scrollIntoView({ behavior: "smooth" })
+                  }}
+                  className="text-[#c9a87c] text-sm font-medium hover:text-[#d4b78f] transition-colors"
+                >
+                  Odaberi →
+                </button>
               </article>
-              <article>
-                <p className="text-4xl font-serif text-[#7b885f] border-b border-[#d8dbcd] pb-4 mb-4">02</p>
-                <h3 className="text-xl font-medium mb-2">Odaberi miris</h3>
-                <p className="text-[#62685d] text-sm">Million Miles, Citrus ili Joyful Bloom — izbor za svaki komad je tvoj.</p>
-              </article>
-              <article>
-                <p className="text-4xl font-serif text-[#7b885f] border-b border-[#d8dbcd] pb-4 mb-4">03</p>
-                <h3 className="text-xl font-medium mb-2">Postavi na ventilaciju</h3>
-                <p className="text-[#62685d] text-sm">Diskretan detalj ostaje na svom mjestu u enterijeru, spreman za tvoju sljedecu voznju.</p>
-              </article>
-            </div>
+            ))}
           </div>
         </section>
 
         {/* Order Section */}
-        <section id="naruci" className="max-w-6xl mx-auto px-4 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-            {/* Left - Info */}
-            <div className="lg:sticky lg:top-8">
-              <p className="text-[#d9ed99] text-[11px] uppercase tracking-[0.25em] font-bold mb-3">Za sebe. Ili za nekoga svog.</p>
-              <h2 className="text-4xl md:text-5xl font-medium leading-tight tracking-tight mb-6">
-                Dva automobila?<br />Jedna dobra odluka.
+        <section id="naruci" className="bg-[#211e1b] py-20">
+          <div className="max-w-4xl mx-auto px-4">
+            <div className="text-center mb-12">
+              <p className="text-[#c9a87c] text-[11px] uppercase tracking-[0.3em] font-semibold mb-4">Naruči sada</p>
+              <h2 className="text-3xl md:text-4xl font-light tracking-tight mb-4">
+                Odaberi svoj paket
               </h2>
-              <p className="text-[#aeb5aa] mb-4">
-                Uzmi dva mirisa za <strong className="text-[#f4f1e9]">45 KM</strong> i ustedi 5 KM u odnosu na pojedinacnu kupovinu. Za drugi automobil u porodici ili mali poklon osobi koja voli svoj auto.
-              </p>
-              <p className="text-[#aeb5aa] text-sm mb-8">Kombinuj kolekcije i mirise. Dostavu placas jednom.</p>
-
-              {/* Bundle preview images */}
-              <div className="relative grid grid-cols-2 gap-3 max-w-sm">
-                <img src="/products/signature.png" alt="Signature miris" className="w-full aspect-square object-cover rounded-lg" />
-                <img src="/products/luxury.png" alt="Luxury miris" className="w-full aspect-square object-cover rounded-lg" />
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-[#d9ed99] text-[#20251b] border-4 border-[#141714] rounded-full flex items-center justify-center text-2xl font-bold">
-                  +
-                </span>
-              </div>
+              <p className="text-[#a8a097]">Više komada = veća ušteda</p>
             </div>
 
-            {/* Right - Order Form */}
-            <div className="bg-[#20241f] border border-[#373d34] rounded-[1rem] p-6 md:p-8">
-              {/* Step 1: Pack Selection */}
-              <div className="flex items-center gap-3 mb-6">
-                <span className="w-6 h-6 rounded-full border border-[#69745b] text-[#d9ed99] text-xs flex items-center justify-center font-bold">1</span>
-                <span className="text-sm font-bold">Odaberi svoj paket</span>
-              </div>
+            {/* Pack Selection */}
+            <div className="grid md:grid-cols-3 gap-4 mb-12">
+              {/* Pack 1 */}
+              <button
+                onClick={() => setPackSize(1)}
+                className={`relative p-6 rounded-2xl border-2 text-left transition-all ${
+                  packSize === 1
+                    ? "border-[#c9a87c] bg-[#c9a87c]/5"
+                    : "border-[#2d2825] hover:border-[#3d3632]"
+                }`}
+              >
+                <p className="text-2xl font-semibold mb-1">1 miris</p>
+                <p className="text-sm text-[#a8a097] mb-4">Za tvoj auto</p>
+                <p className="text-3xl font-semibold text-[#c9a87c]">25 <span className="text-base font-normal">KM</span></p>
+              </button>
 
-              <div className="space-y-3 mb-8">
-                {/* Pack 1 */}
-                <label className={`relative flex items-center gap-4 p-5 rounded-lg border cursor-pointer transition-all ${packSize === 1 ? "border-[#d9ed99] bg-[#293020] border-2" : "border-[#4b5147] hover:border-[#69745b]"}`}>
-                  <input
-                    type="radio"
-                    name="pack"
-                    value={1}
-                    checked={packSize === 1}
-                    onChange={() => setPackSize(1)}
-                    className="accent-[#d9ed99] w-4 h-4"
-                  />
-                  <div className="flex-1">
-                    <span className="font-medium">Jedan miris</span>
-                    <span className="block text-xs text-[#aeb5aa]">Mali detalj za tvoj auto</span>
-                  </div>
-                  <span className="text-xl font-bold">25 KM</span>
-                </label>
+              {/* Pack 2 - Recommended */}
+              <button
+                onClick={() => setPackSize(2)}
+                className={`relative p-6 rounded-2xl border-2 text-left transition-all ${
+                  packSize === 2
+                    ? "border-[#c9a87c] bg-[#c9a87c]/5"
+                    : "border-[#2d2825] hover:border-[#3d3632]"
+                }`}
+              >
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#c9a87c] text-[#1a1816] text-[10px] tracking-wider font-bold rounded-full">
+                  NAJPOPULARNIJE
+                </span>
+                <p className="text-2xl font-semibold mb-1">2 mirisa</p>
+                <p className="text-sm text-[#a8a097] mb-4">Uštedi 5 KM</p>
+                <p className="text-3xl font-semibold text-[#c9a87c]">45 <span className="text-base font-normal">KM</span></p>
+              </button>
 
-                {/* Pack 2 - Recommended */}
-                <label className={`relative flex items-center gap-4 p-5 rounded-lg border cursor-pointer transition-all ${packSize === 2 ? "border-[#d9ed99] bg-[#293020] border-2" : "border-[#4b5147] hover:border-[#69745b]"}`}>
-                  <span className="absolute -top-2.5 right-4 px-2 py-0.5 bg-[#d9ed99] text-[#20251b] text-[9px] tracking-wider font-bold rounded">
-                    PREPORUCENI PAKET
-                  </span>
-                  <input
-                    type="radio"
-                    name="pack"
-                    value={2}
-                    checked={packSize === 2}
-                    onChange={() => setPackSize(2)}
-                    className="accent-[#d9ed99] w-4 h-4"
-                  />
-                  <div className="flex-1">
-                    <span className="font-medium">Dva mirisa</span>
-                    <span className="block text-xs text-[#aeb5aa]">22,50 KM po komadu · usteda 5 KM</span>
-                  </div>
-                  <span className="text-xl font-bold">45 KM</span>
-                </label>
+              {/* Pack 3 */}
+              <button
+                onClick={() => setPackSize(3)}
+                className={`relative p-6 rounded-2xl border-2 text-left transition-all ${
+                  packSize === 3
+                    ? "border-[#c9a87c] bg-[#c9a87c]/5"
+                    : "border-[#2d2825] hover:border-[#3d3632]"
+                }`}
+              >
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-[#2d2825] text-[#c9a87c] text-[10px] tracking-wider font-bold rounded-full border border-[#c9a87c]/30">
+                  NAJVEĆA UŠTEDA
+                </span>
+                <p className="text-2xl font-semibold mb-1">3 mirisa</p>
+                <p className="text-sm text-[#a8a097] mb-4">Uštedi 10 KM</p>
+                <p className="text-3xl font-semibold text-[#c9a87c]">65 <span className="text-base font-normal">KM</span></p>
+              </button>
+            </div>
 
-                {/* Pack 3 */}
-                <label className={`relative flex items-center gap-4 p-5 rounded-lg border cursor-pointer transition-all ${packSize === 3 ? "border-[#d9ed99] bg-[#293020] border-2" : "border-[#4b5147] hover:border-[#69745b]"}`}>
-                  <input
-                    type="radio"
-                    name="pack"
-                    value={3}
-                    checked={packSize === 3}
-                    onChange={() => setPackSize(3)}
-                    className="accent-[#d9ed99] w-4 h-4"
-                  />
-                  <div className="flex-1">
-                    <span className="font-medium">Tri mirisa</span>
-                    <span className="block text-xs text-[#aeb5aa]">Usteda 10 KM na proizvodima</span>
-                  </div>
-                  <span className="text-xl font-bold">65 KM</span>
-                </label>
-              </div>
+            {/* Scent Selection */}
+            <div className="bg-[#1a1816] rounded-2xl border border-[#2d2825] p-6 md:p-8 mb-8">
+              <p className="text-sm font-medium mb-6 flex items-center gap-2">
+                <Sparkles size={16} className="text-[#c9a87c]" />
+                Odaberi {packSize === 1 ? "miris" : "mirise"}
+              </p>
 
-              {/* Step 2: Item Selection */}
-              <div className="flex items-center gap-3 mb-6">
-                <span className="w-6 h-6 rounded-full border border-[#69745b] text-[#d9ed99] text-xs flex items-center justify-center font-bold">2</span>
-                <span className="text-sm font-bold">Slozi svoju kombinaciju</span>
-              </div>
-
-              <div className="space-y-5 mb-8">
+              <div className="space-y-4">
                 {Array.from({ length: packSize }).map((_, index) => (
-                  <div key={index} className="border-b border-[#373d34] pb-5">
-                    <p className="text-xs text-[#aeb5aa] mb-3">MIRIS {index + 1}</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-xs text-[#aeb5aa] block mb-1.5">Kolekcija</label>
-                        <div className="relative">
-                          <select
-                            value={selections[index].collection}
-                            onChange={(e) => updateSelection(index, "collection", e.target.value)}
-                            className="w-full appearance-none bg-[#181c17] border border-[#505749] rounded-md px-3 py-2.5 text-sm text-[#f4f1e9] focus:outline-none focus:border-[#d9ed99]"
-                          >
-                            {COLLECTIONS.map(col => (
-                              <option key={col} value={col}>{col}</option>
-                            ))}
-                          </select>
-                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#aeb5aa] pointer-events-none" />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="text-xs text-[#aeb5aa] block mb-1.5">Miris</label>
-                        <div className="relative">
-                          <select
-                            value={selections[index].scent}
-                            onChange={(e) => updateSelection(index, "scent", e.target.value)}
-                            className="w-full appearance-none bg-[#181c17] border border-[#505749] rounded-md px-3 py-2.5 text-sm text-[#f4f1e9] focus:outline-none focus:border-[#d9ed99]"
-                          >
-                            {SCENTS.map(scent => (
-                              <option key={scent} value={scent}>{scent}</option>
-                            ))}
-                          </select>
-                          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#aeb5aa] pointer-events-none" />
-                        </div>
-                      </div>
+                  <div key={index} className="flex items-center gap-4">
+                    <span className="w-8 h-8 rounded-full bg-[#c9a87c]/10 text-[#c9a87c] text-sm flex items-center justify-center font-medium">
+                      {index + 1}
+                    </span>
+                    <div className="flex-1 relative">
+                      <select
+                        value={selectedScents[index]}
+                        onChange={(e) => updateScent(index, e.target.value)}
+                        className="w-full appearance-none bg-[#211e1b] border border-[#3d3632] rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-[#c9a87c] transition-colors"
+                      >
+                        {SCENTS.map(scent => (
+                          <option key={scent.id} value={scent.id}>{scent.name} — {scent.description}</option>
+                        ))}
+                      </select>
+                      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#a8a097] pointer-events-none" />
                     </div>
                   </div>
                 ))}
               </div>
+            </div>
 
+            {/* Summary & Checkout */}
+            <div className="bg-[#1a1816] rounded-2xl border border-[#2d2825] p-6 md:p-8">
               {/* Summary */}
-              <div className="space-y-3 text-sm mb-6">
+              <div className="space-y-3 text-sm mb-6 pb-6 border-b border-[#2d2825]">
                 <div className="flex justify-between">
-                  <span>{packSize === 1 ? "Jedan miris" : `Paket od ${packSize} mirisa`}</span>
+                  <span className="text-[#a8a097]">{packSize}x Signature miris</span>
                   <span>{subtotal} KM</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Dostava sirom BiH</span>
-                  <span>{SHIPPING_COST} KM</span>
-                </div>
-                <div className="flex justify-between text-lg font-bold border-t border-[#495040] pt-4">
-                  <span>Ukupno za placanje</span>
-                  <span>{total} KM</span>
+                  <span className="text-[#a8a097]">Dostava</span>
+                  <span>{total >= 60 ? <span className="text-[#c9a87c]">Besplatno</span> : `${SHIPPING_COST} KM`}</span>
                 </div>
                 {savings > 0 && (
-                  <p className="text-[#d9ed99] text-xs">Usteda na proizvodima: {savings} KM</p>
+                  <div className="flex justify-between text-[#c9a87c]">
+                    <span>Ušteda</span>
+                    <span>-{savings} KM</span>
+                  </div>
                 )}
+                <div className="flex justify-between text-xl font-semibold pt-3">
+                  <span>Ukupno</span>
+                  <span className="text-[#c9a87c]">{total >= 60 ? subtotal : total} KM</span>
+                </div>
               </div>
 
               {/* Checkout Button / Form */}
               {!showCheckout ? (
                 <button
                   onClick={() => {
-                    // Track InitiateCheckout for Meta Pixel
                     trackInitiateCheckout({
-                      items: selections.slice(0, packSize).map((sel) => ({
-                        id: `${sel.collection.toLowerCase()}-${sel.scent.toLowerCase().replace(/\s+/g, "-")}`,
-                        name: `${sel.collection} - ${sel.scent}`,
-                        price: subtotal / packSize,
-                        quantity: 1,
-                      })),
+                      items: selectedScents.slice(0, packSize).map((scentId) => {
+                        const scent = SCENTS.find(s => s.id === scentId)
+                        return {
+                          id: "signature-collection-miris-za-auto",
+                          name: `Signature - ${scent?.name}`,
+                          price: subtotal / packSize,
+                          quantity: 1,
+                        }
+                      }),
                       total: total,
                     })
                     setShowCheckout(true)
                   }}
-                  className="w-full py-4 bg-[#d9ed99] text-[#20251b] rounded-lg font-bold text-sm hover:bg-[#e8f5b0] transition-colors flex items-center justify-center gap-6"
+                  className="w-full py-4 bg-[#c9a87c] text-[#1a1816] rounded-xl font-semibold text-sm hover:bg-[#d4b78f] transition-all flex items-center justify-center gap-3"
                 >
-                  Nastavi na podatke za dostavu
+                  Nastavi na dostavu
                   <ArrowRight size={16} />
                 </button>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="bg-[#303827] p-4 rounded-lg text-xs mb-4">
-                    <p className="font-medium mb-1">Tvoj odabir:</p>
-                    <p className="text-[#aeb5aa]">
-                      {selections.slice(0, packSize).map(s => `${s.collection} / ${s.scent}`).join(" • ")}
+                  <div className="bg-[#211e1b] p-4 rounded-xl text-xs mb-4 border border-[#2d2825]">
+                    <p className="font-medium mb-1 text-[#c9a87c]">Tvoj odabir:</p>
+                    <p className="text-[#a8a097]">
+                      {selectedScents.slice(0, packSize).map(id => SCENTS.find(s => s.id === id)?.name).join(" • ")}
                     </p>
                   </div>
 
                   {serverError && (
-                    <div className="p-4 bg-red-900/30 border border-red-500/50 text-red-200 rounded-lg text-sm">
+                    <div className="p-4 bg-red-900/20 border border-red-500/30 text-red-300 rounded-xl text-sm">
                       {serverError}
                     </div>
                   )}
 
                   <div>
-                    <label className="text-xs text-[#aeb5aa] block mb-1.5">Ime i prezime *</label>
+                    <label className="text-xs text-[#a8a097] block mb-2">Ime i prezime *</label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className={`w-full bg-[#181c17] border rounded-md px-3 py-2.5 text-sm text-[#f4f1e9] focus:outline-none focus:border-[#d9ed99] ${errors.name ? "border-red-500" : "border-[#505749]"}`}
+                      className={`w-full bg-[#211e1b] border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a87c] transition-colors ${errors.name ? "border-red-500" : "border-[#3d3632]"}`}
                       disabled={loading}
                     />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                   </div>
 
                   <div>
-                    <label className="text-xs text-[#aeb5aa] block mb-1.5">Telefon *</label>
+                    <label className="text-xs text-[#a8a097] block mb-2">Telefon *</label>
                     <input
                       type="tel"
                       name="phone"
                       value={formData.phone}
                       onChange={handleInputChange}
                       placeholder="+387 XX XXX XXX"
-                      className={`w-full bg-[#181c17] border rounded-md px-3 py-2.5 text-sm text-[#f4f1e9] focus:outline-none focus:border-[#d9ed99] ${errors.phone ? "border-red-500" : "border-[#505749]"}`}
+                      className={`w-full bg-[#211e1b] border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a87c] transition-colors ${errors.phone ? "border-red-500" : "border-[#3d3632]"}`}
                       disabled={loading}
                     />
                     {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone}</p>}
                   </div>
 
                   <div>
-                    <label className="text-xs text-[#aeb5aa] block mb-1.5">Ulica i broj *</label>
+                    <label className="text-xs text-[#a8a097] block mb-2">Adresa *</label>
                     <input
                       type="text"
                       name="address"
                       value={formData.address}
                       onChange={handleInputChange}
-                      className={`w-full bg-[#181c17] border rounded-md px-3 py-2.5 text-sm text-[#f4f1e9] focus:outline-none focus:border-[#d9ed99] ${errors.address ? "border-red-500" : "border-[#505749]"}`}
+                      placeholder="Ulica i broj"
+                      className={`w-full bg-[#211e1b] border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a87c] transition-colors ${errors.address ? "border-red-500" : "border-[#3d3632]"}`}
                       disabled={loading}
                     />
                     {errors.address && <p className="text-red-400 text-xs mt-1">{errors.address}</p>}
@@ -540,25 +463,25 @@ export default function MirisiBundleLandingPage() {
 
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-[#aeb5aa] block mb-1.5">Grad *</label>
+                      <label className="text-xs text-[#a8a097] block mb-2">Grad *</label>
                       <input
                         type="text"
                         name="city"
                         value={formData.city}
                         onChange={handleInputChange}
-                        className={`w-full bg-[#181c17] border rounded-md px-3 py-2.5 text-sm text-[#f4f1e9] focus:outline-none focus:border-[#d9ed99] ${errors.city ? "border-red-500" : "border-[#505749]"}`}
+                        className={`w-full bg-[#211e1b] border rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a87c] transition-colors ${errors.city ? "border-red-500" : "border-[#3d3632]"}`}
                         disabled={loading}
                       />
                       {errors.city && <p className="text-red-400 text-xs mt-1">{errors.city}</p>}
                     </div>
                     <div>
-                      <label className="text-xs text-[#aeb5aa] block mb-1.5">Postanski broj</label>
+                      <label className="text-xs text-[#a8a097] block mb-2">Poštanski broj</label>
                       <input
                         type="text"
                         name="zip"
                         value={formData.zip}
                         onChange={handleInputChange}
-                        className="w-full bg-[#181c17] border border-[#505749] rounded-md px-3 py-2.5 text-sm text-[#f4f1e9] focus:outline-none focus:border-[#d9ed99]"
+                        className="w-full bg-[#211e1b] border border-[#3d3632] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#c9a87c] transition-colors"
                         disabled={loading}
                       />
                     </div>
@@ -567,7 +490,7 @@ export default function MirisiBundleLandingPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-4 bg-[#d9ed99] text-[#20251b] rounded-lg font-bold text-sm hover:bg-[#e8f5b0] transition-colors flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full py-4 bg-[#c9a87c] text-[#1a1816] rounded-xl font-semibold text-sm hover:bg-[#d4b78f] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed mt-6"
                   >
                     {loading ? (
                       <>
@@ -576,13 +499,13 @@ export default function MirisiBundleLandingPage() {
                       </>
                     ) : (
                       <>
-                        Potvrdite narudzbu — {total} KM
+                        Potvrdi narudžbu — {total >= 60 ? subtotal : total} KM
                       </>
                     )}
                   </button>
 
-                  <p className="text-center text-xs text-[#aeb5aa]">
-                    Placanje pouzecem · Isporuka 1-3 radna dana
+                  <p className="text-center text-xs text-[#a8a097] mt-4">
+                    Plaćanje pouzećem · Isporuka 1-3 radna dana
                   </p>
                 </form>
               )}
@@ -591,42 +514,42 @@ export default function MirisiBundleLandingPage() {
         </section>
 
         {/* FAQ Section */}
-        <section id="pitanja" className="max-w-4xl mx-auto px-4 py-20">
-          <p className="text-[#d9ed99] text-[11px] uppercase tracking-[0.25em] font-bold mb-3">Prije nego odaberes</p>
-          <h2 className="text-4xl md:text-5xl font-medium leading-tight tracking-tight mb-10">
-            Jos nekoliko detalja.
-          </h2>
+        <section className="max-w-3xl mx-auto px-4 py-20">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-light tracking-tight">
+              Česta pitanja
+            </h2>
+          </div>
 
           <div className="space-y-0">
             {[
               {
-                q: "Mogu li kombinovati razlicite kolekcije i mirise?",
-                a: "Da. Za svaki komad u paketu odaberi Signature ili Luxury kolekciju, a zatim Million Miles, Citrus ili Joyful Bloom."
+                q: "Koliko traje miris?",
+                a: "Miris traje 4-6 sedmica ovisno o intenzitetu korištenja klime/ventilacije u automobilu."
               },
               {
-                q: "Koliko placam s dostavom?",
-                a: "Jedan miris s dostavom iznosi 35 KM, dva 55 KM, a tri 75 KM. Dostava je 10 KM po narudzbi i vec je ukljucena u prikaz ukupnog iznosa."
+                q: "Kako se postavlja?",
+                a: "Jednostavno ga zakačite na lamele ventilacije. Dolazi s klipsom koji odgovara većini automobila."
               },
               {
-                q: "Kako placam i kada paket stize?",
-                a: "Placas pouzecem, prilikom preuzimanja. Dostava sirom Bosne i Hercegovine traje 1-3 radna dana."
+                q: "Koliko košta dostava?",
+                a: "Dostava iznosi 10 KM. Za narudžbe iznad 50 KM dostava je besplatna."
               },
               {
-                q: "Odgovara li mojoj ventilaciji?",
-                a: "Mirisi se postavljaju na ventilacioni otvor. Ako nisi siguran odgovara li oblik tvoje ventilacije, javi nam model automobila prije narucivanja na +387 61 577 576."
+                q: "Kada stiže narudžba?",
+                a: "Narudžbe se šalju istog ili sljedećeg radnog dana. Dostava traje 1-3 radna dana."
               },
               {
-                q: "Mogu li narudzbu preuzeti u Tuzli?",
-                a: "Licno preuzimanje u Tuzli moguce je uz prethodni dogovor. Za tu opciju kontaktiraj nas prije narucivanja na +387 61 577 576."
+                q: "Kako plaćam?",
+                a: "Plaćanje je pouzećem - platite kuriru prilikom preuzimanja paketa."
               },
             ].map((faq, i) => (
-              <details key={i} className="border-b border-[#373d34] py-5 group">
+              <details key={i} className="border-b border-[#2d2825] py-5 group">
                 <summary className="flex justify-between items-center cursor-pointer list-none text-base font-medium">
                   {faq.q}
-                  <span className="text-[#d9ed99] text-xl group-open:hidden">+</span>
-                  <span className="text-[#d9ed99] text-xl hidden group-open:inline">−</span>
+                  <span className="text-[#c9a87c] text-xl transition-transform group-open:rotate-45">+</span>
                 </summary>
-                <p className="mt-4 text-sm text-[#aeb5aa] max-w-2xl">{faq.a}</p>
+                <p className="mt-4 text-sm text-[#a8a097] leading-relaxed">{faq.a}</p>
               </details>
             ))}
           </div>
@@ -634,34 +557,31 @@ export default function MirisiBundleLandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#373d34] py-8">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[#aeb5aa]">
-          <div>
-            <span className="text-xl font-bold text-[#f4f1e9]">GlossDrive<span className="text-[#d9ed99]">.</span></span>
-            <span className="ml-4">autokozmetika.ba · Tuzla, BiH</span>
+      <footer className="border-t border-[#2d2825] py-8">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-[#a8a097]">
+          <div className="flex items-center gap-3">
+            <span className="text-xl font-semibold text-[#f5f0e8]">GlossDrive<span className="text-[#c9a87c]">.</span></span>
+            <span className="text-xs">Tuzla, BiH</span>
           </div>
-          <div className="flex gap-4">
-            <a href="tel:+38761577576" className="hover:text-[#f4f1e9] transition-colors">+387 61 577 576</a>
-            <span>·</span>
-            <Link href="/dostava" className="hover:text-[#f4f1e9] transition-colors">Dostava i placanje</Link>
-            <span>·</span>
-            <Link href="/" className="hover:text-[#f4f1e9] transition-colors">Posjeti webshop</Link>
+          <div className="flex items-center gap-6 text-xs">
+            <a href="tel:+38761577576" className="hover:text-[#f5f0e8] transition-colors">+387 61 577 576</a>
+            <Link href="/" className="hover:text-[#f5f0e8] transition-colors">Webshop</Link>
           </div>
         </div>
       </footer>
 
       {/* Sticky Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#161a16]/95 border-t border-[#414735] backdrop-blur-md z-50 py-3">
+      <div className="fixed bottom-0 left-0 right-0 bg-[#1a1816]/95 border-t border-[#2d2825] backdrop-blur-md z-50 py-3 md:hidden">
         <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
           <div>
-            <p className="font-bold text-lg">{packSize} {packSize === 1 ? "miris" : "mirisa"} · {subtotal} KM</p>
-            <p className="text-xs text-[#aeb5aa]">Ukupno s dostavom: {total} KM</p>
+            <p className="font-semibold">{packSize}x Signature</p>
+            <p className="text-xs text-[#a8a097]">{total >= 60 ? subtotal : total} KM ukupno</p>
           </div>
           <a
             href="#naruci"
-            className="px-6 py-3 bg-[#d9ed99] text-[#20251b] rounded-lg font-bold text-sm hover:bg-[#e8f5b0] transition-colors"
+            className="px-6 py-3 bg-[#c9a87c] text-[#1a1816] rounded-full font-semibold text-sm"
           >
-            Odaberi paket
+            Naruči
           </a>
         </div>
       </div>
