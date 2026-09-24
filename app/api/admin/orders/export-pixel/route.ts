@@ -92,7 +92,7 @@ export async function GET(request: Request) {
       "Purchase", // event_name
       eventTime, // event_time (Unix timestamp)
       order.total.toFixed(2), // value
-      "BAM", // currency
+      "EUR", // currency (Meta doesn't support BAM, using EUR as proxy)
       order.orderNumber, // order_id
       `"${contentIds}"`, // content_ids (quoted for CSV)
       "product", // content_type
