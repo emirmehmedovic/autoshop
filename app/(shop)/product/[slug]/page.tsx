@@ -17,6 +17,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const { slug } = await params
   const product = await prisma.product.findUnique({
     where: { slug },
+    include: {
+      images: {
+        orderBy: { sortOrder: "asc" },
+        take: 1,
+      },
+    },
   })
 
   if (!product) {
@@ -25,9 +31,34 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     }
   }
 
+  const title = product.metaTitle || `${product.name} | GlossDrive`
+  const description = product.metaDesc || product.shortDesc || product.description || ""
+  const imageUrl = product.images[0]?.url || "/og-default.png"
+
   return {
-    title: product.metaTitle || `${product.name} | AutoShop`,
-    description: product.metaDesc || product.shortDesc || product.description,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: `https://autokozmetika.ba/product/${slug}`,
+      images: [
+        {
+          url: imageUrl.startsWith("http") ? imageUrl : `https://autokozmetika.ba${imageUrl}`,
+          width: 1200,
+          height: 630,
+          alt: product.name,
+        },
+      ],
+      siteName: "GlossDrive",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl.startsWith("http") ? imageUrl : `https://autokozmetika.ba${imageUrl}`],
+    },
   }
 }
 
