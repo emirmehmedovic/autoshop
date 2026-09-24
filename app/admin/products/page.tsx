@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
-import { Plus, Search, Edit, AlertCircle } from "lucide-react"
+import { Plus, Search, Edit, AlertCircle, Download } from "lucide-react"
 import { Breadcrumbs } from "@/components/admin/Breadcrumbs"
 import { DeleteProductButton } from "@/components/admin/DeleteProductButton"
 import { CopyNameButton } from "@/components/admin/CopyNameButton"
@@ -76,13 +76,22 @@ export default async function ProductsPage({
               <p className="text-gray-600 mt-1">{products.length} proizvoda u katalogu</p>
             </div>
           </div>
-          <Link
-            href="/admin/products/new"
-            className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-bold shadow-md"
-          >
-            <Plus size={20} />
-            Dodaj proizvod
-          </Link>
+          <div className="flex gap-3">
+            <a
+              href="/api/admin/products/export-fb-catalog"
+              className="flex items-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition font-semibold shadow-md"
+            >
+              <Download size={18} />
+              FB Katalog
+            </a>
+            <Link
+              href="/admin/products/new"
+              className="flex items-center gap-2 px-6 py-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition font-bold shadow-md"
+            >
+              <Plus size={20} />
+              Dodaj proizvod
+            </Link>
+          </div>
         </div>
       </div>
 
