@@ -525,7 +525,7 @@ export default function SignatureLandingPage() {
             {[
               {
                 q: "Koliko traje miris?",
-                a: "Miris traje 4-6 sedmica ovisno o intenzitetu korištenja klime/ventilacije u automobilu."
+                a: "Uz svaki miris dobijete refill bočicu od 15 ml koja može trajati 2-3 mjeseca, ovisno o intenzitetu korištenja."
               },
               {
                 q: "Kako se postavlja?",
